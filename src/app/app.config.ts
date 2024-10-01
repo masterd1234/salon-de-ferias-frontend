@@ -9,7 +9,7 @@ import { environment } from '../environments/environment';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 
 export const appConfig: ApplicationConfig = {
-  providers: [    provideRouter(routes),
+  providers: [provideRouter(routes),
     importProvidersFrom(HttpClientModule), 
     provideHttpClient( withFetch()), // Registro global de HttpClientModule
     provideFirebaseApp(() => initializeApp(environment.firebase)), // Inicializamos Firebase
