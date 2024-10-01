@@ -7,8 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { jwtDecode } from 'jwt-decode';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -70,8 +71,18 @@ export class LoginComponent {
           if (response.token) {
             // Guardamos el token JWT en el localStorage
             this.authService.setToken(response.token);
-            alert('Login exitoso');
-            this.router.navigate(['/profile']); // Redirigir a la página de perfil
+            const decodedToken: any = jwtDecode(response.token);
+            const userRole = decodedToken.rol;
+
+            
+            // Redirigir al dashboard o área según el rol
+            if (userRole === 'admin') {
+              this.router.navigate(['/admin-dashboard']);
+            } else if (userRole === 'user') {
+              this.router.navigate(['/user-dashboard']);
+            } else {
+              this.router.navigate(['/home']);
+            }
           } else {
             alert('Credenciales inválidas');
           }
