@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 export class UserService {
 
   private apiUrl = 'http://localhost:3000/users';
-  
+
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   // Método para obtener usuarios
@@ -29,7 +29,39 @@ export class UserService {
       'Content-Type': 'application/json'
     });
     return this.http.post(this.apiUrl, user, { headers }).pipe(
-      tap(()=> this.getUsers())
+      tap(() => this.getUsers())
     );
   }
+  // Eliminar un usuario por su ID
+  deleteUser(id: string): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Adjuntar el token JWT
+      'Content-Type': 'application/json'
+    });
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers });
+  }
+
+  // Actualizar un usuario por su ID
+  updateUser(id: string, updatedData: any): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Adjuntar el token JWT
+      'Content-Type': 'application/json'
+    });
+    return this.http.put<any>(`${this.apiUrl}/${id}`, updatedData, { headers });
+  }
+
+  // Obtener un usuario por su ID
+  getUserById(id: string): Observable<any> {
+    const token = this.authService.getToken();  // Obtener el token desde AuthService
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // Adjuntar el token JWT
+      'Content-Type': 'application/json'
+    });
+
+    // Hacer la solicitud GET a la API con el ID del usuario
+    return this.http.get<any>(`${this.apiUrl}/${id}`, { headers });
+  }
+
 }

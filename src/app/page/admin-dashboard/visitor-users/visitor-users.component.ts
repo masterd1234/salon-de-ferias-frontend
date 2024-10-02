@@ -4,6 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user.service';
 import { AppComponent } from '../../../app.component';
+import { MatDialog } from '@angular/material/dialog';
+import { EditUsersComponent } from '../edit-users/edit-users.component';
 
 
 @Component({
@@ -22,6 +24,7 @@ export class VisitorUsersComponent {
 
   private userService = inject(UserService);
   private appComponent = inject(AppComponent);
+  private dialog = inject(MatDialog);
 
   constructor() {
     // Nos suscribimos a la señal de creación de usuarios
@@ -47,11 +50,24 @@ export class VisitorUsersComponent {
     user.showInfo = !user.showInfo;
   }
 
+  // Abrir el modal para editar un usuario
   editUser(userId: string): void {
-    console.log(`Editar admin con ID: ${userId}`);
+    const dialogRef = this.dialog.open(EditUsersComponent, {
+      width: '400px',
+      data: { userId } // Pasar el ID del usuario al modal
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadVisitorUsers(); // Recargar los usuarios si hubo cambios
+      }
+    });
   }
 
+  // Eliminar usuario
   deleteUser(userId: string): void {
-    console.log(`Eliminar admin con ID: ${userId}`);
+    this.userService.deleteUser(userId).subscribe(() => {
+      this.loadVisitorUsers(); // Recargar los usuarios después de eliminar
+    });
   }
 }

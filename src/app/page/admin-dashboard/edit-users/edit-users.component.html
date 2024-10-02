@@ -1,0 +1,28 @@
+<mat-dialog-content>
+    <form [formGroup]="editUserForm" (ngSubmit)="onSave()">
+      <mat-form-field class="full-width">
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre" placeholder="Nombre del usuario">
+      </mat-form-field>
+  
+      <mat-form-field class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Correo electrónico" type="email">
+      </mat-form-field>
+  
+      <mat-form-field class="full-width">
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="rol">
+          <mat-option value="admin">Admin</mat-option>
+          <mat-option value="empresa">Empresa</mat-option>
+          <mat-option value="alumno">Alumno</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-dialog-actions>
+        <button mat-button (click)="onCancel()">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="editUserForm.invalid">Guardar</button>
+      </mat-dialog-actions>
+    </form>
+  </mat-dialog-content>
+  

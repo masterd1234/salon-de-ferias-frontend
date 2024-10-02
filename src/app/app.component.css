@@ -3,17 +3,6 @@ body {
   padding: 0;
   font-family: 'IBM Plex Sans', sans-serif;
 }
-
-/* Cambiar el color del ícono del botón de colapso a blanco */
-.navbar-toggler {
-  border-color: white; /* Borde del botón de colapso en blanco */
-}
-
-/* Cambiar las líneas de la hamburguesa a blanco */
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-}
-
 .app-background {
   background-image: url('/assets/fondo.png');
   background-size: cover;
@@ -24,51 +13,81 @@ body {
   flex-direction: column;
 }
 
+/* Estilos para la barra de navegación */
 .navbar-custom {
   background-color: #002e4c;
+  padding: 10px 20px;
 }
 
-.navbar-nav {
-  margin-left: auto;  /* Asegura que los botones estén alineados a la derecha */
+.navbar-brand {
+  margin-right: 20px;
 }
 
+.nav-link, .dropdown-item {
+  color: white !important;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.dropdown-menu {
+  background-color: #002e4c; /* Fondo del menú desplegable */
+}
+
+.dropdown-item:hover {
+  background-color: #00a89c;
+  color: white !important;
+}
+
+/* Ajustes del botón de colapso */
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler-icon {
+  background-color: white; /* Color blanco para el icono del menú */
+}
+
+/* Estilos para los botones */
 .btn-icon-text {
   background: none;
   border: none;
   color: white;
   display: flex;
-  flex-direction: column;
+  flex-direction: column;  /* Coloca el texto debajo del icono */
   align-items: center;
-  cursor: pointer;
   padding: 0;
-  font-size: 14px;
-  margin-right: 20px;
+  margin-left: 15px;
+  font-size: 12px; /* Tamaño de texto más pequeño */
 }
 
 .btn-icon-text i {
-  font-size: 20px;
-  margin-bottom: 4px;
+  font-size: 20px; /* Tamaño del icono */
+  margin-bottom: 5px; /* Espacio entre icono y texto */
 }
 
 .btn-icon-text span {
-  font-size: 12px;
+  font-size: 10px; /* Texto debajo del icono más pequeño */
 }
 
 .btn-icon-text:hover {
-  color: #00a89c;
+  color: #00a89c; /* Cambiar color al pasar el ratón */
 }
 
-/* Media query for mobile responsiveness */
+/* Responsivo: reducir tamaño en pantallas pequeñas */
 @media (max-width: 768px) {
-  .navbar-nav {
-    text-align: center;
+  .nav-link, .dropdown-item {
+    font-size: 14px;
   }
+
   .btn-icon-text {
-    margin-right: 0;
-    font-size: 3px;
+    font-size: 10px; /* Texto aún más pequeño en pantallas pequeñas */
   }
+
+  .btn-icon-text i {
+    font-size: 18px; /* Icono más pequeño en pantallas pequeñas */
+  }
+
   .btn-icon-text span {
-    margin-right: 0;
-    font-size: 3px;
+    font-size: 8px; /* Texto debajo del icono más pequeño */
   }
 }

@@ -4,6 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user.service';
 import { AppComponent } from '../../../app.component';
+import { MatDialog } from '@angular/material/dialog';
+import { EditUsersComponent } from '../edit-users/edit-users.component';
 
 @Component({
   selector: 'app-admin-users',
@@ -13,12 +15,13 @@ import { AppComponent } from '../../../app.component';
   imports: [
     MatCardModule,  // Importar MatCard para las tarjetas
     MatButtonModule,  // Importar MatButton para los botones
-    CommonModule  // Importar CommonModule para directivas básicas
+    CommonModule // Importar CommonModule para directivas básicas
   ]
 })
 export class AdminUsersComponent implements OnInit {
   users = signal<any[]>([]);  // Signal para almacenar los usuarios
 
+  private dialog = inject(MatDialog);
   private userService = inject(UserService);
   private appComponent = inject(AppComponent);
 
@@ -46,11 +49,24 @@ export class AdminUsersComponent implements OnInit {
     user.showInfo = !user.showInfo;
   }
 
+  // Abrir el modal para editar un usuario
   editUser(userId: string): void {
-    console.log(`Editar admin con ID: ${userId}`);
+    const dialogRef = this.dialog.open(EditUsersComponent, {
+      width: '400px',
+      data: { userId } // Pasar el ID del usuario al modal
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadAdminUsers(); // Recargar los usuarios si hubo cambios
+      }
+    });
   }
 
+  // Eliminar usuario
   deleteUser(userId: string): void {
-    console.log(`Eliminar admin con ID: ${userId}`);
+    this.userService.deleteUser(userId).subscribe(() => {
+      this.loadAdminUsers(); // Recargar los usuarios después de eliminar
+    });
   }
 }

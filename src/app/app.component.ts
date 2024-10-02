@@ -3,7 +3,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { LoginComponent } from './page/login/login.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
-import { CreateUserComponent } from './page/create-user/create-user.component';
+import { CreateUserComponent } from './page/admin-dashboard/create-user/create-user.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Overlay } from '@angular/cdk/overlay';
 import { AdminDashboardComponent } from './page/admin-dashboard/admin-dashboard.component';
@@ -39,8 +39,8 @@ export class AppComponent {
   const tokenData = this.authService.decodeToken();
   if (tokenData?.rol === 'admin') {
     return true;
-  }
-  return false;
+  }return  false;
+
 }
 
 

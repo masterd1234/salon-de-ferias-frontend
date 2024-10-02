@@ -8,7 +8,7 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/login';  // URL del backend para login
+  private apiUrl = 'http://localhost:3000/auth/login';  // URL del backend para login
   private token: string | null = null;  // Almacenamos el token JWT aquí
 
   constructor(
