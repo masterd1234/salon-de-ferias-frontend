@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../services/admin.service';
 import { AuthService } from '../../../services/auth.service';
 import { signal } from '@angular/core';
 import { CommonModule } from '@angular/common';

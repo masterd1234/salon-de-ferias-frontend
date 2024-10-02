@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit, effect } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../services/admin.service';
 import { AppComponent } from '../../../app.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EditUsersComponent } from '../edit-users/edit-users.component';
