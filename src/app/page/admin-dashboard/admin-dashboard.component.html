@@ -1,31 +1,9 @@
 <div class="admin-dashboard-container">
-    <!-- Encabezado con gradiente y botón Crear alineado -->
-    <div class="header-gradient p-3 shadow-sm">
-      <div class="d-flex justify-content-between align-items-center">
-        <h1 class="text-white mb-0">Usuarios</h1>
 
-      </div>
-    </div>
-  
-    <!-- Contenedor de tarjetas de usuarios (sin separación respecto al encabezado) -->
-    <div class="row mt-0">
-      <div *ngFor="let user of users()" class="col-12 mb-3">
-        <mat-card class="user-card bg-white text-dark p-3" (click)="toggleInfo(user)">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">{{ user.nombre }}</h5>
-            <div>
-              <button mat-stroked-button color="primary" (click)="editUser(user.id); $event.stopPropagation()"><i class="fa-solid fa-pen-to-square"></i></button>
-              <button mat-stroked-button color="warn" (click)="deleteUser(user.id); $event.stopPropagation()"><i class="fa-solid fa-trash"></i></button>
-            </div>
-          </div>
-  
-          <!-- Información adicional que se revela al hacer clic en la tarjeta -->
-          <mat-card-content *ngIf="user.showInfo" class="mt-4">
-            <p><i class="fa-regular fa-envelope"></i> {{ user.email }}</p>
-            <p><i class="fa-solid fa-flag"></i> {{ user.rol }}</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </div>
+  <!-- Componentes hijos para cada rol -->
+  <div class="user-grid">
+    <app-admin-users></app-admin-users>
+    <app-company-users></app-company-users>
+    <app-visitor-users></app-visitor-users>
   </div>
-  
+</div>

@@ -78,8 +78,8 @@ export class LoginComponent {
             // Redirigir al dashboard o área según el rol
             if (userRole === 'admin') {
               this.router.navigate(['/admin-dashboard']);
-            } else if (userRole === 'user') {
-              this.router.navigate(['/user-dashboard']);
+            } else if (userRole === 'co') {
+              this.router.navigate(['/co-dashboard']);
             } else {
               this.router.navigate(['/home']);
             }

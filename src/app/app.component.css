@@ -4,6 +4,16 @@ body {
   font-family: 'IBM Plex Sans', sans-serif;
 }
 
+/* Cambiar el color del ícono del botón de colapso a blanco */
+.navbar-toggler {
+  border-color: white; /* Borde del botón de colapso en blanco */
+}
+
+/* Cambiar las líneas de la hamburguesa a blanco */
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
 .app-background {
   background-image: url('/assets/fondo.png');
   background-size: cover;
@@ -19,7 +29,7 @@ body {
 }
 
 .navbar-nav {
-  margin-left: auto; /* Asegura que los botones estén alineados a la derecha */
+  margin-left: auto;  /* Asegura que los botones estén alineados a la derecha */
 }
 
 .btn-icon-text {
@@ -31,23 +41,34 @@ body {
   align-items: center;
   cursor: pointer;
   padding: 0;
-  font-size: 14px;  /* Ajusta el tamaño del texto */
-  margin-right: 20px; /* Añade margen para separar los botones */
+  font-size: 14px;
+  margin-right: 20px;
 }
 
 .btn-icon-text i {
-  font-size: 20px;  /* Ajusta el tamaño del icono */
-  margin-bottom: 4px; /* Espacio entre el icono y el texto */
+  font-size: 20px;
+  margin-bottom: 4px;
 }
 
 .btn-icon-text span {
-  font-size: 12px;  /* Ajusta el tamaño del texto debajo del icono */
+  font-size: 12px;
 }
 
 .btn-icon-text:hover {
   color: #00a89c;
 }
 
-.create-btn {
-  font-size: 12px;  /* Tamaño pequeño para el botón de crear usuario */
+/* Media query for mobile responsiveness */
+@media (max-width: 768px) {
+  .navbar-nav {
+    text-align: center;
+  }
+  .btn-icon-text {
+    margin-right: 0;
+    font-size: 3px;
+  }
+  .btn-icon-text span {
+    margin-right: 0;
+    font-size: 3px;
+  }
 }

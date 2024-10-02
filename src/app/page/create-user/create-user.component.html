@@ -14,8 +14,8 @@
         <mat-label>Rol</mat-label>
         <mat-select formControlName="rol" panelClass="custom-select-panel" placeholder="Seleccionar Rol">
           <mat-option value="admin">Administrador</mat-option>
-          <mat-option value="empresa">Empresa</mat-option>
-          <mat-option value="alumno">Alumno</mat-option>
+          <mat-option value="co">Empresa</mat-option>
+          <mat-option value="visitor">Visitante</mat-option>
         </mat-select>
         <mat-error *ngIf="createUserForm.get('rol')?.invalid && createUserForm.get('rol')?.touched">
           El rol es obligatorio.

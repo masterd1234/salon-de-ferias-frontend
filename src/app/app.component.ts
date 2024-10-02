@@ -34,6 +34,16 @@ export class AppComponent {
     return !!this.authService.getToken();  // Comprueba si el token está presente en el localStorage
   }
 
+  //Verifica si el usuario es Admin
+  isAdmin(): boolean{
+  const tokenData = this.authService.decodeToken();
+  if (tokenData?.rol === 'admin') {
+    return true;
+  }
+  return false;
+}
+
+
   // Método para cerrar sesión
   logout(): void {
     this.authService.logout();  // Llama al método de logout del AuthService

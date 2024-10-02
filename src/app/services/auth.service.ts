@@ -2,6 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,14 @@ export class AuthService {
     return this.token;
   }
 
+  //Descodificar el TOKEN
+  decodeToken(): any {
+    const token = this.getToken();
+    if (token) {
+      return jwtDecode(token);  // Decodifica el token JWT
+    }
+    return null;
+  }
 
   // Método para cerrar sesión y limpiar el token
   logout(): void {
