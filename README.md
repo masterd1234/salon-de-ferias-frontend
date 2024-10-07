@@ -29,7 +29,7 @@ La aplicación permite a las empresas:
 ## Estructura del prouecto
 
 - **src/app**: Directorio principal con componentes y servicios.
- - **components**: Contiene todos los componentes visuales.
- - **services**: Contiene todos los servicios utilizados en la aplicación.
+   - **components**: Contiene todos los componentes visuales.
+   - **services**: Contiene todos los servicios utilizados en la aplicación.
 - **assets/**: Almacena las imágenes y estilos globales.
 - **environments/**: Archivos de configuración para diferentes entornos (desarrollo/producción).
