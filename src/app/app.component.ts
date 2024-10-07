@@ -34,13 +34,17 @@ export class AppComponent {
     return !!this.authService.getToken();  // Comprueba si el token está presente en el localStorage
   }
 
-  //Verifica si el usuario es Admin
-  isAdmin(): boolean{
+// Verifica si el usuario es Admin o CO
+isRol(): string {
   const tokenData = this.authService.decodeToken();
-  if (tokenData?.rol === 'admin') {
-    return true;
-  }return  false;
 
+  if (tokenData?.rol === 'admin') {
+    return 'admin';
+  } else if (tokenData?.rol === 'co') {
+    return 'co';
+  }
+  
+  return ''; // Devuelve una cadena vacía si no es ni 'admin' ni 'co'
 }
 
 

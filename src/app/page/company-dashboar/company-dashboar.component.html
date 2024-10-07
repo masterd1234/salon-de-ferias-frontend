@@ -1,0 +1,61 @@
+<!-- Ejemplos de lo que tine que configurar -->
+<div class="container-fluid hero-section">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-6 text-content">
+            <h1 class="hero-title">¡Elige tu Stand Virtual!</h1>
+            <p class="hero-description">
+                En esta sección, podrás seleccionar el stand que mejor se adapte a tu empresa para la feria virtual.
+                Desliza para ver los diferentes modelos de stands disponibles y selecciona el que más te guste.
+            </p>
+            <ul class="features-list">
+                <li>Espacio personalizable con el logo de tu empresa.</li>
+                <li>Zona de exhibición para productos destacados.</li>
+                <li>Herramientas de interacción para conectarte con los visitantes en tiempo real.</li>
+            </ul>
+        </div>
+
+        <div class="col-12 col-md-6 image-content">
+            <c-carousel [interval]="0">
+                <c-carousel-inner>
+                    <c-carousel-item *ngFor="let slide of slides">
+                        <img [src]="slide" class="d-block w-100" loading="lazy" />
+                    </c-carousel-item>
+                </c-carousel-inner>
+                <c-carousel-control [routerLink] caption="Previous" direction="prev"></c-carousel-control>
+                <c-carousel-control [routerLink] caption="Next" direction="next"></c-carousel-control>
+            </c-carousel>
+        </div>
+    </div>
+</div>
+
+<!-- Formulario de Diseño -->
+<div>
+
+</div>
+
+<!-- Formulario de informacion adicional -->
+<div class="container-fluid hero-section">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-md-6 text-content">
+            <h1 class="hero-title">Sube documentos y enlaces de interés</h1>
+            <p class="hero-description">
+                En esta sección, puedes añadir enlaces a tus documentos, reuniones importantes (como Zoom o Google
+                Meet),
+                así como cualquier otro enlace relevante para tus clientes y visitantes.
+            </p>
+            <ul class="features-list">
+                <li>URLs de interés (artículos, páginas web, etc.)</li>
+                <li>Documentos importantes (PDF, Word, etc.)</li>
+                <li>Enlaces a reuniones (Zoom, Google Meet, Microsoft Teams)</li>
+            </ul>
+            <p class="hero-description">
+                Estos recursos estarán disponibles para que tus visitantes puedan acceder fácilmente. ¡Asegúrate de
+                incluir toda la información relevante!
+            </p>
+        </div>
+
+        <div class="col-12 col-md-6">
+            <p>Formulario de información adicional.</p>
+        </div>
+    </div>
+</div>

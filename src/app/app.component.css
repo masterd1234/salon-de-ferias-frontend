@@ -1,8 +1,20 @@
+/* Asegúrate de que el estilo se aplique a todo el cuerpo de la aplicación */
 body {
   margin: 0;
   padding: 0;
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'Noto Sans', sans-serif !important;
 }
+
+/* Si usas Bootstrap u otro framework, sobrescribe las variables globales de fuente si es necesario */
+:root {
+  --bs-body-font-family: 'Noto Sans', sans-serif;
+}
+
+/* Utiliza ::ng-deep para asegurar que el estilo se aplique incluso en componentes con encapsulación */
+::ng-deep * {
+  font-family: 'Noto Sans', sans-serif;
+}
+
 .app-background {
   background-image: url('/assets/fondo.png');
   background-size: cover;
@@ -23,14 +35,16 @@ body {
   margin-right: 20px;
 }
 
-.nav-link, .dropdown-item {
+.nav-link,
+.dropdown-item {
   color: white !important;
   font-size: 16px;
   padding: 10px;
 }
 
 .dropdown-menu {
-  background-color: #002e4c; /* Fondo del menú desplegable */
+  background-color: #002e4c;
+  /* Fondo del menú desplegable */
 }
 
 .dropdown-item:hover {
@@ -44,7 +58,8 @@ body {
 }
 
 .navbar-toggler-icon {
-  background-color: white; /* Color blanco para el icono del menú */
+  background-color: white;
+  /* Color blanco para el icono del menú */
 }
 
 /* Estilos para los botones */
@@ -53,41 +68,52 @@ body {
   border: none;
   color: white;
   display: flex;
-  flex-direction: column;  /* Coloca el texto debajo del icono */
+  flex-direction: column;
+  /* Coloca el texto debajo del icono */
   align-items: center;
   padding: 0;
   margin-left: 15px;
-  font-size: 12px; /* Tamaño de texto más pequeño */
+  font-size: 12px;
+  /* Tamaño de texto más pequeño */
 }
 
 .btn-icon-text i {
-  font-size: 20px; /* Tamaño del icono */
-  margin-bottom: 5px; /* Espacio entre icono y texto */
+  font-size: 20px;
+  /* Tamaño del icono */
+  margin-bottom: 5px;
+  /* Espacio entre icono y texto */
 }
 
 .btn-icon-text span {
-  font-size: 10px; /* Texto debajo del icono más pequeño */
+  font-size: 10px;
+  /* Texto debajo del icono más pequeño */
 }
 
 .btn-icon-text:hover {
-  color: #00a89c; /* Cambiar color al pasar el ratón */
+  color: #00a89c;
+  /* Cambiar color al pasar el ratón */
 }
 
 /* Responsivo: reducir tamaño en pantallas pequeñas */
 @media (max-width: 768px) {
-  .nav-link, .dropdown-item {
+
+  .nav-link,
+  .dropdown-item {
     font-size: 14px;
   }
 
   .btn-icon-text {
-    font-size: 10px; /* Texto aún más pequeño en pantallas pequeñas */
+    font-size: 10px;
+    /* Texto aún más pequeño en pantallas pequeñas */
   }
 
   .btn-icon-text i {
-    font-size: 18px; /* Icono más pequeño en pantallas pequeñas */
+    font-size: 18px;
+    /* Icono más pequeño en pantallas pequeñas */
   }
 
   .btn-icon-text span {
-    font-size: 8px; /* Texto debajo del icono más pequeño */
+    font-size: 8px;
+    /* Texto debajo del icono más pequeño */
   }
 }

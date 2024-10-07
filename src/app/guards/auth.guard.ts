@@ -15,8 +15,9 @@ export const authGuard: CanActivateFn = (route, state) => {
     // Verificar si el rol es 'admin'
     if (decodedToken.rol === 'admin') {
       return true;
-    } else {
-      // Redirigir al login si no es admin
+    } else if (decodedToken.rol === 'co') {
+      return true;
+    }else {
       router.navigate(['/login']);
       return false;
     }

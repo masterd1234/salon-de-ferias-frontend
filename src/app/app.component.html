@@ -6,8 +6,13 @@
         <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
       </a>
     </div>
-    <div *ngIf="isAdmin()">
+    <div *ngIf="isRol() ===  'admin'">
       <a class="navbar-brand" routerLink="/admin-dashboard">
+        <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
+      </a>
+    </div>
+    <div *ngIf="isRol() ===  'co'">
+      <a class="navbar-brand" routerLink="/company-dashboard">
         <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
       </a>
     </div>
@@ -21,7 +26,7 @@
      <!-- Se muestra solo cuando eres administrador-->
      
     <div class="collapse navbar-collapse" id="navbarNav">
-      <div *ngIf="isAdmin()">
+      <div *ngIf="isRol() === 'admin' || isRol() === 'co'">
       <ul class="navbar-nav me-auto">
         <!-- Desplegable de Empresas -->
         <li class="nav-item dropdown">
@@ -38,7 +43,7 @@
     </div>
       <!-- Botones a la derecha -->
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item" *ngIf="isAdmin()">
+        <li class="nav-item" *ngIf="isRol() === 'admin'">
           <button class="btn-icon-text" (click)="createUser()">
             <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
           </button>
