@@ -1,8 +1,12 @@
 .role-section {
-    background: linear-gradient(180deg,#FFFFFF 0% , #002E4C 100%); 
-    min-height: 100vh;        /* Asegúrate de que ocupe toda la altura de la ventana */
-    padding: 20px;            /* Espaciado interno para que no quede pegado a los bordes */
-  }
+  border-color: #002E4C;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border: solid 2px;
+  min-height: 100vh;
+  margin-bottom: 0;
+  overflow: hidden; /* Asegura que el contenido respete las esquinas redondeadas */
+}
 /* Gradiente para el encabezado */
 .header-gradient {
     background-color: #002E4C;

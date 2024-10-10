@@ -9,7 +9,7 @@
         <div *ngFor="let user of users()" class="col-12 mb-3">
             <mat-card class="user-card bg-white text-dark p-3" (click)="toggleInfo(user)">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">{{ user.nombre }}</h5>
+                    <h5 class="mb-0">{{ user.name }}</h5>
                     <div>
                         <button mat-stroked-button color="primary"
                             (click)="editUser(user.id); $event.stopPropagation()">

@@ -6,7 +6,7 @@
   }
 
   .bg-custom2 {
-    background-color: aliceblue;
+    background-color:#bdccdb;
     color:black;
     padding: 50px;
     text-align: center;
@@ -29,9 +29,19 @@
     height: auto;    /* Mantener las proporciones de los logos */
   }
   
+  mat-checkbox {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  mat-checkbox a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #00a89c; /* Color azul para los enlaces */
+  }
+
   @media (max-width: 768px) {
     .logos img {
       max-width: 80%;  /* Reducir el tamaño en pantallas más pequeñas */
     }
   }
-  

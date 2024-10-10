@@ -32,7 +32,19 @@ export class ImageService {
     return of(images);
   }
 
-  getReceptionists() {
+  getReceptionists(): Observable<string[]> {
+    const images = [
+      'assets/receptionist1.jpg',
+      'assets/receptionist2.jpg',
+      'assets/receptionist2.jpg',
+      'assets/receptionist3.jpg'
+    ];
+    return of(images);
+  }
+  getStand() {
+    return this.standImages();
+  }
+  getReceptionist() {
     return this.receptionistImages();
   }
 

@@ -1,21 +1,26 @@
 <nav class="navbar navbar-expand-lg navbar-custom">
   <div class="container-fluid">
     <!-- Logo -->
-    <div *ngIf="!isLoggedIn()">
+    @if(!isLoggedIn()){
+    <div>
       <a class="navbar-brand" routerLink="/login">
         <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
       </a>
     </div>
-    <div *ngIf="isRol() ===  'admin'">
+    }@else if(isRol() === 'admin'){
+    <div>
       <a class="navbar-brand" routerLink="/admin-dashboard">
         <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
       </a>
     </div>
-    <div *ngIf="isRol() ===  'co'">
+    }@else if (isRol() === 'co') {
+    <div>
       <a class="navbar-brand" routerLink="/company-dashboard">
         <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
       </a>
     </div>
+    }
+
     <!-- Toggler for mobile view -->
     <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,10 +28,10 @@
     </button>
 
     <!-- Enlaces desplegables -->
-     <!-- Se muestra solo cuando eres administrador-->
-     
+    <!-- Se muestra solo cuando eres administrador-->
+
     <div class="collapse navbar-collapse" id="navbarNav">
-      <div *ngIf="isRol() === 'admin' || isRol() === 'co'">
+      @if(isRol() === 'admin'){
       <ul class="navbar-nav me-auto">
         <!-- Desplegable de Empresas -->
         <li class="nav-item dropdown">
@@ -40,20 +45,38 @@
           </ul>
         </li>
       </ul>
-    </div>
+      }
+      @if(isRol() === 'co'){
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link active" routerLink="/design">Diseño de Stand</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" routerLink="/empresa-info">Información Empresa</a>
+          </li>
+        </ul>
+      }
+
+
       <!-- Botones a la derecha -->
+      @if(isLoggedIn()){
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item" *ngIf="isRol() === 'admin'">
+
+        @if(isRol() === 'admin'){
+        <li class="nav-item">
           <button class="btn-icon-text" (click)="createUser()">
             <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
           </button>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn()">
+        }
+        <li class="nav-item">
           <button class="btn-icon-text" (click)="logout()">
             <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Cerrar Sesión</span>
           </button>
         </li>
+
       </ul>
+      }
     </div>
   </div>
 </nav>
@@ -62,3 +85,9 @@
 <div class="app-background">
   <router-outlet></router-outlet>
 </div>
+
+<footer class="footer text-white py-3">
+  <div class="container text-center">
+    <p>&copy; 2024 - Medac. Todos los derechos reservados.</p>
+  </div>
+</footer>

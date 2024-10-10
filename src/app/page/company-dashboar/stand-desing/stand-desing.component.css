@@ -1,0 +1,165 @@
+/* Estilo del contenedor principal */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+  padding-top: 50px;
+  gap: 20px;
+  text-align: center;
+  width: 100%; /* Asegura que el contenedor use todo el ancho */
+  box-sizing: border-box;
+}
+
+
+
+/* Ajuste de las imágenes en el carrusel */
+.images-container {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+  object-fit: contain;
+  padding: 10px 0;
+  /* Ocultar la barra de desplazamiento */
+  scrollbar-width: none; /* Firefox */
+}
+
+.images-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari y Opera */
+}
+
+/* Estilo de las imágenes en el carrusel */
+img {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+img:hover {
+  transform: scale(1.05);
+}
+
+img.selected {
+  border-color: blue;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.1);
+}
+
+/* Mejora del tamaño de las imágenes en pantallas más grandes */
+@media (min-width: 600px) {
+  img {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (min-width: 768px) {
+  img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* Botones de navegación */
+.nav-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.nav-button:hover {
+  background-color: #0056b3;
+}
+
+/* Contenedor del botón */
+.carousel-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Para que los botones se alineen */
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Ajuste de ancho y espaciado de los botones */
+button {
+  padding: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Logo y vista previa */
+.subir-logo-container {
+  width: 100%;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.company-logo-preview {
+  max-width: 120px;
+  margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+  .company-logo-preview {
+    max-width: 150px;
+  }
+}
+
+/* Contenedor de vista previa */
+.preview-combined-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* Contenedor de vista previa con posición relativa para las imágenes superpuestas */
+.combined-image-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+/* Imagen del stand */
+.stand-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  position: relative; /* El stand está en el fondo */
+  object-fit: contain;
+}
+
+/* Imagen del recepcionista */
+.receptionist-image {
+  position: absolute;
+  width: 30%; /* Ajusta el tamaño del recepcionista */
+  bottom: 10px; /* Posición inicial */
+  left: 50%; /* Centrado por defecto */
+  transform: translateX(-50%);
+}
+
+/* Estilo para el logo en la vista previa */
+.logo-image {
+  position: absolute;
+  bottom: 10px;
+  max-width: 100px;
+  height: auto;
+}

@@ -25,6 +25,19 @@ body {
   flex-direction: column;
 }
 
+.footer {
+  position: relative;
+  width: 100%;
+  bottom: 0;
+  background-color: #002e4c;
+  color: white;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+}
+
 /* Estilos para la barra de navegación */
 .navbar-custom {
   background-color: #002e4c;
@@ -48,7 +61,7 @@ body {
 }
 
 .dropdown-item:hover {
-  background-color: #00a89c;
+  background-color: #002e4c;
   color: white !important;
 }
 
@@ -93,6 +106,11 @@ body {
   color: #00a89c;
   /* Cambiar color al pasar el ratón */
 }
+/* Cambiar el color al pasar el ratón por encima de los nav-items */
+.nav-link:hover,
+.dropdown-item:hover {
+  color: #00a89c !important; /* Cambia el color al pasar el ratón */
+}
 
 /* Responsivo: reducir tamaño en pantallas pequeñas */
 @media (max-width: 768px) {
@@ -117,3 +135,5 @@ body {
     /* Texto debajo del icono más pequeño */
   }
 }
+
+

@@ -41,17 +41,67 @@ export class CreateUserComponent {
   constructor() {
     // Configuración del formulario reactivo
     this.createUserForm = this.fb.group({
-      nombre: ['', [Validators.required]],
+      name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      contraseña: ['', [Validators.required, Validators.minLength(6)]],
-      rol: ['', Validators.required]  // Asegúrate de que este control está bien configurado
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      rol: ['', Validators.required],
+          // Campos adicionales para COs
+      company: [''],
+      standId: [''],
+      cif: [''],
+
+      // Campos adicionales para Visitantes
+      dni: [''],
+      studies: ['']
+    });
+
+    // Escuchar cambios en el campo "rol" para actualizar las validaciones
+    this.createUserForm.get('rol')?.valueChanges.subscribe((rol) => {
+      this.updateValidationsBasedOnRole(rol);
     });
   }
+
+  // Función para actualizar validaciones dinámicas basadas en el rol seleccionado
+  updateValidationsBasedOnRole(rol: string) {
+    const companyControl = this.createUserForm.get('company');
+    const standIdControl = this.createUserForm.get('standId');
+    const cifControl = this.createUserForm.get('cif');
+    const dniControl = this.createUserForm.get('dni');
+    const studiesControl = this.createUserForm.get('studies');
+
+    // Resetear las validaciones
+    companyControl?.clearValidators();
+    standIdControl?.clearValidators();
+    cifControl?.clearValidators();
+    dniControl?.clearValidators();
+    studiesControl?.clearValidators();
+
+    if (rol === 'co') {
+      // Si el rol es CO, activamos las validaciones de empresa, standId y cif
+      companyControl?.setValidators([Validators.required]);
+      standIdControl?.setValidators([Validators.required]);
+      cifControl?.setValidators([Validators.required]);
+    } else if (rol === 'visitante') {
+      // Si el rol es visitante, activamos las validaciones de dni y estudios
+      dniControl?.setValidators([Validators.required]);
+      studiesControl?.setValidators([Validators.required]);
+    }
+
+    // Aseguramos que se actualicen los estados de los controles
+    companyControl?.updateValueAndValidity();
+    standIdControl?.updateValueAndValidity();
+    cifControl?.updateValueAndValidity();
+    dniControl?.updateValueAndValidity();
+    studiesControl?.updateValueAndValidity();
+  }
+
+
 
   // Método para manejar el envío del formulario
   onSubmit(): void {
     if (this.createUserForm.valid) {
       const newUser = this.createUserForm.value;
+      console.log('Datos enviados:', newUser);  // Agrega esto para depuración
 
       // Obtenemos el token del AuthService
       const token = this.authService.getToken();
@@ -64,7 +114,7 @@ export class CreateUserComponent {
       this.isSubmitting.set(true);
 
       // Llamada al servicio para crear el usuario
-      this.userService.createUser(newUser, token).subscribe({
+      this.userService.createUser(newUser).subscribe({
         next: (response) => {
           console.log('Usuario creado exitosamente', response);
           this.dialogRef.close(response);  // Cierra el modal y pasa el nuevo usuario creado
@@ -77,6 +127,7 @@ export class CreateUserComponent {
       });
     }
   }
+
 
   // Método para cerrar el modal sin crear usuario
   onClose(): void {

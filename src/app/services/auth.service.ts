@@ -17,8 +17,8 @@ export class AuthService {
   ) {}
 
   // Método de login que envía las credenciales al backend
-  login(username: string, password: string): Observable<any> {
-    return this.http.post(this.apiUrl, { nombre: username, contraseña: password }).pipe(
+  login(nameOrEmail: string, password: string): Observable<any> {
+    return this.http.post(this.apiUrl, { nameOrEmail, password }).pipe(
       tap({
         next: (response: any) => {
           if (response.token) {

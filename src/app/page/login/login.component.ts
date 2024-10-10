@@ -10,20 +10,20 @@ import { Router, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { AuthService } from '../../services/auth.service';
-
+import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, RouterModule],
+  imports: [MatCheckboxModule, HttpClientModule, CommonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
 
-  hide = signal(true); //signal para ocultar/mostrar la contraseña
-  privacyAccepted = signal(false); //signal para aceptar la política de privacidad
-  termsAccepted = signal(false);  //signal para aceptar los terminos y condiciones
+  hide = true; //signal para ocultar/mostrar la contraseña
+  privacyAccepted = false; //signal para aceptar la política de privacidad
+  termsAccepted = false;  //signal para aceptar los terminos y condiciones
   loginForm: FormGroup; // Formulario reactivo
 
 
@@ -34,7 +34,7 @@ export class LoginComponent {
   ) {
     // Configuramos el formulario reactivo
     this.loginForm = this.fb.group({
-      name: ['', [Validators.required]], // Campo nombre de usuario requerido
+      nameOrEmail: ['', [Validators.required]], // Campo nombre de usuario requerido
       password: ['', [Validators.required, Validators.minLength(6)]], // Campo contraseña requerido con mínimo 6 caracteres
     });
   }
@@ -42,30 +42,28 @@ export class LoginComponent {
 
   // Alternar visibilidad de la contraseña
   togglePasswordVisibility(): void {
-    this.hide.set(!this.hide());
+    this.hide = !this.hide;
   }
 
 
   // Cambiar el estado de aceptación de la política de privacidad
-  onPrivacyChange(event: Event): void {
-    const checked = (event.target as HTMLInputElement).checked;
-    this.privacyAccepted.set(checked);
+  onPrivacyChange(event: MatCheckboxChange): void {
+    this.privacyAccepted = event.checked;
   }
 
 
   // Cambiar el estado de aceptación de los términos y condiciones
-  onTermsChange(event: Event): void {
-    const checked = (event.target as HTMLInputElement).checked;
-    this.termsAccepted.set(checked);
+  onTermsChange(event: MatCheckboxChange): void {
+    this.termsAccepted = event.checked;
   }
 
   // Método para manejar el envío del formulario
   login(): void {
-    if (this.loginForm.valid && this.privacyAccepted() && this.termsAccepted()) {
-      const { name, password } = this.loginForm.value;
+    if (this.loginForm.valid && this.privacyAccepted && this.termsAccepted) {
+      const { nameOrEmail, password } = this.loginForm.value;
 
       // Llamada al servicio de autenticación
-      this.authService.login(name, password).subscribe({
+      this.authService.login(nameOrEmail, password).subscribe({
         next: (response) => {
           // Verifica si el token está presente en la respuesta
           if (response.token) {

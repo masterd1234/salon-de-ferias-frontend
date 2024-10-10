@@ -1,28 +1,84 @@
 <mat-dialog-content>
-    <form [formGroup]="editUserForm" (ngSubmit)="onSave()">
-      <mat-form-field class="full-width">
-        <mat-label>Nombre</mat-label>
-        <input matInput formControlName="nombre" placeholder="Nombre del usuario">
-      </mat-form-field>
-  
-      <mat-form-field class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" placeholder="Correo electrónico" type="email">
-      </mat-form-field>
-  
-      <mat-form-field class="full-width">
-        <mat-label>Rol</mat-label>
-        <mat-select formControlName="rol">
-          <mat-option value="admin">Admin</mat-option>
-          <mat-option value="empresa">Empresa</mat-option>
-          <mat-option value="alumno">Alumno</mat-option>
-        </mat-select>
-      </mat-form-field>
-  
-      <mat-dialog-actions>
-        <button mat-button (click)="onCancel()">Cancelar</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="editUserForm.invalid">Guardar</button>
-      </mat-dialog-actions>
-    </form>
-  </mat-dialog-content>
-  
+  <form [formGroup]="editUserForm" (ngSubmit)="onSave()">
+    <mat-form-field class="full-width">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" placeholder="Nombre del usuario">
+      @if(editUserForm.get('name')?.invalid && editUserForm.get('name')?.touched){
+      <mat-error>El nombre es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" placeholder="Correo electrónico" type="email">
+      @if(editUserForm.get('email')?.invalid && editUserForm.get('email')?.touched){
+      <mat-error>
+        @if (editUserForm.get('email')?.errors?.['email']){
+        <ng-container>El correo electrónico no es válido.</ng-container>
+        }
+        <ng-container>El correo electrónico es obligatorio.</ng-container>
+
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Rol</mat-label>
+      <mat-select formControlName="rol">
+        <mat-option value="admin">Admin</mat-option>
+        <mat-option value="co">Empresa</mat-option>
+        <mat-option value="visitor">Alumno</mat-option>
+      </mat-select>
+      @if(editUserForm.get('rol')?.invalid && editUserForm.get('rol')?.touched){
+      <mat-error>El rol es requerido</mat-error>
+      }
+    </mat-form-field>
+
+        <!-- Campos adicionales para co -->
+        @if(editUserForm.get('rol')?.value === 'co'){
+          <!-- Campo nombre de la empresa -->
+          <mat-form-field class="full-width">
+            <mat-label>Nombre de la Empresa</mat-label>
+            <input matInput formControlName="company" placeholder="Nombre de la empresa">
+            @if(editUserForm.get('company')?.hasError('required')){
+              <mat-error> El nombre de la empresa es obligatorio.</mat-error>
+            }
+          </mat-form-field>
+    
+          <!-- Campo CIF -->
+          <mat-form-field class="full-width">
+            <mat-label>CIF</mat-label>
+            <input matInput formControlName="cif" placeholder="A12345678">
+            @if(editUserForm.get('cif')?.hasError('required')){
+              <mat-error> El CIF es obligatorio.</mat-error>
+            }
+          </mat-form-field>
+        }
+    
+        <!-- Campos adicionales para visitantes -->
+        @if(editUserForm.get('rol')?.value === 'visitor'){
+          <!-- Campo nombre de la empresa -->
+          <mat-form-field class="full-width">
+            <mat-label>DNI</mat-label>
+            <input matInput formControlName="dni" placeholder="12345667A">
+            @if(editUserForm.get('dni')?.hasError('required')){
+              <mat-error> El DNI es obligatorio.</mat-error>
+            }
+          </mat-form-field>
+    
+          <!-- Campo CIF -->
+          <mat-form-field class="full-width">
+            <mat-label>Estudios</mat-label>
+            <input matInput formControlName="studies" placeholder="Estudios del visitante">
+            @if(editUserForm.get('studies')?.hasError('studies')){
+              <mat-error> Los estidios son obligatorio.</mat-error>
+            }
+          </mat-form-field>
+        }
+
+    <mat-dialog-actions>
+      <button mat-button [disabled]="editUserForm.invalid" (click)="onCancel()">Cancelar</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="editUserForm.invalid">Guardar</button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

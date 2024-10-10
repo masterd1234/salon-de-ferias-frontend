@@ -1,0 +1,69 @@
+<div class="container-fluid main-container ">
+  <div class="row align-items-center justify-content-center" [formGroup]="form">
+
+    <!-- Sección de selección del stand -->
+    <div class="col-md-6 text-content">
+      <h2>Selecciona el Stand</h2>
+      <div class="carousel-container">
+        <button class="nav-button left" (click)="scroll('stand', 'left')">&lt;</button>
+        <div class="images-container stand-carousel">
+          <img *ngFor="let stand of stands" [src]="stand" alt="Stand"
+            [class.selected]="isSelected(stand, selectedStand())" (click)="selectImage(stand, 'stand')"
+            [attr.aria-selected]="isSelected(stand, selectedStand())" />
+        </div>
+        <button class="nav-button right" (click)="scroll('stand', 'right')">&gt;</button>
+      </div>
+      <!-- Sección de selección del recepcionista -->
+      <h2>Selecciona al Recepcionista</h2>
+      <div class="carousel-container">
+        <button class="nav-button left" (click)="scroll('receptionist', 'left')">&lt;</button>
+        <div class="images-container receptionist-carousel">
+          <img *ngFor="let receptionist of receptionists" [src]="receptionist" alt="Recepcionista"
+            [class.selected]="isSelected(receptionist, selectedReceptionist())"
+            (click)="selectImage(receptionist, 'receptionist')"
+            [attr.aria-selected]="isSelected(receptionist, selectedReceptionist())" />
+        </div>
+        <button class="nav-button right" (click)="scroll('receptionist', 'right')">&gt;</button>
+      </div>
+    </div>
+
+    <!-- Vista previa combinada -->
+    <div class="col-md-6 text-content">
+      <div class="preview-combined-container">
+        <h2>Vista Previa:</h2>
+        <div class="combined-image-container">
+          <img [src]="selectedStand() || '../assets/stand1.jpg'" alt="Vista previa del Stand seleccionado" class="stand-image">
+          <img [src]="selectedReceptionist() || '../assets/receptionist1.jpg'" alt="Vista previa del Recepcionista seleccionado"
+            class="receptionist-image">
+
+          <!-- Mostrar el logo solo si está subido -->
+          <img *ngIf="imagenCargada" [src]="imageSrc" alt="Logo de la empresa en la vista previa" class="logo-image">
+        </div>
+      </div>
+    </div>
+
+    <!-- Campo Logo -->
+    <div class="subir-logo-container">
+      <div class="subir-logo">
+        <label for="logo">¡Sube tu logo aquí!</label>
+        <input type="file" id="logo" (change)="subirLogo($event)" class="hidden-file-input">
+
+        <!-- Vista previa del logo -->
+        <div *ngIf="imagenCargada" class="logo-preview-container">
+          <img [src]="imageSrc" alt="Logo de la empresa" class="company-logo-preview">
+        </div>
+
+        <!-- Botones para subir y borrar logo -->
+        <div *ngIf="imagenCargada" class="button-group-horizontal">
+          <button type="button" class="rounded-button" (click)="borrarLogo()">Borrar logo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="button-container">
+      <button (click)="submitSelection()">Enviar Selección</button>
+      <button (click)="clearSelection()"> Borrar Selección</button>
+    </div>
+  </div>
+</div>
