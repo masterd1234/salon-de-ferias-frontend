@@ -1,27 +1,35 @@
 # PalacioDeFerias
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.9.
+**PalacioDeFerias** es una plataforma frontend creada con **Angular** para gestionar una feria virtual. Permite a las empresas configurar stands virtuales y a los visitantes interactuar con estos stands. Los usuarios pueden subir documentos, compartir enlaces a reuniones virtuales y más.
 
-## Development server
+## Tabla de contenido
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+1. [Tecnologías Utilizadas](#tecnologías-utilizadas)
+2. [Uso](#uso)
+3. [Estructura del Proyecto](#estructura-del-proyecto)
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Tecnologías Utilizadas
 
-## Build
+- **Angular CLI** (v17.3.9)
+- **TypeScript**
+- **Bootstrap**
+- **RxJS** para el manejo de observables
+- **Node.js** como entorno de desarrollo
+- **HTML5** y **CSS3**
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Uso
 
-## Running unit tests
+La aplicación permite a las empresas:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- Subir imágenes para mostrar en stands virtuales.
+- Compartir documentos relevantes con los visitantes.
+- Configurar enlaces a reuniones virtuales (Zoom, Google Meet, etc.).
 
-## Running end-to-end tests
+## Estructura del prouecto
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- **src/app**: Directorio principal con componentes y servicios.
+   - **components**: Contiene todos los componentes visuales.
+   - **services**: Contiene todos los servicios utilizados en la aplicación.
+- **assets/**: Almacena las imágenes y estilos globales.
+- **environments/**: Archivos de configuración para diferentes entornos (desarrollo/producción).
