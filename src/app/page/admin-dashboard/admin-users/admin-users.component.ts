@@ -26,7 +26,7 @@ export class AdminUsersComponent implements OnInit {
   private appComponent = inject(AppComponent);
 
   ngOnInit(): void {
-    this.loadAdminUsers();  // Cargar usuarios administradores
+    this.loadAdminUsers(); // Cargar usuarios administradores
   }
 
   constructor() {
@@ -38,11 +38,31 @@ export class AdminUsersComponent implements OnInit {
     });
   }
 
+
   loadAdminUsers(): void {
     this.userService.getUsers().subscribe(
-      (data) => this.users.set(data.filter(user => user.rol === 'admin')),  // Filtrar usuarios con rol 'admin'
+      (data) => {this.users.set(data.filter(user => user.rol === 'admin'));
+        console.log('Usuarios recvibidos:', data )},  // Filtrar usuarios con rol 'admin'
       (error) => console.error('Error al cargar los usuarios', error)
-    );
+    ); 
+  }
+
+  formatDate(timestamp: { _seconds: number, _nanoseconds: number }): string {
+    if (!timestamp || typeof timestamp._seconds !== 'number') {
+      return 'Fecha no disponible';  // Manejar el caso de que no haya fecha
+    }
+  
+    // Convertir _seconds a milisegundos y sumar los nanosegundos convertidos a milisegundos
+    const milliseconds = timestamp._seconds * 1000 + timestamp._nanoseconds / 1000000;
+  
+    const date = new Date(milliseconds);
+  
+    if (isNaN(date.getTime())) {
+      return 'Fecha inválida';  // Si la fecha es inválida
+    }
+  
+    // Formatear la fecha
+    return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
   }
 
   toggleInfo(user: any): void {

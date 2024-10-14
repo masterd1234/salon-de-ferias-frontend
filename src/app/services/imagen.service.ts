@@ -15,10 +15,10 @@ export class ImageService {
   ]);
 
   receptionistImages = signal<string[]>([
-    'assets/receptionist1.jpg',
-    'assets/receptionist2.jpg',
-    'assets/receptionist2.jpg',
-    'assets/receptionist3.jpg'
+    './assets/recepcionist1.png',
+    './assets/recepcionist2.png',
+    './assets/recepcionist4.png',
+    './assets/recepcionist3.png'
   ]);
 
   getStands(): Observable<string[]> {
@@ -34,10 +34,10 @@ export class ImageService {
 
   getReceptionists(): Observable<string[]> {
     const images = [
-      'assets/receptionist1.jpg',
-      'assets/receptionist2.jpg',
-      'assets/receptionist2.jpg',
-      'assets/receptionist3.jpg'
+      './assets/recepcionist1.png',
+      './assets/recepcionist2.png',
+      './assets/recepcionist4.png',
+      './assets/recepcionist3.png'
     ];
     return of(images);
   }

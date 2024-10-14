@@ -39,10 +39,8 @@
 .design-form {
   background-color: #bdccdb;
   color: rgb(8, 8, 8);
-  padding: 20px; /* Ajustamos el padding para pantallas pequeñas */
   text-align: left;
   width: 100%;
-  border-radius: 10px;
 }
 
 /* Ajustes responsivos */
@@ -69,8 +67,4 @@
     height: 400px; /* Ajustamos la altura en pantallas grandes */
   }
 
-  .design-form {
-    padding: 50px;
-    border-radius: 10px;
-  }
 }

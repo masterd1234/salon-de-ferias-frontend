@@ -22,7 +22,7 @@
                 </div>
                 <mat-card-content *ngIf="user.showInfo" class="mt-4">
                     <p><i class="fa-regular fa-envelope"></i> {{ user.email }}</p>
-                    <p><i class="fa-solid fa-flag"></i> {{ user.rol }}</p>
+                    <p><i class="fa-solid fa-flag"></i> {{ formatDate(user.createdAt) }}</p>
                 </mat-card-content>
             </mat-card>
         </div>

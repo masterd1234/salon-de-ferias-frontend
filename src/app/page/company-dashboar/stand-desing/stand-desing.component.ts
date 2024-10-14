@@ -17,119 +17,140 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StandDesingComponent implements OnInit {
-  form: FormGroup;
-  stands: string[] = [];
-  receptionists: string[] = [];
-  imagenCargada: boolean = false;
-  imageSrc: string | ArrayBuffer | null = '';
+ // Signals para almacenar las imágenes y la selección actual
+ standImages = signal<string[]>([]);
+ receptionistImages = signal<string[]>([]);
+ selectedStand = signal<string | null>(null);
+ selectedReceptionist = signal<string | null>(null);
 
-  constructor(
-    private fb: FormBuilder,
-    private imageService: ImageService,
+ // Otros campos para manejar el estado de la aplicación
+ nombre: string | null = '';
+ descripcion: string | null = '';
+ logo: File | null = null;
+ imagenCargada: boolean = false;
+ imagenSubiendo: boolean = false;
+ imageSrc: string | null = null;
+ customStandEnabled: boolean = false;  // Para habilitar la subida de stand personalizado
 
-  ) {
-    this.form = this.fb.group({
-      selectedStand: [''],
-      selectedReceptionist: [''],
-      companyLogo: ['']
-    });
-  }
+ constructor(private imageService: ImageService, private cdr: ChangeDetectorRef) {
+   this.standImages.set(this.imageService.getStand());
+   this.receptionistImages.set(this.imageService.getReceptionist());
+ }
 
-  ngOnInit(): void {
-    this.cargarStands();
-    this.cargarReceptionists();
-  }
+ ngOnInit(): void {}
 
-  // Cargar stands desde el servicio
-  cargarStands() {
-    this.imageService.getStands().subscribe((stands: string[]) => {
-      this.stands = stands;
-    });
-  }
+ // Función para activar/desactivar la opción de subir stand personalizado
+ toggleCustomStand(event: any): void {
+   this.customStandEnabled = event.target.checked;
+ }
 
-  // Cargar recepcionistas desde el servicio
-  cargarReceptionists() {
-    this.imageService.getReceptionists().subscribe((receptionists: string[]) => {
-      this.receptionists = receptionists;
-    });
-  }
+ // Método para abrir el diálogo de selección de archivo para el stand personalizado
+ uploadCustomStand(): void {
+   const fileInput = document.getElementById('standUpload') as HTMLInputElement;
+   fileInput.click();
+ }
 
-  // Manejo de selección de stand
-  selectImage(image: string, type: 'stand' | 'receptionist') {
-    if (type === 'stand') {
-      this.form.controls['selectedStand'].setValue(image);
-    } else {
-      this.form.controls['selectedReceptionist'].setValue(image);
-    }
-  }
+ // Manejo de la subida del stand personalizado
+ handleStandUpload(event: any): void {
+   const archivo = event?.target?.files?.[0];
+   if (archivo && archivo.type === 'image/jpeg' && archivo.size <= 5 * 1024 * 1024) {
+     const reader = new FileReader();
+     reader.onload = (e: any) => {
+       const nuevoStand = e.target.result;
+       this.standImages.set([nuevoStand, ...this.standImages()]);  // Agregar el nuevo stand al principio
+       this.selectedStand.set(nuevoStand);  // Seleccionar automáticamente el nuevo stand
+       this.cdr.detectChanges();  // Forzar la actualización de la vista
+     };
+     reader.readAsDataURL(archivo);
+   } else {
+     alert('Solo se permiten imágenes en formato .jpg con un tamaño máximo de 5Mb');
+   }
+ }
 
-  // Manejo de subir logo
-  subirLogo(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result;
-        if (result) { // Verificamos que no sea undefined
-          this.imageSrc = result;  // Garantizamos que sea string | ArrayBuffer | null
-          this.form.controls['companyLogo'].setValue(this.imageSrc);
-          this.imagenCargada = true;
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  }
+ // Método para seleccionar una imagen de stand o recepcionista
+ selectImage(image: string, type: 'stand' | 'receptionist') {
+   if (type === 'stand') {
+     this.selectedStand.set(image);
+   } else {
+     this.selectedReceptionist.set(image);
+   }
+ }
 
-  borrarLogo() {
-    this.form.controls['companyLogo'].setValue('');
-    this.imagenCargada = false;
-    this.imageSrc = null;
-  }
+ // Verificar si una imagen está seleccionada
+ isSelected(image: string, selectedImage: string | null): boolean {
+   return image === selectedImage;
+ }
 
-  // Enviar la selección final del formulario
-  submitSelection() {
-    if (this.form.valid) {
-      console.log('Formulario enviado:', this.form.value);
-    }
-  }
+ // Método para manejar el scroll de los carruseles
+ scroll(type: 'stand' | 'receptionist', direction: 'left' | 'right') {
+   const container = document.querySelector(
+     type === 'stand' ? '.stand-carousel' : '.receptionist-carousel'
+   ) as HTMLElement;
 
-  scroll(type: 'stand' | 'receptionist', direction: 'left' | 'right') {
-    const container = type === 'stand' 
-      ? document.querySelector('.stand-carousel') 
-      : document.querySelector('.receptionist-carousel');
-  
-    if (container) {
-      const scrollAmount = 300; // Cantidad de desplazamiento en píxeles
-      const currentScroll = container.scrollLeft;
-  
-      if (direction === 'left') {
-        container.scrollTo({ left: currentScroll - scrollAmount, behavior: 'smooth' });
-      } else {
-        container.scrollTo({ left: currentScroll + scrollAmount, behavior: 'smooth' });
-      }
-    }
-  }
+   if (container) {
+     const scrollAmount = 300;
+     container.scrollBy({
+       left: direction === 'left' ? -scrollAmount : scrollAmount,
+       behavior: 'smooth'
+     });
+   }
+ }
+ 
+ // Método para subir el logo
+ selectLogo(): void {
+   const fileInput = document.getElementById('logo') as HTMLInputElement;
+   fileInput.click();  // Simular el clic para abrir el input de archivo
+ }
 
-  // Limpiar la selección
-  clearSelection() {
-    this.form.reset();
-    this.imagenCargada = false;
-    this.imageSrc = null;
-  }
+ subirLogo(event: any): void {
+   const archivo = event?.target?.files?.[0];
+   if (archivo && archivo.type === 'image/jpeg' && archivo.size <= 5 * 1024 * 1024) {
+     const reader = new FileReader();
+     reader.onload = (e: any) => {
+       this.imageSrc = e.target.result;
+       this.imagenCargada = true;
+       this.cdr.detectChanges();  // Forzar la actualización de la vista
+       alert('Logo subido correctamente');
+     };
+     reader.readAsDataURL(archivo);
+   } else {
+     alert('Solo se permiten imágenes en formato .jpg con un tamaño máximo de 5Mb');
+   }
+ }
 
-  // Métodos auxiliares para verificar selecciones
-  isSelected(image: string, selected: string) {
-    return image === selected;
-  }
+ // Método para borrar el logo subido
+ borrarLogo(): void {
+   this.imageSrc = null;
+   this.imagenCargada = false;
+ }
 
-  // Obtener los stands y recepcionistas seleccionados
-  selectedStand() {
-    return this.form.controls['selectedStand'].value;
-  }
+ // Método para editar el logo (borrar el actual y subir uno nuevo)
+ editarLogo(): void {
+   this.borrarLogo();
+   this.selectLogo();
+ }
 
-  selectedReceptionist() {
-    return this.form.controls['selectedReceptionist'].value;
-  }
+ // Método para enviar la selección de imágenes y logo
+ submitSelection() {
+   const selection = {
+     stand: this.selectedStand(),
+     receptionist: this.selectedReceptionist(),
+     logo: this.imageSrc  // Incluir el logo en la selección
+   };
+   console.log('Selección enviada:', selection);
+   alert(`Has seleccionado:\nStand: ${selection.stand}\nRecepcionista: ${selection.receptionist}\nLogo: ${selection.logo ? 'Subido' : 'No subido'}`);
+ }
+
+ // Método para limpiar la selección de stands y recepcionistas
+ clearSelection() {
+   this.selectedStand.set(null);
+   this.selectedReceptionist.set(null);
+   this.logo = null;
+   this.imageSrc = null;
+   this.imagenCargada = false;
+   this.cdr.detectChanges();  // Forzar la actualización de la vista
+ }
+
 
 
 }

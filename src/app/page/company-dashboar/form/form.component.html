@@ -1,6 +1,6 @@
 <div class="formulario">
   <form [formGroup]="formulario" (ngSubmit)="enviarFormulario()">
-    
+
     <!-- Campo Nombre -->
     <div class="form-group pt-3 mx-3">
       <label>Nombre de la empresa</label>
@@ -20,7 +20,6 @@
       </small>
     </div>
 
-
     <!-- Campo Más información -->
     <div class="form-group mt-3 mx-3">
       <label>Más información</label>
@@ -28,21 +27,58 @@
       <ckeditor *ngIf="editorCargado" [editor]="EditorMasInformacion" formControlName="masInformacion"></ckeditor>
     </div>
 
-  <!-- Campo Título botón adicional -->
-  <div class="form-group mt-3 mx-3">
-    <label>Título botón adicional</label>
-    <input type="text" id="titulo-boton-adicional" formControlName="tituloBotonAdicional" class="form-control">
-  </div>
+    <!-- Campo para añadir enlaces -->
+    <div class="form-group mt-3 mx-3">
+      <div class="row">
+        <div class="col-md-6">
+          <label>Título botón adicional</label>
+          <input type="text" id="titulo-boton-adicional" formControlName="tituloBotonAdicional" class="form-control">
+        </div>
+        <div class="col-md-6">
+          <label>Link botón adicional</label>
+          <input type="text" id="link-boton-adicional" formControlName="linkBotonAdicional" class="form-control">
+        </div>
+        <button type="button" class="btn btn-secondary mt-2" (click)="addLink()">Add Link</button>
+      </div>
+    </div>
 
-  <!-- Campo Link botón adicional -->
-  <div class="form-group mt-3 mx-3">
-    <label>Link botón adicional</label>
-    <input type="text" id="link-boton-adicional" formControlName="linkBotonAdicional" class="form-control">
-  </div>
+    <!-- Campo para subir archivos -->
+    <div class="form-group mt-3 mx-3">
+      <label for="file">Subir archivo</label>
+      <input type="file" id="file" class="form-control" (change)="onFileChange($event)">
+    </div>
 
-  <!-- Botón enviar -->
-  <div class="form-group mt-3 pb-3 text-end mx-3">
-    <button type="submit" class="btn btn-primary btn-lg" [disabled]="formulario.invalid">Enviar</button>
-  </div>
-</form>
+    <div class="form-group mt-3 mx-3">
+      <div class="row">
+        <!-- List of added links -->
+        <div *ngIf="formulario.get('links')?.value?.length > 0" [ngClass]="{'col-md-12': uploadedFiles.length === 0, 'col-md-6': uploadedFiles.length > 0}">
+          <label>Added Links:</label>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let link of formulario.get('links')?.value; let i = index">
+              <span><a [href]="link.url" target="_blank">{{ link.title }}</a></span>
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeLink(i)"><i class="fa-solid fa-trash"></i></button>
+            </li>
+          </ul>
+        </div>
+        <!-- Lista de archivos añadidos -->
+        <div *ngIf="uploadedFiles.length > 0"  [ngClass]="{'col-md-12': formulario.get('links')?.value?.length === 0, 'col-md-6': formulario.get('links')?.value?.length > 0}">
+          <label>Uploaded Files:</label>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let file of uploadedFiles; let i = index">
+              <span>{{ file.name }}</span>
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeFile(i)"><i class="fa-solid fa-trash"></i></button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Botón enviar -->
+    <div class="form-group mt-3 pb-3 text-end mx-3">
+      <button type="submit" class="btn btn-primary btn-lg" [disabled]="formulario.invalid">Enviar</button>
+    </div>
+  </form>
 </div>

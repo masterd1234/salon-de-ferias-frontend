@@ -38,3 +38,22 @@ small {
   border-color: #aaa;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-group-item a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.list-group-item a:hover {
+  text-decoration: underline;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+}
