@@ -1,0 +1,11 @@
+{
+  "routes": [
+    "/",
+    "/admin-dashboard",
+    "/company-dashboard",
+    "/login",
+    "/offers",
+    "/profile",
+    "/videos"
+  ]
+}
