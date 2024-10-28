@@ -2,6 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -48,11 +49,10 @@ export class AuthService {
     return this.token;
   }
 
-  // Función para cargar jwt-decode dinámicamente y decodificar el token
-  async decodeToken(): Promise<any> {
+  //Descodificar el TOKEN
+  decodeToken(): any {
     const token = this.getToken();
     if (token) {
-      const { default: jwtDecode } = await import('jwt-decode');
       return jwtDecode(token);  // Decodifica el token JWT
     }
     return null;
