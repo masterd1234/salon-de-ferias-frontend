@@ -17,7 +17,7 @@
               "@ckeditor/ckeditor5-build-classic",
               "undici"
             ],
-            "outputPath": "dist/palacio-de-ferias/browser",
+            "outputPath": "dist/palacio-de-ferias",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
