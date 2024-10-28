@@ -13,6 +13,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": [
+              "@ckeditor/ckeditor5-build-classic",
+              "undici"
+            ],
             "outputPath": "dist/palacio-de-ferias/browser",
             "index": "src/index.html",
             "browser": "src/main.ts",
