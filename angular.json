@@ -61,7 +61,7 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/"
+              "baseHref": "/salon-feria-frontend/"
             },
             "development": {
               "optimization": false,
