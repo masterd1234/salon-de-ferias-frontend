@@ -8,7 +8,8 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes),
+  providers: [
+    provideRouter(routes),
     importProvidersFrom (BrowserAnimationsModule),
     importProvidersFrom(HttpClientModule), 
     provideHttpClient( withFetch()), // Registro global de HttpClientModule

@@ -1,93 +1,66 @@
-<nav class="navbar navbar-expand-lg navbar-custom">
-  <div class="container-fluid">
-    <!-- Logo -->
-    @if(!isLoggedIn()){
-    <div>
-      <a class="navbar-brand" routerLink="/login">
-        <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
-      </a>
-    </div>
-    }@else if(isRol() === 'admin'){
-    <div>
-      <a class="navbar-brand" routerLink="/admin-dashboard">
-        <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
-      </a>
-    </div>
-    }@else if (isRol() === 'co') {
-    <div>
-      <a class="navbar-brand" routerLink="/company-dashboard">
-        <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
-      </a>
-    </div>
-    }
-
-    <!-- Toggler for mobile view -->
-    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Enlaces desplegables -->
-    <!-- Se muestra solo cuando eres administrador-->
-
-    <div class="collapse navbar-collapse" id="navbarNav">
-      @if(isRol() === 'admin'){
-      <ul class="navbar-nav me-auto">
-        <!-- Desplegable de Empresas -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="empresaDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            Empresas
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="empresaDropdown">
-            <li><a class="dropdown-item" routerLink="/design">Diseño de Stand</a></li>
-            <li><a class="dropdown-item" routerLink="/empresa-info">Información Empresa</a></li>
-          </ul>
-        </li>
-      </ul>
-      }
-      @if(isRol() === 'co'){
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link active" routerLink="/design">Diseño de Stand</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" routerLink="/empresa-info">Información Empresa</a>
-          </li>
-        </ul>
-      }
-
-
-      <!-- Botones a la derecha -->
-      @if(isLoggedIn()){
-      <ul class="navbar-nav ms-auto">
-
-        @if(isRol() === 'admin'){
-        <li class="nav-item">
-          <button class="btn-icon-text" (click)="createUser()">
-            <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
-          </button>
-        </li>
-        }
-        <li class="nav-item">
-          <button class="btn-icon-text" (click)="logout()">
-            <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Cerrar Sesión</span>
-          </button>
-        </li>
-
-      </ul>
-      }
-    </div>
+<!-- Barra superior -->
+<mat-toolbar class="navbar-custom" style="display: flex; justify-content: space-between;">
+  <!-- Logo -->
+  @if(!isLoggedIn()){
+  <div>
+    <a class="navbar-brand" routerLink="/login">
+      <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
+    </a>
   </div>
-</nav>
+  }@else if(isRol() === 'admin'){
+  <div>
+    <a class="navbar-brand" routerLink="/admin-dashboard">
+      <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
+    </a>
+  </div>
+  }@else if (isRol() === 'co') {
+  <div>
+    <a class="navbar-brand" routerLink="/company-dashboard">
+      <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
+    </a>
+  </div>
+  }
 
-<!-- Main content -->
-<div class="app-background">
-  <router-outlet></router-outlet>
-</div>
+  @if(isLoggedIn()){
+  <mat-nav-list>
+    @if(isRol() === 'admin'){
+    <button class="btn-icon-text" (click)="createUser()">
+      <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
+    </button>
+    }
+    <button class="btn-icon-text" (click)="logout()">
+      <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Cerrar Sesión</span>
+    </button>
+  </mat-nav-list>
+  }
+</mat-toolbar>
 
+<!-- Barra Lateral -->
+
+<mat-sidenav-container>
+  @if(isLoggedIn()){
+  <mat-sidenav #drawer mode="side" opened clasS="sidenav">
+    <mat-nav-list class="nav-list">
+      @if(isRol()==='co'){
+      <mat-list-item> <a class="nav-link active" routerLink="/profile" style="color: #002e4c;"> <i
+            class="fa-solid fa-user" style="color: #002e4c;"></i><span>Perfil</span></a></mat-list-item>
+      <mat-list-item><a class="nav-link active" routerLink="/videos">Videos</a></mat-list-item>
+      <mat-list-item><a class="nav-link active" routerLink="/offers">Ofertas</a></mat-list-item>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+  }
+  <!-- Contenido principal -->
+  <mat-sidenav-content>
+    <div class="app-background">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!-- Footer -->
 <footer class="footer text-white py-3">
-  <div class="container text-center">
+  <div class="text-center">
     <p>&copy; 2024 - Medac. Todos los derechos reservados.</p>
   </div>
 </footer>

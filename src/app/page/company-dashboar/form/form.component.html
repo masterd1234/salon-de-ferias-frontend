@@ -1,21 +1,65 @@
 <div class="formulario">
-  <form [formGroup]="formulario" (ngSubmit)="enviarFormulario()">
+  <form class [formGroup]="companyForm" (ngSubmit)="submitForm()">
 
     <!-- Campo Nombre -->
     <div class="form-group pt-3 mx-3">
-      <label>Nombre de la empresa</label>
-      <input type="text" id="nombre" formControlName="nombre" class="form-control">
-      <small *ngIf="formulario.get('nombre')?.invalid || formulario.get('nombre')?.touched">
-        El nombre es obligatorio y debe tener al menos 3 caracteres.
-      </small>
+      <div class="row">
+        <div class="col-md-4">
+          <label>Nombre de la empresa</label>
+          <input matInput type="text" id="nombre" formControlName="name" class="form-control">
+          <small *ngIf="companyForm.get('name')?.invalid && companyForm.get('name')?.touched">
+            El nombre es obligatorio y debe tener al menos 3 caracteres.
+          </small>
+        </div>
+        <div class="col-md-4">
+          <label>Correo</label>
+          <input matInput type="email" id="email" formControlName="email" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Selecciona el sector:</label>
+          <select id="sector" name="sector" formControlName="sector" class="form-control">
+            <option value="" disabled selected>Selecciona un sector</option>
+            <option value="tic">Tecnología de la Información y la Comunicación (TIC)</option>
+            <option value="finanzas">Finanzas y Banca</option>
+            <option value="salud">Salud y Farmacéutica</option>
+            <option value="energia">Energía y Servicios Públicos</option>
+            <option value="manufactura">Manufactura</option>
+            <option value="automotriz">Automotriz</option>
+            <option value="alimentacion">Alimentación y Bebidas</option>
+            <option value="construccion">Construcción e Infraestructura</option>
+            <option value="transporte">Transporte y Logística</option>
+            <option value="aeronautica">Aeronáutica y Espacio</option>
+            <option value="turismo">Turismo y Hotelería</option>
+            <option value="educacion">Educación y Formación</option>
+            <option value="agricultura">Agricultura y Agroindustria</option>
+            <option value="biotecnologia">Biotecnología</option>
+            <option value="retail">Comercio Minorista (Retail)</option>
+            <option value="seguros">Seguros</option>
+            <option value="medios">Medios de Comunicación y Entretenimiento</option>
+            <option value="consultoria">Consultoría y Servicios Profesionales</option>
+            <option value="inmobiliario">Inmobiliario y Construcción</option>
+            <option value="quimica">Química e Industria Petroquímica</option>
+            <option value="rrhh">Recursos Humanos</option>
+            <option value="moda">Moda y Textil</option>
+            <option value="ecommerce">E-commerce</option>
+            <option value="arte">Arte y Cultura</option>
+            <option value="deportes">Deportes y Ocio</option>
+            <option value="medioambiente">Medio Ambiente y Sostenibilidad</option>
+            <option value="legales">Servicios Legales</option>
+            <option value="investigacion">Investigación y Desarrollo (I+D)</option>
+            <option value="maritimo">Transporte Marítimo y Naval</option>
+          </select>
+        </div>
+      </div>
+
     </div>
 
     <!-- Campo Descripción -->
     <div class="form-group mt-3 mx-3">
       <label>Descripción de la empresa</label>
       <small>Por favor introduzca una descripción de su entidad</small>
-      <ckeditor *ngIf="editorCargado" [editor]="EditorDescripcion" formControlName="descripcion"></ckeditor>
-      <small *ngIf="formulario.get('descripcion')?.invalid || formulario.get('descripcion')?.touched">
+      <ckeditor *ngIf="editorLoaded" [editor]="EditorDescription" formControlName="description"></ckeditor>
+      <small *ngIf="companyForm.get('description')?.invalid && companyForm.get('description')?.touched">
         La descripción es obligatoria.
       </small>
     </div>
@@ -24,61 +68,63 @@
     <div class="form-group mt-3 mx-3">
       <label>Más información</label>
       <small>Aquí puede añadir información sobre los perfiles buscados, principales clientes...</small>
-      <ckeditor *ngIf="editorCargado" [editor]="EditorMasInformacion" formControlName="masInformacion"></ckeditor>
+      <ckeditor *ngIf="editorLoaded" [editor]="EditorAdditionalInfo" formControlName="additional_information">
+      </ckeditor>
     </div>
 
     <!-- Campo para añadir enlaces -->
     <div class="form-group mt-3 mx-3">
       <div class="row">
         <div class="col-md-6">
-          <label>Título botón adicional</label>
-          <input type="text" id="titulo-boton-adicional" formControlName="tituloBotonAdicional" class="form-control">
+          <label for="additional-button-title">Título botón adicional</label>
+          <input type="text" id="additional-button-title" formControlName="additionalButtonTitle" class="form-control">
         </div>
         <div class="col-md-6">
-          <label>Link botón adicional</label>
-          <input type="text" id="link-boton-adicional" formControlName="linkBotonAdicional" class="form-control">
+          <label for="additional-button-link">Link botón adicional</label>
+          <input type="text" id="additional-button-link" formControlName="additionalButtonLink" class="form-control">
         </div>
-        <button type="button" class="btn btn-secondary mt-2" (click)="addLink()">Add Link</button>
       </div>
+      <button type="button" class="btn btn-secondary mt-2" (click)="addLink()" [disabled]="!canAddLink()">Añadir enlace</button>
     </div>
 
     <!-- Campo para subir archivos -->
     <div class="form-group mt-3 mx-3">
       <label for="file">Subir archivo</label>
       <input type="file" id="file" class="form-control" (change)="onFileChange($event)">
+      <small *ngIf="fileError">{{ fileError }}</small>
     </div>
 
     <div class="form-group mt-3 mx-3">
       <div class="row">
-        <!-- List of added links -->
-        <div *ngIf="formulario.get('links')?.value?.length > 0" [ngClass]="{'col-md-12': uploadedFiles.length === 0, 'col-md-6': uploadedFiles.length > 0}">
-          <label>Added Links:</label>
+        <!-- Lista de enlaces añadidos -->
+        <div *ngIf="links.length > 0" class="col-md-6">
+          <label>Enlaces añadidos:</label>
           <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center"
-              *ngFor="let link of formulario.get('links')?.value; let i = index">
-              <span><a [href]="link.url" target="_blank">{{ link.title }}</a></span>
-              <button type="button" class="btn btn-danger btn-sm" (click)="removeLink(i)"><i class="fa-solid fa-trash"></i></button>
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let link of links.controls; let i = index">
+              <a [href]="link.value.additionalButtonLink" target="_blank">{{ link.value.additionalButtonTitle }}</a>
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeLink(i)"><i class="fa fa-trash"></i></button>
             </li>
           </ul>
         </div>
+
         <!-- Lista de archivos añadidos -->
-        <div *ngIf="uploadedFiles.length > 0"  [ngClass]="{'col-md-12': formulario.get('links')?.value?.length === 0, 'col-md-6': formulario.get('links')?.value?.length > 0}">
-          <label>Uploaded Files:</label>
+        <div *ngIf="uploadedFiles.length > 0" class="col-md-6">
+          <label>Archivos subidos:</label>
           <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center"
-              *ngFor="let file of uploadedFiles; let i = index">
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let file of uploadedFiles; let i = index">
               <span>{{ file.name }}</span>
               <button type="button" class="btn btn-danger btn-sm" (click)="removeFile(i)"><i class="fa-solid fa-trash"></i></button>
             </li>
           </ul>
         </div>
-
       </div>
     </div>
 
     <!-- Botón enviar -->
     <div class="form-group mt-3 pb-3 text-end mx-3">
-      <button type="submit" class="btn btn-primary btn-lg" [disabled]="formulario.invalid">Enviar</button>
+      <button type="submit" class="btn btn-primary btn-lg" [disabled]="companyForm.invalid || isSubmitting">
+        {{ isSubmitting ? 'Enviando...' : 'Enviar' }}
+      </button>
     </div>
   </form>
 </div>

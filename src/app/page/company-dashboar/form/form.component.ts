@@ -2,92 +2,132 @@ import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { isPlatformBrowser } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CompanyService } from '../../../services/company.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-form-root',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
   standalone: true,
-  imports: [CKEditorModule, CommonModule, ReactiveFormsModule]
+  imports: [CKEditorModule, CommonModule,MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatOptionModule]
 })
 export class FormComponent implements AfterViewInit {
-  public EditorDescripcion: any;
-  public EditorMasInformacion: any;
-  public editorCargado: boolean = false;
-  formulario: FormGroup;
-  links: { title: string, url: string }[] = [];
-  uploadedFiles: File[] = [];  // Almacena archivos subidos
+  public EditorDescription: any;
+  public EditorAdditionalInfo: any;
+  public editorLoaded: boolean = false;
+  successMessage: string = '';
+  errorMessage: string = '';
+  companyForm: FormGroup;
+  uploadedFiles: File[] = [];
+  isSubmitting: boolean = false; // Estado de envío
+  fileError: string = ''; // Errores de archivos
 
-  constructor(@Inject(PLATFORM_ID) private platformId: any, private fb: FormBuilder) { 
-    this.formulario = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(3)]], // Campo requerido
-      descripcion: ['', Validators.required], // Campo requerido
-      masInformacion: [''],
-      tituloBotonAdicional: [''],  // Campo para el título del enlace
-      linkBotonAdicional: [''],    // Campo para el link
-      links: [[]],
-      file: [null]                 // Campo para archivo
+  constructor(@Inject(PLATFORM_ID) private platformId: any, private fb: FormBuilder, private companyService: CompanyService) {
+    this.companyForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      description: ['', Validators.required],
+      additional_information: [''],
+      email:  [''],
+      sector: [''],
+      additionalButtonTitle: [''],  // Campo para el título del enlace temporal
+      additionalButtonLink: [''],   // Campo para el link temporal
+      links: this.fb.array([])
     });
   }
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.cargarEditor();
+      this.loadEditor();
     }
   }
 
-  async cargarEditor() {
+  async loadEditor() {
     const ckeditor = await import('@ckeditor/ckeditor5-build-classic');
-    this.EditorDescripcion = ckeditor.default;
-    this.EditorMasInformacion = ckeditor.default;
-    this.editorCargado = true;
+    this.EditorDescription = ckeditor.default;
+    this.EditorAdditionalInfo = ckeditor.default;
+    this.editorLoaded = true;
   }
 
+  get links(): FormArray {
+    return this.companyForm.get('links') as FormArray;
+  }
+
+  canAddLink(): boolean {
+    return (this.companyForm.get('additionalButtonTitle')?.valid ?? false) && (this.companyForm.get('additionalButtonLink')?.valid ?? false);
+  }
+  
   addLink() {
-    const titulo = this.formulario.get('tituloBotonAdicional')?.value;
-    const link = this.formulario.get('linkBotonAdicional')?.value;
-  
-    if (titulo && link) {
-      // Obtener el array de links actual
-      const currentLinks = this.formulario.get('links')?.value || [];
-      // Añadir el nuevo link al array
-      currentLinks.push({ title: titulo, url: link });
-      
-      // Actualizar el campo links con el nuevo array
-      this.formulario.get('links')?.setValue(currentLinks);
-  
-      // Limpiar los campos de entrada
-      this.formulario.get('tituloBotonAdicional')?.reset();
-      this.formulario.get('linkBotonAdicional')?.reset();
-    } else {
-      console.error('Faltan datos para añadir el enlace.');
+    const title = this.companyForm.get('additionalButtonTitle')?.value;
+    const link = this.companyForm.get('additionalButtonLink')?.value;
+
+    if (title && link) {
+      const linkGroup = this.fb.group({
+        additionalButtonTitle: [title, Validators.required],
+        additionalButtonLink: [link, [Validators.required, Validators.pattern('https?://.+')]]
+      });
+
+      this.links.push(linkGroup);
+      this.companyForm.get('additionalButtonTitle')?.reset();
+      this.companyForm.get('additionalButtonLink')?.reset();
     }
-  }  
+  }
+
   removeLink(index: number): void {
-    const currentLinks = this.formulario.get('links')?.value;
-    currentLinks.splice(index, 1); // Remover el link en el índice dado
-    this.formulario.get('links')?.setValue(currentLinks); // Actualizar el formulario con los enlaces restantes
+    this.links.removeAt(index);
   }
 
   onFileChange(event: any) {
     const files = event.target.files;
+    this.fileError = '';
     if (files.length > 0) {
       for (let file of files) {
-        this.uploadedFiles.push(file);  // Añadimos cada archivo al array
+        if (file.size > 5000000) { // Limitar tamaño a 5MB
+          this.fileError = 'El tamaño del archivo no puede exceder los 5MB';
+          return;
+        }
+        this.uploadedFiles.push(file);
       }
     }
   }
 
   removeFile(index: number): void {
-    this.uploadedFiles.splice(index, 1);  // Elimina el archivo seleccionado
+    this.uploadedFiles.splice(index, 1);
   }
 
-  // Método para enviar el formulario
-  enviarFormulario() {
-    if (this.formulario.valid) {
-      console.log('Formulario válido:', this.formulario.value);
-      // Aquí puedes realizar acciones adicionales como enviar los datos al servidor
+  submitForm() {
+    if (this.companyForm.valid) {
+      const formData = this.companyForm.value;
+
+  
+      // Eliminar los campos nulos si no se necesitan
+      if (!formData.additionalButtonTitle) {
+        delete formData.additionalButtonTitle;
+      }
+      if (!formData.additionalButtonLink) {
+        delete formData.additionalButtonLink;
+      }
+  
+      this.isSubmitting = true;
+      this.companyService.addCompany(formData).subscribe({
+        next: () => {
+          this.successMessage = 'Información enviada correctamente';
+          this.errorMessage = '';
+          this.isSubmitting = false;
+        },
+        error: (error) => {
+          this.successMessage = '';
+          this.errorMessage = `Error: ${error.error.message}`;
+          this.isSubmitting = false;
+  
+          // Ver más detalles del error
+          console.error('Error al enviar la solicitud:', error);
+        }
+      });
     } else {
       console.error('Formulario inválido');
     }

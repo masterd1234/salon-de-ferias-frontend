@@ -23,63 +23,87 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  padding: 0;
+  margin: 0;
 }
 
 .footer {
   position: relative;
-  width: 100%;
   bottom: 0;
   background-color: #002e4c;
   color: white;
   text-align: center;
+  height: 64px;
 }
 
 .footer p {
   margin: 0;
 }
 
-/* Estilos para la barra de navegación */
-.navbar-custom {
-  background-color: #002e4c;
-  padding: 10px 20px;
+.container {
+  height: 100vh;
+  width: 100%;
 }
 
-.navbar-brand {
-  margin-right: 20px;
+/* Barra lateral fija */
+mat-sidenav {
+  position: fixed;
+  top: 64px; /* Justo debajo de la barra superior */
+  left: 0;
+  width: 100px; /* Ancho de la barra lateral */
+  height: calc(100vh - 64px); /* Altura completa de la ventana menos la barra superior */
+  overflow-y: auto; /* Permite scroll si el contenido de la barra lateral es largo */
+  z-index: 1000;
+  background-color:white;/* Fondo de la barra lateral */
 }
 
-.nav-link,
-.dropdown-item {
-  color: white !important;
-  font-size: 16px;
-  padding: 10px;
+.navbar-custom{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
-.dropdown-menu {
-  background-color: #002e4c;
-  /* Fondo del menú desplegable */
+/* Ajustar el espacio entre los items de la lista */
+mat-list-item {
+  padding: 20px 0; /* Aumenta el espacio superior e inferior de cada item */
+  justify-content: center; /* Asegura que el contenido esté centrado */
 }
 
-.dropdown-item:hover {
-  background-color: #002e4c;
-  color: white !important;
+/* Aumenta el tamaño y espacio de los enlaces */
+.nav-link {
+  display: flex;
+  flex-direction: column; /* Coloca el texto debajo del ícono */
+  align-items: center; /* Centra el ícono y el texto */
+  justify-content: center; /* Alinea el ícono y texto verticalmente */
+  text-align: center; /* Centra el texto */
+  font-size: 14px; /* Ajusta el tamaño del texto */
+  color: #002e4c; /* Color del texto */
+  width: 100%; /* Asegura que ocupe todo el ancho del mat-list-item */
 }
 
-/* Ajustes del botón de colapso */
-.navbar-toggler {
-  border: none;
+/* Aumentar el tamaño y espacio del ícono */
+.nav-link i {
+  font-size: 24px; /* Tamaño del ícono */
+  margin-bottom: 0; /* Espacio entre el ícono y el texto */
 }
 
-.navbar-toggler-icon {
-  background-color: white;
-  /* Color blanco para el icono del menú */
+/* Aumentar el espacio entre los mat-list-items */
+.mat-nav-list {
+  padding: 10px 0; /* Añade espacio adicional entre los items */
+}
+
+
+.mat-sidenav-container {
+  margin-top: 64px; /* Altura de la barra superior */
 }
 
 /* Estilos para los botones */
 .btn-icon-text {
   background: none;
   border: none;
-  color: white;
+  color:  #002e4c;
   display: flex;
   flex-direction: column;
   /* Coloca el texto debajo del icono */
@@ -93,7 +117,7 @@ body {
 .btn-icon-text i {
   font-size: 20px;
   /* Tamaño del icono */
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   /* Espacio entre icono y texto */
 }
 
@@ -106,19 +130,8 @@ body {
   color: #00a89c;
   /* Cambiar color al pasar el ratón */
 }
-/* Cambiar el color al pasar el ratón por encima de los nav-items */
-.nav-link:hover,
-.dropdown-item:hover {
-  color: #00a89c !important; /* Cambia el color al pasar el ratón */
-}
-
 /* Responsivo: reducir tamaño en pantallas pequeñas */
 @media (max-width: 768px) {
-
-  .nav-link,
-  .dropdown-item {
-    font-size: 14px;
-  }
 
   .btn-icon-text {
     font-size: 10px;

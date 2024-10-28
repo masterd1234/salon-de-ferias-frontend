@@ -1,0 +1,87 @@
+<div class="stand-form">
+  <form [formGroup]="formBanner" (ngSubmit)="onSubmit()">
+    <h2 class="form-title">Configuración de Stand Virtual</h2>
+
+    <!-- Selección de Stand y Recepcionista -->
+    <!-- Selección de Stand -->
+    <div class="form-group">
+      <label for="stand" class="form-label">Seleccione su Stand:</label>
+      <select formControlName="stand" id="stand" class="form-control">
+        <option value="">--Seleccione un Stand--</option>
+        <option value="stand1">Stand 1</option>
+        <option value="stand2">Stand 2</option>
+      </select>
+      <!-- Mensaje de error si el campo no es válido -->
+      <small *ngIf="formBanner.get('stand')?.invalid && formBanner.get('stand')?.touched" class="text-danger">
+        El campo "Stand" es obligatorio.
+      </small>
+    </div>
+
+    <!-- Selección de Recepcionista -->
+    <div class="form-group">
+      <label for="receptionist" class="form-label">Seleccione su Recepcionista:</label>
+      <select formControlName="receptionist" id="receptionist" class="form-control">
+        <option value="">--Seleccione un Recepcionista--</option>
+        <option value="receptionist1">Recepcionista 1</option>
+        <option value="receptionist2">Recepcionista 2</option>
+      </select>
+      <!-- Mensaje de error si el campo no es válido -->
+      <small *ngIf="formBanner.get('receptionist')?.invalid && formBanner.get('receptionist')?.touched"
+        class="text-danger">
+        El campo "Recepcionista" es obligatorio.
+      </small>
+    </div>
+
+    <!-- Subida de Banner -->
+    <div *ngIf="showBannerAndPoster()" class="upload-section">
+      <h3>Subir Imágenes</h3>
+
+      <div class="form-group">
+        <label for="banner" class="form-label">Subir Banner:</label>
+        <input type="file" id="banner" (change)="onFileChange($event, 'banner')" class="form-control" accept=".jpg" />
+        <input type="text" formControlName="bannerLink" placeholder="Link para Banner"
+          class="form-control link-input" />
+      </div>
+
+      <!-- Vista previa del banner -->
+      <div class="preview-tab" *ngIf="bannerUrl">
+        <h4>Vista previa del Banner</h4>
+        <img [src]="bannerUrl" alt="Banner Preview" class="preview-img" />
+      </div>
+
+      <div class="form-group">
+        <h3>Subir Logo</h3>
+        <input type="file" id="logo" (change)="onFileChange($event, 'logo')" class="form-control" accept=".jpg" />
+        <!-- Mensaje de error si el campo no es válido -->
+        <small *ngIf="formBanner.get('logo')?.invalid && formBanner.get('logo')?.touched" class="text-danger">
+          El logo es obligatorio.
+        </small>
+      </div>
+
+      <!-- Vista previa del póster -->
+      <div class="preview-tab" *ngIf="posterUrl">
+        <h4>Vista previa del Póster</h4>
+        <img [src]="posterUrl" alt="Poster Preview" class="preview-img" />
+      </div>
+    </div>
+
+    <!-- Subida de Logo y Rectángulo Azul para ajustar el logo -->
+    <div class="form-group">
+      <h3>Subir Logo</h3>
+      <input type="file" id="logo" (change)="onFileChange($event, 'logo')" class="form-control" accept=".jpg" />
+    </div>
+
+    <!-- Vista previa del logo con funcionalidad de zoom y arrastre -->
+    <div class="image-container">
+      <h4>Ajuste del Logo</h4>
+      <div class="image-viewport" #logoViewport>
+        <img *ngIf="logoUrl" [src]="logoUrl" alt="Logo Preview" class="resizable-image"
+          [style.transform]="logoTransform" (wheel)="onZoom($event)" (mousedown)="startDragging($event)" />
+      </div>
+    </div>
+
+    <div class="form-group mt-3 pb-3 text-end mx-3">
+      <button type="submit" class="btn btn-primary btn-lg" >Enviar</button>
+    </div>
+  </form>
+</div>

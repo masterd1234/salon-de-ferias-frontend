@@ -1,5 +1,4 @@
 :host {
-  min-height: 100vh;
   display: block;
   margin: 0;
   padding: 0;
@@ -12,12 +11,19 @@
   color: white;
   text-align: left;
   width: 100%;
-  padding: 20px; /* Añadimos padding para evitar que el texto esté pegado al borde */
+  margin: 0;
+  padding: 20px 0; /* Añadimos padding para evitar que el texto esté pegado al borde */
 }
 
 .text-content {
   max-width: 100%; /* Usamos el 100% del ancho en pantallas pequeñas */
   padding: 15px;
+  margin: 0;
+}
+
+.container-fluid {
+  padding: 0;
+  margin: 0;
 }
 
 .features-list {
@@ -41,8 +47,15 @@
   color: rgb(8, 8, 8);
   text-align: left;
   width: 100%;
+  margin: 0;
+  padding: 0;
+  height: auto;
 }
 
+.img-form img{
+  width: 555px;
+  height: 445px;
+}
 /* Ajustes responsivos */
 @media (min-width: 600px) {
   .hero-section {

@@ -1,0 +1,24 @@
+<div class="container">
+  <h1>Lista de Videos</h1>
+
+  <!-- Sección para añadir nuevos videos -->
+  <div class="add-video-section">
+    <input [(ngModel)]="newVideo" placeholder="Añadir URL de YouTube" />
+    <button (click)="addVideo()">Añadir Video</button>
+  </div>
+
+  <!-- Mostrar los videos existentes -->
+  <div class="video-list">
+    <div *ngFor="let video of videos; let i = index" class="video-item">
+      <iframe
+        width="300"
+        height="300"
+        [src]="video"
+        title="YouTube video player"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>

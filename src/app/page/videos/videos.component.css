@@ -1,0 +1,59 @@
+.container {
+  padding: 20px;
+  text-align: center; /* Centra todo el contenido dentro de la página */
+}
+
+.add-video-section {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center; /* Centrar el input y el botón */
+  align-items: center;
+}
+
+.add-video-section input {
+  padding: 10px;
+  width: 400px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-video-section button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-video-section button:hover {
+  background-color: #218838;
+}
+
+.video-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center; /* Centrar la lista de videos */
+}
+
+.video-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video-item button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.video-item button:hover {
+  background-color: #0056b3;
+}

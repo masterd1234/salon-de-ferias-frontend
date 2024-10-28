@@ -23,7 +23,8 @@
 
                 <!-- Campo usuario -->
                 <mat-form-field appearance="fill" class="w-100 mb-3">
-                    <mat-label>Usuario</mat-label>
+                    <mat-label>Usuario o correo electrónico</mat-label>
+
                     <input matInput placeHolder="Usuario o Correo Electronico" formControlName="nameOrEmail">
                     @if(loginForm.get('nameOrEmail')?.invalid && loginForm.get('nameOrEmail')?.touched){
                     <mat-error>El usuario o correo electrónico es requerido.</mat-error>

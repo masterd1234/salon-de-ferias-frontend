@@ -4,11 +4,10 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  min-height: 100vh;
   text-align: center;
-  width: 100%;
   /* Asegura que el contenedor use todo el ancho */
   box-sizing: border-box;
+  padding-bottom: 10px;
 
 }
 

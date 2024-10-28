@@ -10,7 +10,7 @@ import { Usuario } from '../../models/users.model';
 export class UserService {
 
   
-  private apiUrl = 'http://localhost:3000/users';
+  private apiUrl = 'https://backend-node-wpf9.onrender.com/users';
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 

@@ -6,6 +6,9 @@ import { AuthService } from './services/auth.service';
 import { CreateUserComponent } from './page/admin-dashboard/create-user/create-user.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Overlay } from '@angular/cdk/overlay';
+import {MatSidenavModule} from  '@angular/material/sidenav' ;
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatListModule } from '@angular/material/list';
 import { AdminDashboardComponent } from './page/admin-dashboard/admin-dashboard.component';
 import { sign } from 'crypto';
 
@@ -14,7 +17,7 @@ import { sign } from 'crypto';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, LoginComponent, CommonModule],
+  imports: [RouterOutlet, RouterLink, LoginComponent, CommonModule, MatSidenavModule, MatToolbarModule,MatListModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

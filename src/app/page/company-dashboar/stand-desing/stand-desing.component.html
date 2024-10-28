@@ -1,24 +1,5 @@
 <div class="main-container">
 
-  <!-- Botón de subir logo justo debajo del título -->
-  <div class="subir-logo-container">
-    <div class="subir-logo">
-      <button type="button" class="btn btn-primary btn-lg" (click)="selectLogo()">¡Sube tu logo aquí!</button>
-      <input type="file" id="logo" (change)="subirLogo($event)" class="hidden-file-input">
-
-      <!-- Imagen del logo subida -->
-      <div *ngIf="imagenCargada" class="logo-preview-container">
-        <img [src]="imageSrc" alt="Logo de la empresa" class="company-logo-preview">
-      </div>
-
-      <!-- Botones para editar o borrar el logo -->
-      <div *ngIf="imagenCargada" class="button-group-horizontal">
-        <button type="button" class="rounded-button" (click)="borrarLogo()">Borrar logo</button>
-        <button type="button" class="rounded-button" (click)="editarLogo()">Editar logo</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Contenedor para los carruseles y la vista previa -->
   <div class="content-container pt-3 px-3">
     <div class="row">
