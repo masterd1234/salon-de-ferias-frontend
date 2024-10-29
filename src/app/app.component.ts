@@ -27,6 +27,7 @@ export class AppComponent {
 
   isSmallScreen = false;
   @ViewChild('drawer') drawer!: MatSidenav;
+  sidenavMode: 'side' | 'over' = 'side';
   // Signal para notificar la creacion de un usuario
   userCreatedSignal = signal(false);
   // Inyectamos AuthService y Router
@@ -38,6 +39,7 @@ export class AppComponent {
   constructor(private breakpointObserver: BreakpointObserver){
     this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).subscribe (result => {
       this.isSmallScreen = result.matches;
+      this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
     })
   }
 

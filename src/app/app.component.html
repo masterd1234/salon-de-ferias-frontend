@@ -22,7 +22,7 @@
   </div>
   }
 
-  @if(isLoggedIn()){
+  @if(isLoggedIn() && !isSmallScreen){
   <mat-nav-list>
     @if(isRol() === 'admin'){
     <button class="btn-icon-text" (click)="createUser()">
@@ -35,21 +35,40 @@
   </mat-nav-list>
   }
   <!-- Botón de menú para pantallas pequeñas -->
-  <button mat-icon-button (click)="drawer.toggle()" class="menu-btn" *ngIf="isSmallScreen">
-    <i class="fa-solid fa-bars"></i>
-  </button>
+   @if(isSmallScreen && isLoggedIn()){
+    <button (click)="drawer.toggle()" class="menu-btn" *ngIf="isSmallScreen">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+   }
+
 </mat-toolbar>
 
 <mat-sidenav-container>
   <!-- Barra Lateral -->
   @if(isLoggedIn()){
-  <mat-sidenav #drawer mode="over" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav">
+  <mat-sidenav #drawer  [mode]="sidenavMode" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav">
     <mat-nav-list class="nav-list">
       @if(isRol()==='co'){
       <mat-list-item> <a class="nav-link active" routerLink="/profile" style="color: #002e4c;"> <i
             class="fa-solid fa-user" style="color: #002e4c;"></i><span>Perfil</span></a></mat-list-item>
       <mat-list-item><a class="nav-link active" routerLink="/videos">Videos</a></mat-list-item>
       <mat-list-item><a class="nav-link active" routerLink="/offers">Ofertas</a></mat-list-item>
+
+      @if(isSmallScreen){
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          @if(isRol() === 'admin'){
+            <a class="nav-link link" (click)="createUser()">
+              <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
+            </a>
+            }
+        </mat-list-item>
+        <mat-list-item>
+          <a class="nav-link link" (click)="logout()">
+            <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Salir</span>
+          </a>
+        </mat-list-item>
+      }
       }
     </mat-nav-list>
   </mat-sidenav>
