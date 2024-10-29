@@ -1,189 +1,201 @@
 :host {
-    background-color: #bdccdb;
-    min-height: 100vh;
-    width: 100%;
-    display: block;
-  }
-  
-  .container {
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
-    position: relative;
-  }
-  
-  .action-button {
-    margin-left: auto;
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .editor-content {
-    padding: 30px;
-  }
-  
-  .user-icon {
-    font-size: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: rgb(17, 226, 17);
-  }
-  
-  .action-button button {
-    background-color: rgb(17, 226, 17);
-    color: white;
-    padding: 10px;
-    font-size: 14px;
-    margin-left: 10px;
-  }
-  
-  .profile-header {
-    width: 100%;
-    height: 20vh;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #194572;
-    color: white;
-    padding: 15px;
-  }
-  
-  .profile-header .back-button {
-    margin: 0 0 100px 20px;
-  }
-  
+  background-color: #bdccdb;
+  min-height: 100vh;
+  width: 100%;
+  display: block;
+}
+
+.container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.action-button {
+  margin-left: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.editor-content {
+  padding: 30px;
+}
+
+.user-icon {
+  font-size: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgb(17, 226, 17);
+}
+
+.action-button button {
+  background-color: rgb(17, 226, 17);
+  color: white;
+  padding: 10px;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.profile-header {
+  width: 100%;
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #194572;
+  color: white;
+  padding: 15px;
+}
+
+.profile-header .back-button {
+  margin: 0 0 100px 20px;
+}
+
+.profile-picture {
+  position: absolute;
+  top: -70px;
+  left: 20px;
+  background-color: white;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-picture img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid white;
+}
+
+.plus-icon {
+  position: absolute;
+  bottom: 0;
+  right: -15px;
+  background-color: rgb(17, 226, 17);
+  border-radius: 50%;
+  color: white;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+
+.profile-name {
+  margin-left: auto;
+  padding-left: 130px;
+  white-space: nowrap;
+  text-align: right;
+  flex-grow: 1;
+}
+
+.personal-info,
+.card {
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  top: -20px;
+  margin: 0px 200px 20px 50px;
+}
+
+.leer-mas {
+  color: rgb(17, 226, 17);
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+}
+
+.leer-mas-container {
+  display: flex;
+  justify-content: center;
+  /* Centra horizontalmente */
+}
+
+/* Responsive Styles */
+
+/* Tablets and mobile (max-width 768px) */
+@media (max-width: 768px) {
   .profile-picture {
-    position: absolute;
-    top: -70px;
-    left: 20px;
-    background-color: white;
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 110px;
+    height: 110px;
+    top: -60px;
+    left: 30px;
   }
-  
+
   .profile-picture img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border: 2px solid white;
+    width: 100px;
+    height: 100px;
   }
-  
+
   .plus-icon {
-    position: absolute;
-    bottom: 0;
+    width: 35px;
+    height: 35px;
+    font-size: 22px;
+    bottom: 5px;
+    right: -10px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+  }
+
+  .personal-info {
+    margin: 0 10px;
+  }
+
+  .card {
+    margin: 5px 10px;
+  }
+
+  .action-button {
+    margin-top: 10px;
+  }
+}
+
+/* Mobile (max-width 480px) */
+@media (max-width: 480px) {
+  .profile-picture {
+    width: 100px;
+    height: 100px;
+    top: -50px;
+    left: 20px;
+  }
+
+  .profile-picture img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .plus-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    bottom: 10px;
     right: -15px;
-    background-color: rgb(17, 226, 17);
-    border-radius: 50%;
-    color: white;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
   }
-  
-  .profile-name {
-    margin-left: auto;
-    padding-left: 130px;
-    white-space: nowrap;
-    text-align: right;
-    flex-grow: 1;
+
+  .action-button button {
+    font-size: 12px;
+    padding: 8px;
   }
-  
+
   .personal-info,
   .card {
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    top: -20px;
-    margin: 0px 200px 20px 50px;
+    padding: 15px;
   }
-  
-  /* Responsive Styles */
-  
-  /* Tablets and mobile (max-width 768px) */
-  @media (max-width: 768px) {
-    .profile-picture {
-      width: 110px;
-      height: 110px;
-      top: -60px;
-      left: 30px;
-    }
-  
-    .profile-picture img {
-      width: 100px;
-      height: 100px;
-    }
-  
-    .plus-icon {
-      width: 35px;
-      height: 35px;
-      font-size: 22px;
-      bottom: 5px;
-      right: -10px;
-    }
-  
-    .profile-header {
-      flex-direction: column;
-      align-items: flex-start;
-      height: auto;
-    }
-  
-    .personal-info {
-      margin: 0 10px;
-    }
-
-    .card {
-        margin: 5px 10px;
-    }
-  
-    .action-button {
-      margin-top: 10px;
-    }
-  }
-  
-  /* Mobile (max-width 480px) */
-  @media (max-width: 480px) {
-    .profile-picture {
-      width: 100px;
-      height: 100px;
-      top: -50px;
-      left: 20px;
-    }
-  
-    .profile-picture img {
-      width: 100%;
-      height: 100%;
-    }
-  
-    .plus-icon {
-      width: 30px;
-      height: 30px;
-      font-size: 20px;
-      bottom: 10px;
-      right: -15px;
-    }
-  
-    .action-button button {
-      font-size: 12px;
-      padding: 8px;
-    }
-  
-    .personal-info,
-    .card {
-      padding: 15px;
-    }
-  }
-  
+}

@@ -50,6 +50,16 @@ export class ProfileComponent {
     maritimo: 'Transporte Marítimo y Naval'
   };
 
+  // Propiedades para "Descripción"
+  showFullText: boolean = false;
+  truncatedDescription: string = '';
+  fullDescription: string = '';
+
+  // Propiedades para "Información Adicional"
+  showFullAdditionalInfo: boolean = false;
+  truncatedAdditionalInfo: string = '';
+  fullAdditionalInfo: string = '';
+
   users = signal<any[]>([]);  // Signal para almacenar los usuarios
   company = signal<Company | null>(null);
   profileImageUrl: string | null = null; // Aquí defines si hay una URL para la imagen o no
@@ -62,23 +72,82 @@ export class ProfileComponent {
     this.profileImageUrl = '';
   }
 
+  // Alterna el estado de mostrar el texto completo
+  toggleText() {
+    this.showFullText = !this.showFullText;
+  }
+  // Alterna entre mostrar texto completo o truncado para "Información Adicional"
+  toggleAdditionalInfo() {
+    this.showFullAdditionalInfo = !this.showFullAdditionalInfo;
+  }
+
   // Método para recuperar el nombre completo del sector
   getSectorName(code: string | undefined): string {
     return this.sectorsMap[code || ''] || 'Sector no definido';
   }
 
-  // Método para obtener los datos de la empresa
+  // Método para obtener los datos de la empresa y configurar descripciones
   getCompanyData() {
     this.companyService.getCompany().subscribe({
-
       next: (data) => {
-        this.company.set(data),
-        console.log('Datos recibidos del backend:', data); // Almacena la información de la empresa
-        console.log('Enlaces recibidos:', data.link);  // Verificar específicamente el array de enlaces
+        this.company.set(data);
+
+        // Establecer descripciones completa y truncada
+        this.fullDescription = data.description || '';
+        this.truncatedDescription = this.truncateHTML(this.fullDescription, 100); // Limitar a 100 caracteres o menos si quieres
+
+        // Configurar "Información Adicional"
+        this.fullAdditionalInfo = data.additional_information || '';
+        this.truncatedAdditionalInfo = this.truncateHTML(this.fullAdditionalInfo, 100); // Limitar a 100 caracteres
       },
       error: (error) => console.error('Error al obtener la información de la empresa', error)
     });
   }
+
+  // Función para truncar HTML y mantener etiquetas válidas (ya creada antes)
+  truncateHTML(html: string, limit: number): string {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+
+    let truncated = "";
+    let charCount = 0;
+
+    function traverse(node: Node) {
+      if (charCount >= limit) return;
+
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.textContent || "";
+        if (charCount + text.length > limit) {
+          truncated += text.substring(0, limit - charCount) + "...";
+          charCount = limit;
+        } else {
+          truncated += text;
+          charCount += text.length;
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as HTMLElement;
+        truncated += `<${element.tagName.toLowerCase()}${getAttributes(element)}>`;
+
+        for (let i = 0; i < element.childNodes.length; i++) {
+          traverse(element.childNodes[i]);
+          if (charCount >= limit) break;
+        }
+
+        truncated += `</${element.tagName.toLowerCase()}>`;
+      }
+    }
+
+    function getAttributes(element: HTMLElement): string {
+      return Array.from(element.attributes)
+        .map(attr => ` ${attr.name}="${attr.value}"`)
+        .join("");
+    }
+
+    traverse(div);
+    return truncated;
+  }
+
+
 
   // Verifica si el usuario es Admin o CO
   isRol(): string {

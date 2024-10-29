@@ -53,12 +53,25 @@
                 <div class="mt-2">
                     <i class="fa-regular fa-newspaper"></i>
                     <strong class="ps-2">Descripción:</strong>
-                    <div [innerHTML]="company()?.description" class="editor-content"></div>
+                    <div class="editor-content" [innerHTML]="showFullText ? fullDescription : truncatedDescription">
+                    </div>
+                    <div class="leer-mas-container">
+                        <button mat-button (click)="toggleText()" class="leer-mas">
+                            {{ showFullText ? 'Leer menos' : 'Leer más' }}
+                        </button>
+                    </div>
                 </div>
                 <div class="mt-2">
                     <i class="fa-solid fa-circle-info"></i>
                     <strong class="ps-2">Información Adicional:</strong>
-                    <div [innerHTML]="company()?.additional_information" class="editor-content"></div>
+                    <div class="editor-content"
+                        [innerHTML]="showFullAdditionalInfo ? fullAdditionalInfo : truncatedAdditionalInfo"></div>
+                    <div class="leer-mas-container">
+                        <button mat-button (click)="toggleAdditionalInfo()" class="leer-mas">
+                            {{ showFullAdditionalInfo ? 'Leer menos' : 'Leer más' }}
+                        </button>
+                    </div>
+
                 </div>
                 <div class="col-md-6">
                     <div class="mt-2">
