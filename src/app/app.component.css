@@ -67,7 +67,6 @@ mat-sidenav {
 
 /* Ajustar el espacio entre los items de la lista */
 mat-list-item {
-  padding: 20px 0; /* Aumenta el espacio superior e inferior de cada item */
   justify-content: center; /* Asegura que el contenido esté centrado */
 }
 
@@ -130,8 +129,13 @@ mat-list-item {
   color: #00a89c;
   /* Cambiar color al pasar el ratón */
 }
+
+
 /* Responsivo: reducir tamaño en pantallas pequeñas */
 @media (max-width: 768px) {
+  .menu-btn {
+    display: inline;
+  }
 
   .btn-icon-text {
     font-size: 10px;

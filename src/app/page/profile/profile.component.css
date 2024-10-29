@@ -1,52 +1,47 @@
 :host {
     background-color: #bdccdb;
     min-height: 100vh;
-    /* Asegura que ocupe toda la altura de la pantalla */
     width: 100%;
-    /* Asegura que ocupe todo el ancho */
     display: block;
-}
-
-.container {
+  }
+  
+  .container {
     width: 100%;
-    /* Ancho completo */
     max-width: 100%;
-    /* Elimina el límite de ancho */
     margin: 0;
-    /* Asegura que no haya márgenes */
     padding: 0;
     position: relative;
-}
-
-.action-button {
-    margin-left: auto; /* Empuja el contenido a la derecha */
-    display: flex;
-    justify-content: flex-end; /* Alinea los botones a la derecha */
   }
-
-  .editor-content{
+  
+  .action-button {
+    margin-left: auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .editor-content {
     padding: 30px;
   }
   
   .user-icon {
-    font-size: 5rem;  /* Ajusta el tamaño del ícono aquí */
+    font-size: 5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     color: rgb(17, 226, 17);
   }
+  
   .action-button button {
     background-color: rgb(17, 226, 17);
     color: white;
     padding: 10px;
     font-size: 14px;
-    margin-left: 10px; /* Añade separación entre los botones */
+    margin-left: 10px;
   }
-
-.profile-header {
+  
+  .profile-header {
     width: 100%;
-    /* Asegura que el encabezado ocupe todo el ancho */
     height: 20vh;
     display: flex;
     align-items: center;
@@ -54,18 +49,15 @@
     background-color: #194572;
     color: white;
     padding: 15px;
-    position: relative;
-}
-
-.profile-header .back-button {
-    margin: 0px 0px 100px 20px;
-}
-
-
-.profile-picture {
+  }
+  
+  .profile-header .back-button {
+    margin: 0 0 100px 20px;
+  }
+  
+  .profile-picture {
     position: absolute;
     top: -70px;
-    /* Mueve la imagen hacia arriba */
     left: 20px;
     background-color: white;
     border-radius: 50%;
@@ -75,65 +67,40 @@
     justify-content: center;
     align-items: center;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 100px;
-}
-
-.profile-picture img {
+  }
+  
+  .profile-picture img {
     width: 80px;
     height: 80px;
     object-fit: cover;
     border: 2px solid white;
-}
-
-.plus-icon {
+  }
+  
+  .plus-icon {
     position: absolute;
-    bottom: 0px;
-    /* Ajusta la posición para que quede más abajo */
+    bottom: 0;
     right: -15px;
-    /* Ajusta la posición para que quede más a la derecha */
     background-color: rgb(17, 226, 17);
-    /* Color de fondo verde */
     border-radius: 50%;
-    /* Círculo perfecto */
     color: white;
-    /* Color del símbolo + */
     width: 40px;
-    /* Ancho del ícono */
     height: 40px;
-    /* Altura del ícono */
     display: flex;
-    /* Usamos flexbox para centrar el símbolo */
     justify-content: center;
-    /* Centra el símbolo horizontalmente */
     align-items: center;
-    /* Centra el símbolo verticalmente */
     font-size: 18px;
-    /* Tamaño del símbolo + */
-    border: none;
-    /* Asegúrate de que no haya borde visible */
-    outline: none;
-    /* Quitar cualquier outline que pudiera aparecer */
-}
-
-.profile-name {
-    margin-left: auto; /* Alinea el h2 a la derecha */
+  }
+  
+  .profile-name {
+    margin-left: auto;
     padding-left: 130px;
     white-space: nowrap;
     text-align: right;
-    flex-grow: 1; /* Esto hace que el h2 ocupe todo el espacio restante */
-}
-
-.action-button button {
-    background-color: rgb(17, 226, 17);
-    color: white;
-    padding: 10px;
-    font-size: 14px;
-}
-
-.personal-info {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-grow: 1;
+  }
+  
+  .personal-info,
+  .card {
     background-color: #ffffff;
     color: rgb(0, 0, 0);
     padding: 20px;
@@ -142,100 +109,81 @@
     position: relative;
     top: -20px;
     margin: 0px 200px 20px 50px;
-}
-
-.card {
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    top: -20px;
-    margin: 0px 200px 20px 50px;
-}
-
-
-/* Para pantallas de hasta 768px (tablets y móviles) */
-@media (max-width: 768px) {
+  }
+  
+  /* Responsive Styles */
+  
+  /* Tablets and mobile (max-width 768px) */
+  @media (max-width: 768px) {
     .profile-picture {
-        width: 110px;
-        height: 110px;
-        position: absolute;
-        top: -60px;
-        /* Mueve la imagen hacia arriba */
-        left: 30px;
+      width: 110px;
+      height: 110px;
+      top: -60px;
+      left: 30px;
     }
-
+  
     .profile-picture img {
-        width: 100px;
-        height: 100px;
+      width: 100px;
+      height: 100px;
     }
-
+  
     .plus-icon {
-        width: 35px;
-        height: 35px;
-        font-size: 22px;
-        position: absolute;
-        bottom: 5px;
-        /* Ajusta la posición para que quede más abajo */
-        right: -10px;
-        /* Ajusta la posición para que quede más a la derecha */
+      width: 35px;
+      height: 35px;
+      font-size: 22px;
+      bottom: 5px;
+      right: -10px;
     }
-
+  
     .profile-header {
-        flex-direction: column;
-        /* Los elementos se colocan uno debajo del otro en pantallas pequeñas */
-        align-items: start;
-        height: auto;
+      flex-direction: column;
+      align-items: flex-start;
+      height: auto;
     }
-
-    .profile-header button{
-        margin-left: 0;
-    }
-
+  
     .personal-info {
-        margin: 0 10px;
-        /* Márgenes más pequeños para pantallas pequeñas */
+      margin: 0 10px;
     }
 
+    .card {
+        margin: 5px 10px;
+    }
+  
     .action-button {
-        margin-top: 10px;
+      margin-top: 10px;
     }
-}
-
-/* Para pantallas aún más pequeñas, hasta 480px (móviles) */
-@media (max-width: 480px) {
+  }
+  
+  /* Mobile (max-width 480px) */
+  @media (max-width: 480px) {
     .profile-picture {
-        width: 100px;
-        height: 100px;
-        position: absolute;
-        top: -50px;
-        /* Mueve la imagen hacia arriba */
-        left: 20px;
+      width: 100px;
+      height: 100px;
+      top: -50px;
+      left: 20px;
     }
-
+  
     .profile-picture img {
-        width: 100%;
-        height: 100%;
+      width: 100%;
+      height: 100%;
     }
-
+  
     .plus-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 20px;
-        bottom: 10px;
-        /* Ajusta la posición para que quede más abajo */
-        right: -15px;
-        /* Ajusta la posición para que quede más a la derecha */
+      width: 30px;
+      height: 30px;
+      font-size: 20px;
+      bottom: 10px;
+      right: -15px;
     }
-
+  
     .action-button button {
-        font-size: 12px;
-        padding: 8px;
+      font-size: 12px;
+      padding: 8px;
     }
-
-    .personal-info {
-        padding: 15px;
+  
+    .personal-info,
+    .card {
+      padding: 15px;
     }
-}
+  }
+  

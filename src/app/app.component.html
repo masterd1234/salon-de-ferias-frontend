@@ -1,5 +1,6 @@
 <!-- Barra superior -->
 <mat-toolbar class="navbar-custom" style="display: flex; justify-content: space-between;">
+
   <!-- Logo -->
   @if(!isLoggedIn()){
   <div>
@@ -33,13 +34,16 @@
     </button>
   </mat-nav-list>
   }
+  <!-- Botón de menú para pantallas pequeñas -->
+  <button mat-icon-button (click)="drawer.toggle()" class="menu-btn" *ngIf="isSmallScreen">
+    <i class="fa-solid fa-bars"></i>
+  </button>
 </mat-toolbar>
 
-<!-- Barra Lateral -->
-
 <mat-sidenav-container>
+  <!-- Barra Lateral -->
   @if(isLoggedIn()){
-  <mat-sidenav #drawer mode="side" opened clasS="sidenav">
+  <mat-sidenav #drawer mode="over" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav">
     <mat-nav-list class="nav-list">
       @if(isRol()==='co'){
       <mat-list-item> <a class="nav-link active" routerLink="/profile" style="color: #002e4c;"> <i
@@ -50,6 +54,7 @@
     </mat-nav-list>
   </mat-sidenav>
   }
+
   <!-- Contenido principal -->
   <mat-sidenav-content>
     <div class="app-background">
