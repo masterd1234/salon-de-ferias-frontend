@@ -1,59 +1,55 @@
-.container {
-  padding: 20px;
-  text-align: center; /* Centra todo el contenido dentro de la página */
-}
-
-.add-video-section {
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center; /* Centrar el input y el botón */
-  align-items: center;
-}
-
-.add-video-section input {
-  padding: 10px;
-  width: 400px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.add-video-section button {
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.add-video-section button:hover {
-  background-color: #218838;
-}
-
-.video-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center; /* Centrar la lista de videos */
-}
-
-.video-item {
+.video-dialog-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  padding: 20px;
 }
 
-.video-item button {
+h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.input-group {
+  display: flex;
+  justify-content: center; /* Alinea el contenido al centro */
+  align-items: center;
+  gap: 8px;
   margin-top: 10px;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
-.video-item button:hover {
-  background-color: #0056b3;
+.custom-input {
+  padding: 10px;
+  margin-right: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 250px;
+  font-size: 14px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.custom-button {
+  background-color: rgb(17, 226, 17);
+  color: white;
+  padding: 10px 20px;
+  margin: 0; /* Elimina márgenes adicionales */
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  height: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+}
+
+.custom-button:hover {
+  background-color: #45a049;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button:active {
+  background-color: #3e8e41;
+  box-shadow: none;
 }

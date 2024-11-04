@@ -33,17 +33,18 @@
     </div>
     <mat-card class="card">
         <mat-card-header>
-            <mat-card-title>
-                <h3 id="personal-info-card">Información</h3>
-            </mat-card-title>
-            <!-- Botones de acción -->
-            <div class="action-button ml-auto d-flex">
-                <button class="mx-2" mat-flat-button>
-                    <i class="fas fa-download"></i>
-                </button>
-                <button class="mx-2" mat-flat-button>
-                    <i class="fas fa-edit"></i>
-                </button>
+            <div class="action-header">
+                <mat-card-title>
+                    <h3 id="personal-info-card">Información</h3>
+                </mat-card-title>
+                <div class="action-button">
+                    <button class="mx-2" mat-flat-button>
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="mx-2" mat-flat-button>
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
             </div>
         </mat-card-header>
         <mat-divider class="mt-2" style="width: 100%;"></mat-divider>
@@ -110,26 +111,27 @@
     </mat-card>
     }
     <mat-card class="card">
-        <mat-card-header>
+        <mat-card-header class="action-header">
             <mat-card-title>
                 <h3 id="personal-info-card">Video</h3>
             </mat-card-title>
-            <div class="input-group ml-auto d-flex">
-                <input matInput [(ngModel)]="newVideo" placeholder="Añadir URL de YouTube" class="custom-input"/>
+            @if(!isSmallScreen){
+            <div class="action-button ml-auto d-flex">
+                <input matInput [(ngModel)]="newVideo" placeholder="Añadir URL de YouTube" class="custom-input" />
                 <button mat-flat-button class="custom-button" (click)="addVideo()">Añadir Video</button>
-              </div>
+            </div>
+            }@else{
+                <div class="action-button ml-auto d-flex">
+                    <button mat-flat-button class="custom-button" (click)="openVideoDialog()">+</button>
+                </div>
+            }
         </mat-card-header>
         <mat-divider class="mt-2" style="width: 100%;"></mat-divider>
-        <mat-grid-list cols="3" gutterSize="16px" rowHeight="4:3">
+        <mat-grid-list [cols]="cols" gutterSize="16px" rowHeight="1:1" class="mt-3">
             <mat-grid-tile *ngFor="let video of videos">
                 <mat-card class="video">
                     <mat-card-content>
-                        <iframe 
-                            width="300"
-                            height="300" 
-                            [src]="video" 
-                            title="YouTube video player" 
-                            frameborder="0"
+                        <iframe width="300" height="300" [src]="video" title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen>
                         </iframe>

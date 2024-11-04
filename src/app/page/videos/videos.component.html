@@ -1,9 +1,7 @@
-<div class="container">
-  <h1>Lista de Videos</h1>
-
-  <!-- Sección para añadir nuevos videos -->
-  <div class="add-video-section">
-    <input [(ngModel)]="newVideo" placeholder="Añadir URL de YouTube" />
-    <button (click)="addVideo()">Añadir Video</button>
+<div class="video-dialog-container">
+  <h2>Agregar Video</h2>
+  <div class="input-group">
+    <input matInput [(ngModel)]="videoUrl" placeholder="Añadir URL de YouTube" class="custom-input" />
+    <button mat-flat-button color="primary" class="custom-button" (click)="addVideo()">Añadir Video</button>
   </div>
 </div>

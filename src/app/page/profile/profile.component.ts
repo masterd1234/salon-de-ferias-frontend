@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, HostListener } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,6 +12,7 @@ import { OffersComponent } from "../offers/offers.component";
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { VideoService } from '../../services/videos.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-profile',
@@ -63,18 +64,23 @@ export class ProfileComponent {
   showFullAdditionalInfo: boolean = false;
   truncatedAdditionalInfo: string = '';
   fullAdditionalInfo: string = '';
+
+
   newVideo: string = '';
   videos: SafeResourceUrl[] = [];
   users = signal<any[]>([]);  // Signal para almacenar los usuarios
   company = signal<Company | null>(null);
   profileImageUrl: string | null = null; // Aquí defines si hay una URL para la imagen o no
+  cols: number = 3; // Número de columnas predeterminado para pantallas grandes
+  isSmallScreen: boolean = false;
 
   private authService = inject(AuthService);
   private companyService = inject(CompanyService);
   private sanitazer = inject(DomSanitizer);
-  private videoService = inject(VideoService)
+  private videoService = inject(VideoService);
+  
 
-  constructor() {
+  constructor(public dialog: MatDialog) {
     this.loadVideos();
     this.getCompanyData();  // Llamar al método cuando se inicializa el componente
     this.profileImageUrl = '';
@@ -82,6 +88,8 @@ export class ProfileComponent {
 
   ngOnInit():void{
     this.loadVideos();
+    this.setGridCols(); //Establece el número de columnas al cargar el componente
+    this.checkScreenSize();
   }
   // Alterna el estado de mostrar el texto completo
   toggleText() {
@@ -227,5 +235,38 @@ export class ProfileComponent {
     return this.sanitazer.bypassSecurityTrustResourceUrl(url);
   }
 
+  //ajustes responsive
 
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.setGridCols(); // Cambia el número de columnas al redimensionar la pantalla
+    this.checkScreenSize();
+  }
+
+  checkScreenSize(): void {
+    this.isSmallScreen = window.innerWidth <= 768; // Define como "pantalla pequeña" el ancho menor o igual a 600px
+  }
+
+  setGridCols() {
+    const width = window.innerWidth;
+    if (width <= 480) {
+      this.cols = 1; // 1 columna en móviles
+    } else if (width <= 768) {
+      this.cols = 2; // 2 columnas en tablets
+    } else {
+      this.cols = 3; // 3 columnas en pantallas grandes
+    }
+  }
+
+  openVideoDialog(): void {
+    const dialogRef = this.dialog.open(VideosComponent, {
+      width: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe(videoUrl => {
+      if (videoUrl) {
+        this.addVideo();
+      }
+    });
+  }
 }
