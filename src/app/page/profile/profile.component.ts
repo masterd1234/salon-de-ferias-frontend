@@ -185,10 +185,18 @@ export class ProfileComponent {
   // Cargar videos desde el backend
   loadVideos() {
     this.videoService.getVideos().subscribe(data => {
-      this.videos = data.map(video => this.sanitizeUrl(`https://www.youtube.com/embed/${video.id}`));
+      this.videos = data
+        .map(video => {
+          if (video.url) {
+            return this.sanitazer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${video.url}`);
+          } else {
+            console.error("URL del video es inválida:", video);
+            return null;
+          }
+        })
+        .filter((video): video is SafeResourceUrl => video !== null); // Filtra valores nulos
     });
   }
-
   // Obtener el ID del video de YouTube
   getYouTubeVideoId(url: string): string | null {
     const regExp = /^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
