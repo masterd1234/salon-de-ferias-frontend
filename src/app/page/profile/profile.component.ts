@@ -4,15 +4,19 @@ import { AuthService } from '../../services/auth.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { CompanyService } from '../../services/company.service';
 import { Company } from '../../../models/company.model';
 import { VideosComponent } from "../videos/videos.component";
 import { OffersComponent } from "../offers/offers.component";
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { VideoService } from '../../services/videos.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, MatButtonModule, MatCardModule, VideosComponent, OffersComponent],
+  imports: [CommonModule, MatDividerModule, MatButtonModule, MatCardModule, VideosComponent, OffersComponent, MatGridListModule, FormsModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -59,15 +63,19 @@ export class ProfileComponent {
   showFullAdditionalInfo: boolean = false;
   truncatedAdditionalInfo: string = '';
   fullAdditionalInfo: string = '';
-
+  newVideo: string = '';
+  videos: SafeResourceUrl[] = [];
   users = signal<any[]>([]);  // Signal para almacenar los usuarios
   company = signal<Company | null>(null);
   profileImageUrl: string | null = null; // Aquí defines si hay una URL para la imagen o no
 
   private authService = inject(AuthService);
   private companyService = inject(CompanyService);
+  private sanitazer = inject(DomSanitizer);
+  private videoService = inject(VideoService)
 
   constructor() {
+    this.loadVideos();
     this.getCompanyData();  // Llamar al método cuando se inicializa el componente
     this.profileImageUrl = '';
   }
@@ -167,6 +175,45 @@ export class ProfileComponent {
     if (section) {
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  }
+
+  //PARTE DE LOS VIDEOS
+
+  // Cargar videos desde el backend
+  loadVideos() {
+    this.videoService.getVideos().subscribe(data => {
+      this.videos = data.map(video => this.sanitizeUrl(`https://www.youtube.com/embed/${video.id}`));
+    });
+  }
+
+  // Obtener el ID del video de YouTube
+  getYouTubeVideoId(url: string): string | null {
+    const regExp = /^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  }
+
+  // Agregar una nueva URL de video
+  addVideo() {
+    if (this.newVideo) {
+      const videoId = this.getYouTubeVideoId(this.newVideo);  // Extraer el ID
+      if (videoId) {
+        this.videoService.addVideo(videoId).subscribe(() => {
+          this.videos.push(this.sanitizeUrl(`https://www.youtube.com/embed/${videoId}`));
+          this.newVideo = ''; // Limpiar el campo de texto
+        }, error => {
+          alert('Error al agregar el video.');
+        });
+      } else {
+        alert('URL de YouTube no válida');
+      }
+    }
+  }
+
+
+  // Sanitizar la URL
+  sanitizeUrl(url: string): SafeResourceUrl {
+    return this.sanitazer.bypassSecurityTrustResourceUrl(url);
   }
 
 

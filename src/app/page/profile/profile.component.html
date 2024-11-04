@@ -112,13 +112,37 @@
     <mat-card class="card">
         <mat-card-header>
             <mat-card-title>
-                <h3 id="personal-info-card">Videos</h3>
+                <h3 id="personal-info-card">Video</h3>
             </mat-card-title>
+            <div>
+                <input [(ngModel)]="newVideo" placeholder="Añadir URL de YouTube" />
+                <button (click)="addVideo()">Añadir Video</button>
+            </div>
         </mat-card-header>
         <mat-divider class="mt-2" style="width: 100%;"></mat-divider>
-        <mat-card-content>
-            <app-videos></app-videos>
-        </mat-card-content>
+        <mat-grid-list cols="3" gutterSize="16px" rowHeight="4:3">
+            <mat-grid-tile *ngFor="let video of videos">
+                <mat-card class="video">
+                    <mat-card-content>
+                        <iframe 
+                            width="300"
+                            height="300" 
+                            [src]="video" 
+                            title="YouTube video player" 
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </mat-card-content>
+                    <mat-card-footer>
+                        <div class="video-info">
+                            <h3 mat-card-title></h3>
+                            <p mat-card-subtitle></p>
+                        </div>
+                    </mat-card-footer>
+                </mat-card>
+            </mat-grid-tile>
+        </mat-grid-list>
     </mat-card>
     <mat-card class="card">
         <mat-card-header>
