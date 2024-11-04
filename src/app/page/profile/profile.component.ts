@@ -80,6 +80,9 @@ export class ProfileComponent {
     this.profileImageUrl = '';
   }
 
+  ngOnInit():void{
+    this.loadVideos();
+  }
   // Alterna el estado de mostrar el texto completo
   toggleText() {
     this.showFullText = !this.showFullText;
