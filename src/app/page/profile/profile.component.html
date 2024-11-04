@@ -114,10 +114,10 @@
             <mat-card-title>
                 <h3 id="personal-info-card">Video</h3>
             </mat-card-title>
-            <div>
-                <input [(ngModel)]="newVideo" placeholder="Añadir URL de YouTube" />
-                <button (click)="addVideo()">Añadir Video</button>
-            </div>
+            <div class="input-group ml-auto d-flex">
+                <input matInput [(ngModel)]="newVideo" placeholder="Añadir URL de YouTube" class="custom-input"/>
+                <button mat-flat-button class="custom-button" (click)="addVideo()">Añadir Video</button>
+              </div>
         </mat-card-header>
         <mat-divider class="mt-2" style="width: 100%;"></mat-divider>
         <mat-grid-list cols="3" gutterSize="16px" rowHeight="4:3">
