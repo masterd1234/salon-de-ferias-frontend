@@ -1,97 +1,122 @@
 /* Contenedor de la tarjeta */
 mat-card {
-    max-width: 500px;
-    padding: 20px;
-    margin: auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    background-color: #ffffff; /* Fondo blanco */
-  }
-  
-  mat-card-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  /* Ancho completo para los campos de entrada */
-  mat-form-field {
-    width: 100%;
-    margin-bottom: 16px;
-  }
-  
-  mat-form-field .mat-form-field-flex {
-    background-color: #f5f5f5; /* Color de fondo para los campos de entrada */
-  }
-  
-  mat-form-field .mat-label {
-    color: #555; /* Color de la etiqueta */
-    font-weight: 500;
-  }
-  
-  .mat-select-arrow {
-    color: #555; /* Color de la flecha del selector */
-  }
-  
-  /* Grupo de botones */
-  .button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  /* Estilo del botón de Añadir Oferta */
-  button[color="primary"] {
-    background-color: rgb(17, 226, 17); /* Verde para el botón de añadir */
-    color: white;
-  }
-  
-  button[color="primary"]:hover {
-    background-color: #218838; /* Un verde más oscuro al pasar el cursor */
-  }
+  max-width: 500px;
+  padding: 20px;
+  margin: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  background-color: #ffffff;
+  /* Fondo blanco */
+}
 
-  /* Estilo del botón de Añadir Oferta cuando está deshabilitado */
+mat-card-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Ancho completo para los campos de entrada */
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+mat-form-field .mat-form-field-flex {
+  background-color: #f5f5f5;
+  /* Color de fondo para los campos de entrada */
+}
+
+mat-form-field .mat-label {
+  color: #555;
+  /* Color de la etiqueta */
+  font-weight: 500;
+}
+
+.mat-select-arrow {
+  color: #555;
+  /* Color de la flecha del selector */
+}
+
+/* Grupo de botones */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Estilo del botón de Añadir Oferta */
+button[color="primary"] {
+  background-color: rgb(17, 226, 17);
+  /* Verde para el botón de añadir */
+  color: white;
+}
+
+button[color="primary"]:hover {
+  background-color: #218838;
+  /* Un verde más oscuro al pasar el cursor */
+}
+
+/* Estilo del botón de Añadir Oferta cuando está deshabilitado */
 button[color="primary"]:disabled {
-    background-color: #a5d6a7; /* Verde más claro para indicar que está deshabilitado */
-    color: #ffffff; /* Color de texto en blanco para el botón deshabilitado */
-    cursor: not-allowed; /* Cambia el cursor para indicar que no es clicable */
-    opacity: 0.7; /* Baja opacidad para enfatizar el estado deshabilitado */
-  }
-  
-  /* Estilo del botón de Cancelar */
-  button[color="warn"] {
-    color: #dc3545; /* Rojo para el botón de cancelar */
-  }
-  
-  button[color="warn"]:hover {
-    background-color: rgba(220, 53, 69, 0.1); /* Fondo rojo claro al pasar el cursor */
-  }
-  /* Estilo responsive para pantallas pequeñas */
+  background-color: #a5d6a7;
+  /* Verde más claro para indicar que está deshabilitado */
+  color: #ffffff;
+  /* Color de texto en blanco para el botón deshabilitado */
+  cursor: not-allowed;
+  /* Cambia el cursor para indicar que no es clicable */
+  opacity: 0.7;
+  /* Baja opacidad para enfatizar el estado deshabilitado */
+}
+
+/* Estilo del botón de Cancelar */
+button[color="warn"] {
+  color: #dc3545;
+  /* Rojo para el botón de cancelar */
+}
+
+button[color="warn"]:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+  /* Fondo rojo claro al pasar el cursor */
+}
+
+
+/* Estilo responsive para pantallas pequeñas */
 @media (max-width: 600px) {
   mat-card {
-    max-width: 70%; /* Ocupa el 90% del ancho de la pantalla */
+    max-width: 100%;
+    /* Ocupa el 90% del ancho de la pantalla */
     padding: 15px;
     margin: auto;
     border-radius: 8px;
   }
 
   mat-card-title {
-    font-size: 1.2em; /* Reduce el tamaño del título en pantallas pequeñas */
+    font-size: 1.2em;
+    /* Reduce el tamaño del título en pantallas pequeñas */
   }
 
   mat-form-field {
-    margin-bottom: 12px; /* Reduce el espacio entre campos */
+    margin-bottom: 12px;
+    /* Reduce el espacio entre campos */
   }
 
   .button-group {
     flex-direction: column;
-    gap: 10px; /* Espacio entre botones */
+    gap: 10px;
+    /* Espacio entre botones */
   }
 
   button[color="primary"],
   button[color="warn"] {
-    width: 100%; /* Botones ocupan el ancho completo en pantallas pequeñas */
+    width: 100%;
+    /* Botones ocupan el ancho completo en pantallas pequeñas */
+  }
+
+  /* Ajusta la altura máxima del contenido en pantallas pequeñas */
+  .dialog-scrollable-content {
+    max-height: 60vh;
+    /* Reduce la altura para permitir más espacio para el scroll en pantallas pequeñas */
   }
 }
