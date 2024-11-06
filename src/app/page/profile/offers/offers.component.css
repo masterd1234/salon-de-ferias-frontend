@@ -71,7 +71,7 @@ button[color="primary"]:disabled {
   /* Estilo responsive para pantallas pequeñas */
 @media (max-width: 600px) {
   mat-card {
-    max-width: 90%; /* Ocupa el 90% del ancho de la pantalla */
+    max-width: 70%; /* Ocupa el 90% del ancho de la pantalla */
     padding: 15px;
     margin: auto;
     border-radius: 8px;
