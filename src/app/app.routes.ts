@@ -4,8 +4,8 @@ import { AdminDashboardComponent } from './page/admin-dashboard/admin-dashboard.
 import { authGuard } from './guards/auth.guard';
 import { CompanyDashboarComponent } from './page/company-dashboar/company-dashboar.component';
 import { ProfileComponent } from './page/profile/profile.component';
-import { VideosComponent } from './page/videos/videos.component';
-import { OffersComponent } from './page/offers/offers.component';
+import { VideosComponent } from './page/profile/videos/videos.component';
+import { OffersComponent } from './page/profile/offers/offers.component';
 
 export const routes: Routes = [
     {path: '', component: LoginComponent},

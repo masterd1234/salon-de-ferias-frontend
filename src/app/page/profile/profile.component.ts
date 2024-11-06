@@ -7,17 +7,20 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CompanyService } from '../../services/company.service';
 import { Company } from '../../../models/company.model';
-import { VideosComponent } from "../videos/videos.component";
-import { OffersComponent } from "../offers/offers.component";
+import { VideosComponent } from "./videos/videos.component";
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { VideoService } from '../../services/videos.service';
 import { MatDialog } from '@angular/material/dialog';
+import { Offer } from '../../../models/offers.model';
+import { OffersService } from '../../services/offers.service';
+import { OffersComponent } from './offers/offers.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, MatButtonModule, MatCardModule, VideosComponent, OffersComponent, MatGridListModule, FormsModule],
+  imports: [CommonModule, MatDividerModule, MatButtonModule, MatCardModule, VideosComponent, MatGridListModule, FormsModule, MatIconModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
@@ -66,6 +69,9 @@ export class ProfileComponent {
   fullAdditionalInfo: string = '';
 
 
+  
+  offers: Offer[] = [];
+  expandedOfferId: string | null = null;
   newVideo: string = '';
   videos: SafeResourceUrl[] = [];
   users = signal<any[]>([]);  // Signal para almacenar los usuarios
@@ -78,19 +84,23 @@ export class ProfileComponent {
   private companyService = inject(CompanyService);
   private sanitazer = inject(DomSanitizer);
   private videoService = inject(VideoService);
+  private offerService = inject(OffersService);
   
 
   constructor(public dialog: MatDialog) {
+    this.loadOffers();
     this.loadVideos();
     this.getCompanyData();  // Llamar al método cuando se inicializa el componente
     this.profileImageUrl = '';
   }
 
   ngOnInit():void{
+    this.loadOffers();
     this.loadVideos();
     this.setGridCols(); //Establece el número de columnas al cargar el componente
     this.checkScreenSize();
   }
+  
   // Alterna el estado de mostrar el texto completo
   toggleText() {
     this.showFullText = !this.showFullText;
@@ -235,6 +245,18 @@ export class ProfileComponent {
     return this.sanitazer.bypassSecurityTrustResourceUrl(url);
   }
 
+  openVideoDialog(): void {
+    const dialogRef = this.dialog.open(VideosComponent, {
+      width: '300px',
+    });
+
+    dialogRef.afterClosed().subscribe(videoUrl => {
+      if (videoUrl) {
+        this.addVideo();
+      }
+    });
+  }
+
   //ajustes responsive
 
   @HostListener('window:resize', ['$event'])
@@ -258,15 +280,59 @@ export class ProfileComponent {
     }
   }
 
-  openVideoDialog(): void {
-    const dialogRef = this.dialog.open(VideosComponent, {
-      width: '300px',
+  //Ofertas
+
+  loadOffers(){
+    this.offerService.getOffersById().subscribe(
+      (data) => {
+        this.offers = data;
+        console.log('Ofertas obtenidas:', this.offers);
+      },
+      (error) => {
+        console.error('Error al obtener ofertas:', error);
+      }
+    );
+  }
+
+  toggleOfferDetails(offerId: string) {
+    this.expandedOfferId = this.expandedOfferId === offerId ? null : offerId;
+  }
+
+  closeOfferDetails(event: Event) {
+    event.stopPropagation();
+    this.expandedOfferId = null;
+  }
+
+  deleteOffer(offerId: string) {
+    // Lógica para eliminar la oferta si es necesario
+    console.log('Eliminando oferta con ID:', offerId);
+  }
+
+  // Envía los datos del formulario al backend usando el servicio
+  addOffer(offerData: Offer) {
+    this.offerService.addOffer(offerData).subscribe(
+      (response) => {
+        console.log('Oferta añadida con éxito:', response);
+        // Puedes agregar aquí lógica adicional, como actualizar la lista de ofertas
+        this.loadOffers();
+      },
+      (error) => {
+        console.error('Error al agregar la oferta:', error);
+      }
+    );
+  }
+
+  openOfferDialog(): void {
+    const dialogRef = this.dialog.open(OffersComponent, {
+      width: '400px'
     });
 
-    dialogRef.afterClosed().subscribe(videoUrl => {
-      if (videoUrl) {
-        this.addVideo();
+    dialogRef.afterClosed().subscribe(offerData => {
+      if (offerData) {
+        this.addOffer(offerData); // Llama a una función para procesar los datos de la oferta
       }
     });
   }
+
+
 }

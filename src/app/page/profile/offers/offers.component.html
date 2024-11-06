@@ -1,0 +1,53 @@
+<mat-card>
+    <mat-card-title>Añadir Nueva Oferta</mat-card-title>
+    <form [formGroup]="offerForm" (ngSubmit)="addOffer()">
+      <mat-form-field appearance="fill">
+        <mat-label>Posición</mat-label>
+        <input matInput formControlName="position" placeholder="Posición" required />
+        <mat-error *ngIf="offerForm.get('position')?.hasError('required')">
+          La posición es obligatoria
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Tipo de Lugar de Trabajo</mat-label>
+        <mat-select formControlName="workplace_type">
+          <mat-option value="presencial">Presencial</mat-option>
+          <mat-option value="remoto">Remoto</mat-option>
+          <mat-option value="hibrido">Híbrido</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Ubicación</mat-label>
+        <input matInput formControlName="location" placeholder="Ubicación" required />
+        <mat-error *ngIf="offerForm.get('location')?.hasError('required')">
+          La ubicación es obligatoria
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Tipo de Trabajo</mat-label>
+        <mat-select formControlName="job_type">
+          <mat-option value="tiempo_completo">Tiempo Completo</mat-option>
+          <mat-option value="medio_tiempo">Medio Tiempo</mat-option>
+          <mat-option value="temporal">Temporal</mat-option>
+          <mat-option value="practicas">Prácticas</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput formControlName="description" placeholder="Descripción" rows="4" required></textarea>
+        <mat-error *ngIf="offerForm.get('description')?.hasError('required')">
+          La descripción es obligatoria
+        </mat-error>
+      </mat-form-field>
+  
+      <div class="button-group">
+        <button mat-raised-button color="primary" type="submit" [disabled]="offerForm.invalid">Añadir Oferta</button>
+        <button mat-button color="warn" (click)="onCancel()">Cancelar</button>
+      </div>
+    </form>
+  </mat-card>
+  
