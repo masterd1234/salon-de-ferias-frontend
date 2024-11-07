@@ -46,6 +46,10 @@ body {
   width: 100%;
 }
 
+mat-nav-list{
+  margin-top: 15px;
+}
+
 /* Barra lateral fija */
 mat-sidenav {
   position: fixed;
