@@ -35,38 +35,40 @@
   </mat-nav-list>
   }
   <!-- Botón de menú para pantallas pequeñas -->
-   @if(isSmallScreen && isLoggedIn()){
-    <button (click)="drawer.toggle()" class="menu-btn" *ngIf="isSmallScreen">
-      <i class="fa-solid fa-bars"></i>
-    </button>
-   }
+  @if(isSmallScreen && isLoggedIn()){
+  <button (click)="drawer.toggle()" class="menu-btn" *ngIf="isSmallScreen">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+  }
 
 </mat-toolbar>
 
 <mat-sidenav-container>
   <!-- Barra Lateral -->
   @if(isLoggedIn()){
-  <mat-sidenav #drawer  [mode]="sidenavMode" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav">
+  <mat-sidenav #drawer [mode]="sidenavMode" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav">
     <mat-nav-list class="nav-list">
       @if(isRol()==='co'){
       <mat-list-item> <a class="nav-link active" routerLink="/profile" style="color: #002e4c;"> <i
             class="fa-solid fa-user" style="color: #002e4c;"></i><span>Perfil</span></a></mat-list-item>
-      <mat-list-item><a class="nav-link active" routerLink="/offers" ><span>Ofertas</span></a></mat-list-item>
+
+      <mat-list-item class="mt-2"><a class="nav-link active" routerLink="/offers"><i class="fa-solid fa-briefcase"
+            style="color: #002e4c;"></i><span>Ofertas</span></a></mat-list-item>
 
       @if(isSmallScreen){
-        <mat-divider></mat-divider>
-        <mat-list-item>
-          @if(isRol() === 'admin'){
-            <a class="nav-link link" (click)="createUser()">
-              <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
-            </a>
-            }
-        </mat-list-item>
-        <mat-list-item>
-          <a class="nav-link link" (click)="logout()">
-            <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Salir</span>
-          </a>
-        </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item>
+        @if(isRol() === 'admin'){
+        <a class="nav-link link" (click)="createUser()">
+          <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
+        </a>
+        }
+      </mat-list-item>
+      <mat-list-item>
+        <a class="nav-link link" (click)="logout()">
+          <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Salir</span>
+        </a>
+      </mat-list-item>
       }
       }
     </mat-nav-list>
