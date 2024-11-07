@@ -2,11 +2,9 @@
   "routes": [
     "/",
     "/admin-dashboard",
-    "/banner",
     "/company-dashboard",
     "/login",
     "/offers",
-    "/profile",
-    "/videos"
+    "/profile"
   ]
 }

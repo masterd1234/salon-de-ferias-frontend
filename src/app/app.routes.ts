@@ -4,9 +4,8 @@ import { AdminDashboardComponent } from './page/admin-dashboard/admin-dashboard.
 import { authGuard } from './guards/auth.guard';
 import { CompanyDashboarComponent } from './page/company-dashboar/company-dashboar.component';
 import { ProfileComponent } from './page/profile/profile.component';
-import { VideosComponent } from './page/profile/videos/videos.component';
 import { OffersComponent } from './page/profile/offers/offers.component';
-import { BannerComponent } from './page/banner/banner.component';
+
 
 export const routes: Routes = [
     {path: '', component: LoginComponent},
@@ -14,7 +13,5 @@ export const routes: Routes = [
     {path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [authGuard] },
     {path: 'company-dashboard', component: CompanyDashboarComponent, canActivate: [authGuard] },
     {path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
-    {path: 'videos', component: VideosComponent, canActivate: [authGuard]},
-    {path: 'offers', component: OffersComponent, canActivate: [authGuard]},
-    {path: 'banner', component: BannerComponent, canActivate: [authGuard]},
+    {path: 'offers', component: OffersComponent, canActivate: [authGuard]}
 ];
