@@ -49,6 +49,9 @@
   <mat-sidenav #drawer [mode]="sidenavMode" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav">
     <mat-nav-list class="nav-list">
       @if(isRol()==='co'){
+      <mat-list-item class="mt-2"><a class="nav-link active" routerLink="/home"><i class="fa-solid fa-house"
+            style="color: #002e4c;"></i><span>Home</span></a></mat-list-item>
+            
       <mat-list-item> <a class="nav-link active" routerLink="/profile" style="color: #002e4c;"> <i
             class="fa-solid fa-user" style="color: #002e4c;"></i><span>Perfil</span></a></mat-list-item>
 

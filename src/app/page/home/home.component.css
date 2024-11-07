@@ -1,0 +1,220 @@
+/* Reset general */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  :host {
+    background-color: #bdccdb;
+    min-height: 100vh;
+    width: 100%;
+    display: block;
+  }
+  
+  .container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  
+  /* Header */
+  .header {
+    background-color: #333;
+    color: white;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .header nav ul {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+  }
+  
+  .header nav ul li a {
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+  }
+  
+  /* Ajustes para la imagen de fondo */
+  .manual-image {
+    position: relative;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .manual-image img {
+    width: 100%;
+    max-width: 1200px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  /* Bienvenida centrada en la imagen */
+  .welcome-section {
+    position: relative;
+    top: 25%;                /* Centrado vertical */
+    left: 50%;               /* Centrado horizontal */
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 800px;
+    width: 50%;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .welcome-section .welcome-text {
+    color: #fff;
+    margin-bottom: 20px;
+    margin: 0; /* Eliminación de posibles márgenes internos */
+  }
+  
+  /* Counter Section */
+  .counters {
+    display: flex;
+    justify-content: space-around;
+    padding: 2rem 0;
+    background-color: #222;
+    color: white;
+  }
+  
+  .counter {
+    text-align: center;
+  }
+  
+  .counter h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Contenedor principal de la sección */
+  .content-section {
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  
+  /* Título centrado arriba de los bloques */
+  .bloques {
+    margin-bottom: 2rem;
+  }
+  /* Bloques de contenido alineados horizontalmente */
+  .content-section .content-card {
+    background-color: #f4f4f4;
+    padding: 2rem;
+    width: 30%; /* Ajusta el ancho según sea necesario */
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 1rem;
+  }
+  
+  /* Contenedor de los bloques en fila */
+  .content-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  /* Contenedor de los bloques en fila */
+  .content-cards {
+    display: flex;
+    justify-content: space-around;
+    gap: 1.5rem; /* Espacio entre los bloques */
+    flex-wrap: wrap; /* Permite que los bloques se ajusten en dispositivos pequeños */
+  }
+  
+  /* Estilos individuales para cada bloque */
+  .content-card {
+    background-color: #f4f4f4;
+    padding: 2rem;
+    width: 30%; /* Ajusta el ancho según el diseño */
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .content-section div {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 1000px; /* Ancho máximo del contenedor */
+  }
+  
+  
+  /* About Fair Section */
+  .about-fair {
+    padding: 3rem 2rem;
+    text-align: center;
+    background-color: #f4f4f4;
+  }
+  
+  .about-fair h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .about-fair p {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 0.5rem 0;
+  }
+  
+  .fair-images {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .fair-images img {
+    width: 300px;
+    height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Content Section */
+  .content-section {
+    display: flex;
+    justify-content: space-around;
+    padding: 3rem 2rem;
+  }
+  
+  .content-card {
+    background-color: #f4f4f4;
+    padding: 2rem;
+    width: 30%;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .content-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  #about-fair {
+    scroll-margin-top: 80px; /* Ajusta según la altura del menú */
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 2rem;
+    margin-top: 2rem;
+  }
+  
