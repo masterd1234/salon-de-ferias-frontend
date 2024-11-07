@@ -3,6 +3,7 @@
     "/",
     "/admin-dashboard",
     "/company-dashboard",
+    "/home",
     "/login",
     "/offers",
     "/profile"
