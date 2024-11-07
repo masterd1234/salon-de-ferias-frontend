@@ -30,4 +30,9 @@ export class OffersService {
     return this.http.get(`${this.apiUrl}/by-id`, { headers });
   }
 
+  deleterOffer(id: string): Observable<any>{
+    const headers = this.getHeaders();
+    return this.http.delete(`${this.apiUrl}/${id}`,  { headers });
+
+  }
 }

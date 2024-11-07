@@ -2,25 +2,13 @@
 
   <!-- Contenedor para los carruseles y la vista previa -->
   <div class="content-container pt-3 px-3">
-    <div class="row">
 
+    <div class="row">
+      <!-- Incluye el componente BannerComponent dentro de StandDesingComponent -->
+      <app-banner-root [canUploadFiles]="canUploadFiles()"></app-banner-root>
       <!-- Carrusel del stand -->
       <div class="col-md-6">
-        <h4 class="text-start">Selecciona el Stand
-
-          <!-- Checkbox para subir un stand personalizado -->
-          <div class="custom-stand-checkbox text-start">
-            <input type="checkbox" id="customStand" (change)="toggleCustomStand($event)">
-            <label for="customStand"><small>Subir un stand con diseño propio</small></label>
-          </div>
-
-          <!-- Botón para subir un stand personalizado (solo aparece si el checkbox está marcado) -->
-          <div *ngIf="customStandEnabled" class="custom-stand-upload">
-            <button type="button" class="btn btn-primary btn-lg" (click)="uploadCustomStand()">Tu Stand</button>
-            <input type="file" id="standUpload" (change)="handleStandUpload($event)" class="hidden-file-input">
-          </div>
-        </h4>
-
+        <h4 class="text-start">Selecciona el Stand</h4>
         <div class="carousel-container">
           <button class="nav-button left" (click)="scroll('stand', 'left')">&lt;</button>
           <div class="images-container stand-carousel">
@@ -50,7 +38,7 @@
         <div class="preview-combined-container">
           <h4>Vista Previa:</h4>
           <div class="combined-image-container">
-            <img [src]="selectedStand() || '../assets/stand1.jpg'" alt="Vista previa del Stand seleccionado"
+            <img [src]="selectedStand() || '../assets/stand1.png'" alt="Vista previa del Stand seleccionado"
               class="stand-image">
             <img [src]="selectedReceptionist() || '../assets/recepcionist1.png'"
               alt="Vista previa del Recepcionista seleccionado" class="receptionist-image">
@@ -59,6 +47,8 @@
           </div>
         </div>
       </div>
+
+
     </div>
   </div>
 

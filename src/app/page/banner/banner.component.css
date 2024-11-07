@@ -1,89 +1,81 @@
-/* Contenedor del formulario */
+/* banner.component.css */
+
 .stand-form {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
 
-/* Título del formulario */
-.form-title {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-/* Estilos para los grupos del formulario */
-.form-group {
-  margin-bottom: 20px;
-}
-
-/* Etiquetas */
-.form-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 8px;
-  color: #555;
-}
-
-/* Contenedor de vista previa de imágenes */
-.preview-tab {
-  margin-top: 20px;
-  text-align: center;
-}
-
-/* Imagen de vista previa (sin zoom ni arrastre) */
-.preview-img {
-  max-width: 100%;
-  height: auto;
-  border: 2px solid #ddd;
-  border-radius: 5px;
-}
-
-/* Contenedor del logo (rectángulo azul) */
-.image-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.image-viewport {
-  width: 300px;
-  height: 200px;
-  border: 2px solid blue;
-  overflow: hidden; /* Limita la imagen al contenedor */
-  position: relative;
-  cursor: grab;
-}
-
-.resizable-image {
-  position: absolute;
-  cursor: grab;
-  transition: transform 0.1s ease;
-}
-
-/* Botón de Enviar */
-.btn-submit {
-  display: block;
   width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  color: #fff;
-  background-color: #007bff;
+  max-width: 100%; /* Ocupa todo el ancho disponible */
+  background-color:azure;
+  margin-top: 3px;
+  margin-bottom: 10px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between; /* Distribuye el título y el botón a ambos extremos */
+  align-items: center;
+  padding: 8px 16px; /* Añade algo de espacio alrededor */
+}
+
+mat-card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.file-input {
+  display: none; /* Oculta el input de archivo */
+}
+.action-button {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  align-items: center; /* Asegura que los botones estén alineados verticalmente */
+}
+
+.action-button .mx-2 {
+  padding: 5px 10px;
+  background-color: rgb(17, 226, 17);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.action-button .mx-2:hover {
+  background-color: #45a049;
+}
+
+.action-button .mx-2:active {
+  background-color: #3e8e41;
+}
+/* Botón personalizado */
+.custom-button {
+  background-color: rgb(17, 226, 17);
+  color: white;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
+  font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  max-width: 150px; /* Tamaño máximo para evitar botones demasiado grandes */
 }
 
-.btn-submit:disabled {
-  background-color: #aaa;
+.custom-button:hover {
+  background-color: #218838;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button:active {
+  background-color: #1e7e34;
+  box-shadow: none;
+}
+
+.custom-button:disabled {
+  background-color: #a5d6a7;
+  color: #ffffff;
   cursor: not-allowed;
-}
-
-.btn-submit:hover:not(:disabled) {
-  background-color: #0056b3;
+  opacity: 0.7;
 }

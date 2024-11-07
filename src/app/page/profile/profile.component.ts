@@ -304,8 +304,14 @@ export class ProfileComponent {
   }
 
   deleteOffer(offerId: string) {
-    // Lógica para eliminar la oferta si es necesario
-    console.log('Eliminando oferta con ID:', offerId);
+    this.offerService.deleterOffer(offerId).subscribe(
+      (response) => {
+        console.log('Oferta eliminada:', response);
+        this.loadOffers();
+      }, (error) =>{
+        console.error('Error al eliminar oferta:', error);
+      }
+    );
   }
 
   // Envía los datos del formulario al backend usando el servicio

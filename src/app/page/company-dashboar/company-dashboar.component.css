@@ -35,27 +35,32 @@
 }
 
 .image-content img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  padding: 0;
-  object-fit: contain;
+  width: 100%;            /* Ocupa el ancho completo del contenedor */
+  height: auto;           /* Ajusta la altura para mantener la proporción */
+  object-fit: contain;    /* Escala la imagen para que se ajuste sin recortar */
+  border-radius: 15px;    /* Bordes redondeados (opcional) */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra (opcional) */
 }
 
-.design-form {
+.desing-form {
   background-color: #bdccdb;
-  color: rgb(8, 8, 8);
-  text-align: left;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  height: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; /* Espacio entre el banner y el componente de diseño */
 }
 
 .img-form img{
   width: 555px;
   height: 445px;
 }
+
+
+.img-form{
+  border-radius: 5%;
+}
+
 /* Ajustes responsivos */
 @media (max-width: 600px) {
   .img-form{
@@ -73,6 +78,7 @@
     height: 300px; /* Ajustamos la altura en pantallas medianas */
   }
 }
+
 
 @media (min-width: 768px) {
   .text-content {

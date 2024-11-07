@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
@@ -6,15 +6,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ImageService } from '../../../services/imagen.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CompanyService } from '../../../services/company.service';
+import { BannerComponent } from "../../banner/banner.component";
 
 @Component({
   templateUrl: './stand-desing.component.html',
   styleUrls: ['./stand-desing.component.css'],
   selector: 'app-desing-root',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, CommonModule, ReactiveFormsModule],
+  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, CommonModule, ReactiveFormsModule, BannerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StandDesingComponent implements OnInit {
@@ -23,6 +24,9 @@ export class StandDesingComponent implements OnInit {
   receptionistImages = signal<string[]>([]);
   selectedStand = signal<string | null>(null);
   selectedReceptionist = signal<string | null>(null);
+
+ // Señal computada para saber si se pueden subir archivos
+ canUploadFiles = computed(() => !!this.selectedStand() && !!this.selectedReceptionist());
 
   // Otros campos para manejar el estado de la aplicación
   nombre: string | null = '';
