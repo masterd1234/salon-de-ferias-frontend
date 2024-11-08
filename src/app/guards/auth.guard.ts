@@ -18,12 +18,12 @@ export const authGuard: CanActivateFn = (route, state) => {
     } else if (decodedToken.rol === 'co') {
       return true;
     }else {
-      router.navigate(['/login']);
+      router.navigate(['/home']);
       return false;
     }
   } else {
     // Redirigir si no hay token
-    router.navigate(['/login']);
+    router.navigate(['/home']);
     return false;
   }
 };

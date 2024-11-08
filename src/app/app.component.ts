@@ -9,8 +9,6 @@ import { Overlay } from '@angular/cdk/overlay';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
-import { AdminDashboardComponent } from './page/admin-dashboard/admin-dashboard.component';
-import { sign } from 'crypto';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 
@@ -18,7 +16,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, LoginComponent, CommonModule, MatSidenavModule, MatToolbarModule, MatListModule],
+  imports: [RouterOutlet, RouterLink, CommonModule, MatSidenavModule, MatToolbarModule, MatListModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -36,19 +34,19 @@ export class AppComponent {
   private dialog = inject(MatDialog);  // Inyectar MatDialog para manejar el modal
   private overlay = inject(Overlay);
 
-  constructor(private breakpointObserver: BreakpointObserver){
-    this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).subscribe (result => {
+  constructor(private breakpointObserver: BreakpointObserver) {
+    this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).subscribe(result => {
       this.isSmallScreen = result.matches;
       this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
     })
   }
 
-    // Método para abrir o cerrar el drawer en pantallas pequeñas
-    toggleDrawer(): void {
-      if (this.drawer) {
-        this.drawer.toggle();
-      }
+  // Método para abrir o cerrar el drawer en pantallas pequeñas
+  toggleDrawer(): void {
+    if (this.drawer) {
+      this.drawer.toggle();
     }
+  }
 
   // Verifica si el usuario está logueado
   isLoggedIn(): boolean {
@@ -72,7 +70,7 @@ export class AppComponent {
   // Método para cerrar sesión
   logout(): void {
     this.authService.logout();  // Llama al método de logout del AuthService
-    this.router.navigate(['/login']);  // Redirige al usuario a la página de login
+    this.router.navigate(['/home']);  // Redirige al usuario a la página de login
   }
 
   // Método para abrir el modal y crear un nuevo usuario

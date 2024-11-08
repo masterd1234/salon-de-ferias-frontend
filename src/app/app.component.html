@@ -4,7 +4,7 @@
   <!-- Logo -->
   @if(!isLoggedIn()){
   <div>
-    <a class="navbar-brand" routerLink="/login">
+    <a class="navbar-brand" routerLink="/home">
       <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
     </a>
   </div>
@@ -33,6 +33,12 @@
       <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Cerrar Sesión</span>
     </button>
   </mat-nav-list>
+  }@else if (!isLoggedIn() && !isSmallScreen) {
+    <mat-nav-list>
+      <button class="btn-icon-text" routerLink="/login">
+        <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Iniciar Sesión</span>
+      </button>
+    </mat-nav-list>
   }
   <!-- Botón de menú para pantallas pequeñas -->
   @if(isSmallScreen && isLoggedIn()){
