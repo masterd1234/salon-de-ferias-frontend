@@ -1,4 +1,4 @@
-<!-- Ejemplos de lo que tine que configurar -->
+<!-- Sección del carrusel para selección de stand virtual -->
 <div class="container-fluid hero-section" style="border-top: 1px solid white; padding: 10px 0;">
     <div class="row align-items-center justify-content-center">
         <div class="col-md-6 text-content">
@@ -14,6 +14,7 @@
             </ul>
         </div>
 
+        <!-- Carrusel de selección de stand -->
         <div class="col-12 col-md-6 image-content">
             <c-carousel [interval]="0">
                 <c-carousel-inner>
@@ -28,20 +29,19 @@
     </div>
 </div>
 
-<!-- Formulario de Diseño -->
+<!-- Componente de diseño de stand -->
 <div class="desing-form">
     <app-desing-root></app-desing-root>
 </div>
 
-<!-- Formulario de informacion adicional -->
+<!-- Sección de formulario para subir documentos y enlaces relevantes -->
 <div class="container-fluid hero-section"
     style="border-bottom: 1px solid white; background: linear-gradient(180deg, #4A768D 0%,  #072D50  100%);">
-    <div class="row  justify-content-center">
+    <div class="row justify-content-center">
         <div class="col-md-6 text-content">
             <h1 class="hero-title pt-5">Sube documentos y enlaces de interés</h1>
             <p class="hero-description">
-                En esta sección, puedes añadir enlaces a tus documentos, reuniones importantes (como Zoom o Google
-                Meet),
+                En esta sección, puedes añadir enlaces a tus documentos, reuniones importantes (como Zoom o Google Meet),
                 así como cualquier otro enlace relevante para tus clientes y visitantes.
             </p>
             <ul class="features-list">
@@ -58,6 +58,7 @@
             </div>
         </div>
 
+        <!-- Componente de formulario para subir documentos y enlaces -->
         <div class="col-12 col-md-6 mb-2 mt-3">
             <app-form-root></app-form-root>
         </div>

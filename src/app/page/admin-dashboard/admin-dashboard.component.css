@@ -1,32 +1,33 @@
+/* Estilo principal para el host del componente, ocupando toda la altura disponible */
 :host {
   background-color:  #bdccdb;
   min-height: 100vh; /* Asegura que ocupe toda la pantalla */
   display: block;    /* Para que cubra el componente completo */
 }
 
-/* Contenedor para la grilla */
+/* Contenedor de la grilla de usuarios */
 .user-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
     gap: 20px; /* Espacio entre las columnas */
     padding: 20px; /* Espacio interno alrededor del contenido */
-  }
-  
-  /* Ajustes para pantallas medianas (tablets, etc.) */
-  @media (max-width: 992px) {
+}
+
+/* Ajustes de la grilla para pantallas medianas (tablets, etc.) */
+@media (max-width: 992px) {
     .user-grid {
       grid-template-columns: repeat(2, 1fr); /* Cambiar a 2 columnas en pantallas medianas */
     }
-  }
-  
-  /* Ajustes para pantallas pequeñas (móviles) */
-  @media (max-width: 768px) {
+}
+
+/* Ajustes de la grilla para pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
     .user-grid {
       grid-template-columns: 1fr; /* Una sola columna en pantallas pequeñas */
     }
-  }
-  
-  /* Contenedor de cada elemento (nombre y botones) */
+}
+
+/* Estilo para cada elemento de usuario */
 .user-item {
   display: flex;
   justify-content: space-between;
@@ -37,7 +38,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilo de los botones */
+/* Estilo para los botones dentro de cada elemento de usuario */
 .user-item button {
   background: none;
   border: none;
@@ -45,6 +46,7 @@
   padding: 0 5px;
 }
 
+/* Efecto de opacidad al pasar el ratón por encima del botón */
 .user-item button:hover {
   opacity: 0.7;
 }

@@ -1,13 +1,63 @@
+/**
+ * @interface Usuario
+ * @description Interfaz que representa los datos de un usuario en la aplicación, incluyendo propiedades opcionales específicas para diferentes roles (admin, co y visitor).
+ */
 export interface Usuario {
-  id?: string;              // El ID puede ser opcional
-  name: string;             // Nombre del usuario
-  email: string;            // Email del usuario
-  rol: 'admin' | 'co' | 'visitor';  // El rol del usuario: admin, co o visitor
-  password: string;         // Contraseña hasheada del usuario
-  company?: string;         // Solo para CO: Nombre de la empresa
-  standId?: string;         // Solo para CO: ID del stand asociado
-  cif?: string;             // Solo para CO: CIF de la empresa
-  dni?: string;             // Solo para Visitante: DNI del visitante
-  studies?: string;         // Solo para Visitante: Estudios del visitante
-  createdAt?: Date;         // Fecha de creación del usuario
+  /**
+   * @property {string} [id] - ID único del usuario (opcional).
+   */
+  id?: string;
+
+  /**
+   * @property {string} name - Nombre del usuario.
+   */
+  name: string;
+
+  /**
+   * @property {string} email - Correo electrónico del usuario.
+   */
+  email: string;
+
+  /**
+   * @property {'admin' | 'co' | 'visitor'} rol - Rol del usuario, que puede ser:
+   * - `admin`: Administrador del sistema.
+   * - `co`: Representante de una empresa.
+   * - `visitor`: Visitante de la feria.
+   */
+  rol: 'admin' | 'co' | 'visitor';
+
+  /**
+   * @property {string} password - Contraseña hasheada del usuario.
+   */
+  password: string;
+
+  /**
+   * @property {string} [company] - Solo para usuarios con rol `co`. Nombre de la empresa del usuario.
+   */
+  company?: string;
+
+  /**
+   * @property {string} [standId] - Solo para usuarios con rol `co`. ID del stand asociado a la empresa del usuario.
+   */
+  standId?: string;
+
+  /**
+   * @property {string} [cif] - Solo para usuarios con rol `co`. CIF (Código de Identificación Fiscal) de la empresa.
+   */
+  cif?: string;
+
+  /**
+   * @property {string} [dni] - Solo para usuarios con rol `visitor`. DNI (Documento Nacional de Identidad) del visitante.
+   */
+  dni?: string;
+
+  /**
+   * @property {string} [studies] - Solo para usuarios con rol `visitor`. Estudios del visitante.
+   */
+  studies?: string;
+
+  /**
+   * @property {Date} [createdAt] - Fecha de creación del usuario en el sistema.
+   */
+  createdAt?: Date;
 }

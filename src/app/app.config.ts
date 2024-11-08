@@ -2,15 +2,39 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+/**
+ * @constant {ApplicationConfig} appConfig
+ * @description Configuración global de la aplicación, que define los proveedores para el enrutamiento,
+ * HTTP, autenticación y animaciones.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
+    /**
+     * @description Proveedor de enrutamiento que usa la configuración de rutas definida en `app.routes`.
+     */
     provideRouter(routes),
-    importProvidersFrom (BrowserAnimationsModule),
+
+    /**
+     * @description Importa el módulo de animaciones del navegador, habilitando animaciones en la aplicación.
+     */
+    importProvidersFrom(BrowserAnimationsModule),
+
+    /**
+     * @description Importa y registra el módulo de HTTP para permitir peticiones HTTP en toda la aplicación.
+     */
     importProvidersFrom(HttpClientModule), 
-    provideHttpClient( withFetch()), // Registro global de HttpClientModule
-    provideAuth(() => getAuth()) ]// Proveemos el servicio de autenticación, provideClientHydration()]
+
+    /**
+     * @description Proveedor de `HttpClient` para realizar peticiones HTTP, configurado para admitir `fetch` en vez de `XMLHttpRequest`.
+     */
+    provideHttpClient(withFetch()),
+
+    /**
+     * @description Proveedor del servicio de autenticación de Firebase, configurado para autenticar usuarios.
+     */
+    provideAuth(() => getAuth())
+  ]
 };

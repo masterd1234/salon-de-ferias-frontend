@@ -1,6 +1,7 @@
 <div class="container">
-<!-- Header (menú de navegación) -->
-<div class="header">
+  <!-- Header (menú de navegación) -->
+  <div class="header">
+    <!-- Menú de navegación con enlaces para desplazamiento suave -->
     <nav>
       <ul>
         <li><a (click)="navigateToSection('acerca')">Feria</a></li>
@@ -10,52 +11,40 @@
       </ul>
     </nav>
   </div>
-  
-  <!-- Imagen manual debajo del menú -->
+
+  <!-- Imagen principal de la página -->
   <div class="manual-image">
     <img src="assets/fondo.png" alt="Imagen de portada" />
   </div>
-  
-  <!-- Sección de bienvenida -->
+
+  <!-- Sección de bienvenida con un mensaje principal -->
   <div class="welcome-section">
     <div class="welcome-text">
       <h2>Bienvenidos a la Feria Virtual</h2>
       <p>Texto de bienvenida o slogan aquí.</p>
     </div>
   </div>
-  
-  <!-- Nueva sección sobre la Feria -->
+
+  <!-- Información sobre la Feria -->
   <div id="acerca" class="about-fair">
     <h2>Acerca de la Feria</h2>
-    <p>La feria es un evento que reúne a empresas líderes en el sector y ofrece una plataforma para conectar con profesionales, explorar oportunidades de trabajo y conocer las últimas tendencias de la industria.</p>
-    <p>Durante el evento, podrás asistir a diversas charlas, interactuar con representantes de empresas, y descubrir productos y servicios innovadores.</p>
+    <p>La feria es un evento que reúne a empresas líderes en el sector y ofrece una plataforma para conectar con profesionales.</p>
     
-    <!-- Imágenes de la feria -->
+    <!-- Imágenes destacadas de la feria -->
     <div id="stand" class="fair-images">
       <img src="assets/stand1.png" alt="Imagen Feria 1" />
       <img src="assets/stand2.png" alt="Imagen Feria 2" />
       <img src="assets/stand3.png" alt="Imagen Feria 3" />
     </div>
-  
-  
-  <!--relleno-->
-  <p>La feria es un evento que reúne a empresas líderes en el sector y ofrece una plataforma para conectar con profesionales, explorar oportunidades de trabajo y conocer las últimas tendencias de la industria.</p>
-  <p>Durante el evento, podrás asistir a diversas charlas, interactuar con representantes de empresas, y descubrir productos y servicios innovadores.</p>
-  
-  <p>La feria es un evento que reúne a empresas líderes en el sector y ofrece una plataforma para conectar con profesionales, explorar oportunidades de trabajo y conocer las últimas tendencias de la industria.</p>
-  <p>Durante el evento, podrás asistir a diversas charlas, interactuar con representantes de empresas, y descubrir productos y servicios innovadores.</p>
-  
   </div>
-  
-  
-  <!--texto para las empresas-->
+
+  <!-- Información adicional sobre las empresas -->
   <div id="empresas" class="about-fair"> 
-    <h2>sobre las empresas</h2>
-    <p>La feria es un evento que reúne a empresas líderes en el sector y ofrece una plataforma para conectar con profesionales, explorar oportunidades de trabajo y conocer las últimas tendencias de la industria.</p>
-    <p>Durante el evento, podrás asistir a diversas charlas, interactuar con representantes de empresas, y descubrir productos y servicios innovadores.</p>
+    <h2>Sobre las Empresas</h2>
+    <p>La feria es un evento que reúne a empresas líderes en el sector y ofrece una plataforma para conectar con profesionales.</p>
   </div>
-  
-  <!-- Sección de contadores -->
+
+  <!-- Sección de contadores para datos de la feria -->
   <div class="counters">
     <div class="counter">
       <h3>{{ companiesCount }}</h3>
@@ -70,19 +59,10 @@
       <p>Visitas</p>
     </div>
   </div>
-  
-  
-  <!--texto para las empresas-->
-  <div class="about-fair"> 
-    <p>La feria es un evento que reúne a empresas líderes en el sector y ofrece una plataforma para conectar con profesionales, explorar oportunidades de trabajo y conocer las últimas tendencias de la industria.</p>
-    <p>Durante el evento, podrás asistir a diversas charlas, interactuar con representantes de empresas, y descubrir productos y servicios innovadores.</p>
-  </div>
-  
-  <!-- Sección de servicios -->
+
+  <!-- Sección de contacto con información sobre la feria -->
   <div id="contacto" class="content-section"> 
     <h2 class="bloques">¿Qué obtienes al visitar nuestra feria?</h2>
-    
-    <!-- Contenedor de bloques en fila -->
     <div class="content-cards">
       <div class="content-card">
         <h3>Alcance</h3>
@@ -98,4 +78,4 @@
       </div>
     </div>
   </div>
-</div>  
+</div>

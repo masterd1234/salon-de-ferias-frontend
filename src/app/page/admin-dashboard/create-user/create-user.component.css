@@ -1,32 +1,27 @@
 .full-width {
-    width: 100%;  /* Hacer que los inputs ocupen todo el ancho disponible */
-  }
-  
-  .mat-form-field {
-    margin-bottom: 16px;  /* Espaciado entre los campos */
-  }
-  
-  .action-buttons {
-    display: flex;
-    justify-content: center;  /* Centrar los botones */
-    gap: 10px;  /* Separar los botones */
-  }
-  
-  .mat-dialog-container {
-    padding: 20px;  /* Ajustar padding del modal */
-    overflow: visible !important;  /* Asegura que el contenido del modal no se oculte */
-  }
-  
-  .mat-select-panel {
-    z-index: 2000 !important;  /* Elevar el z-index para que el panel de selección esté por encima */
-  }
-  
-  button[mat-button] {
-    color: var(--mat-primary);  /* Color personalizado para botones planos */
-  }
-  
-  button[mat-raised-button] {
-    background-color: var(--mat-primary) !important;
-    color: white !important;
-  }
-  
+  width: 100%;  /* Hacer que los inputs ocupen todo el ancho disponible */
+}
+
+.mat-form-field {
+  margin-bottom: 16px;  /* Espaciado entre los campos */
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;  /* Centrar los botones */
+  gap: 10px;  /* Separar los botones */
+}
+
+.mat-dialog-container {
+  padding: 20px;  /* Ajustar padding del modal */
+  overflow: visible !important;  /* Asegura que el contenido del modal no se oculte */
+}
+
+button[mat-button] {
+  color: var(--mat-primary);  /* Color personalizado para botones planos */
+}
+
+button[mat-raised-button] {
+  background-color: var(--mat-primary) !important;
+  color: white !important;
+}

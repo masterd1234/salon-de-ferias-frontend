@@ -1,3 +1,4 @@
+/* === Estilos principales del contenedor de formulario === */
 .formulario {
   padding: 0;
   background-color: #f9f9f9;
@@ -6,9 +7,10 @@
   border-radius: 2%;
 }
 
+/* === Grupo de formulario === */
 .form-group {
-  margin-bottom: 5px; /* Reducimos el margen inferior */
-  padding: 5px; /* Reducimos el padding */
+  margin-bottom: 5px;
+  padding: 5px;
 }
 
 .form-group label {

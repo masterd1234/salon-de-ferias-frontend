@@ -1,47 +1,55 @@
+/* Fondo del contenedor de la cabecera de inicio de sesión */
 .bg-custom1 {
-    background: linear-gradient(180deg, #4A768D 0%, #072D50 100%);
-    color: white; /* Para que el texto sea visible sobre el fondo oscuro */
-    padding: 50px; /* Ajuste de padding */
-    text-align: center; /* Alineación del texto */
-  }
+  background: linear-gradient(180deg, #4A768D 0%, #072D50 100%);
+  color: white;
+  padding: 50px;
+  text-align: center;
+}
 
-  .bg-custom2 {
-    background-color:#bdccdb;
-    color:black;
-    padding: 50px;
-    text-align: center;
-  }
+/* Fondo del contenedor del formulario */
+.bg-custom2 {
+  background-color: #bdccdb;
+  color: black;
+  padding: 50px;
+  text-align: center;
+}
 
-  .text-justify {
-    text-align: justify;
-  }
+/* Justificación del texto en los términos y política de privacidad */
+.text-justify {
+  text-align: justify;
+}
 
-  .logos {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap; /* Permitir que los logos pasen a la siguiente línea si es necesario */
-  }
-  
+/* Contenedor de logos de las empresas colaboradoras */
+.logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Ajuste de tamaño máximo de los logos */
+.logos img {
+  max-width: 45%;
+  height: auto;
+}
+
+/* Estilo para el checkbox de términos y políticas */
+mat-checkbox {
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Enlaces dentro de los checkboxes */
+mat-checkbox a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #00a89c;
+}
+
+/* Ajustes de responsividad para pantallas medianas */
+@media (max-width: 768px) {
   .logos img {
-    max-width: 45%;  /* Asegurar que los logos ocupen hasta el 45% del ancho del contenedor */
-    height: auto;    /* Mantener las proporciones de los logos */
+    max-width: 80%;
   }
-  
-  mat-checkbox {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  mat-checkbox a {
-    text-decoration: none;
-    font-weight: bold;
-    color: #00a89c; /* Color azul para los enlaces */
-  }
-
-  @media (max-width: 768px) {
-    .logos img {
-      max-width: 80%;  /* Reducir el tamaño en pantallas más pequeñas */
-    }
-  }
+}

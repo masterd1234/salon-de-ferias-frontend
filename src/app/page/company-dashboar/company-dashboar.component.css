@@ -5,18 +5,17 @@
   overflow-x: hidden;
 }
 
-/* Estilo general */
+/* === Hero Section === */
 .hero-section {
   background: linear-gradient(180deg, #072D50 0%, #4A768D 100%);
   color: white;
   text-align: left;
   width: 100%;
-  margin: 0;
-  padding: 20px 0; /* Añadimos padding para evitar que el texto esté pegado al borde */
+  padding: 20px 0;
 }
 
 .text-content {
-  max-width: 100%; /* Usamos el 100% del ancho en pantallas pequeñas */
+  max-width: 100%;
   padding: 15px;
   margin: 0;
 }
@@ -27,7 +26,7 @@
 }
 
 .features-list {
-  padding-left: 20px; /* Reducimos el padding para pantallas pequeñas */
+  padding-left: 20px;
 }
 
 .features-list li {
@@ -35,58 +34,50 @@
 }
 
 .image-content img {
-  width: 100%;            /* Ocupa el ancho completo del contenedor */
-  height: auto;           /* Ajusta la altura para mantener la proporción */
-  object-fit: contain;    /* Escala la imagen para que se ajuste sin recortar */
-  border-radius: 15px;    /* Bordes redondeados (opcional) */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra (opcional) */
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* === Diseño del formulario === */
 .desing-form {
   background-color: #bdccdb;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px; /* Espacio entre el banner y el componente de diseño */
+  gap: 20px;
 }
 
-.img-form img{
+.img-form img {
   width: 555px;
   height: 445px;
-}
-
-
-.img-form{
   border-radius: 5%;
 }
 
-/* Ajustes responsivos */
+/* === Media Queries === */
 @media (max-width: 600px) {
-  .img-form{
+  .img-form {
     display: none;
   }
   .hero-section {
     padding: 30px;
   }
-
   .text-content {
-    max-width: 80%; /* Se ajusta el contenido a un máximo del 80% */
+    max-width: 80%;
   }
-
   .image-content img {
-    height: 300px; /* Ajustamos la altura en pantallas medianas */
+    height: 300px;
   }
 }
 
-
 @media (min-width: 768px) {
   .text-content {
-    max-width: 600px; /* Máximo ancho en pantallas grandes */
+    max-width: 600px;
   }
-
   .image-content img {
-    height: 400px; /* Ajustamos la altura en pantallas grandes */
+    height: 400px;
   }
-
 }
