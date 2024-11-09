@@ -41,7 +41,7 @@
     </mat-nav-list>
   }
   <!-- Botón de menú para pantallas pequeñas -->
-  @if(isSmallScreen && isLoggedIn()){
+  @if(isSmallScreen){
   <button (click)="drawer.toggle()" class="menu-btn" *ngIf="isSmallScreen">
     <i class="fa-solid fa-bars"></i>
   </button>
