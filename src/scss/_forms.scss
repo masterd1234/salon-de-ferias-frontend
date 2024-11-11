@@ -1,0 +1,30 @@
+// _forms.scss
+
+.form-container {
+  background-color: $background-color;
+  padding: 20px;
+  border-radius: $border-radius;
+  @include box-shadow;
+
+  .form-group {
+    margin-bottom: 15px;
+
+    label {
+      font-weight: bold;
+      color: $text-color;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid $border-color;
+      border-radius: $border-radius;
+      @include transition;
+
+      &:focus {
+        border-color: $highlight-color;
+        @include box-shadow(rgba($highlight-color, 0.3));
+      }
+    }
+  }
+}

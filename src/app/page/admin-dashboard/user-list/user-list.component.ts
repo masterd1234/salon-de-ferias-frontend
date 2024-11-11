@@ -17,7 +17,7 @@ import { MatCardModule } from '@angular/material/card';
   standalone: true,
   imports: [CommonModule, MatCardModule],
   templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.css'],
+  styleUrls: ['./user-list.component.scss'],
 })
 export class UserListComponent implements OnInit {
   /** Título de la sección, configurable por `@Input` */

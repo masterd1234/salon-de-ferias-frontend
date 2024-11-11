@@ -1,0 +1,40 @@
+@import '../../../../scss/responsive';
+@import '../../../../scss/var';
+@import '../../../../scss/buttons';
+
+/* Contenedor principal */
+:host {
+  display: block;
+  background-color: $secondary-background-color;
+  padding: 20px;
+}
+
+/* Ancho completo para los campos del formulario */
+.full-width {
+  width: 100%;
+}
+
+/* Estilo para los campos de formulario */
+.mat-form-field {
+  margin-bottom: 16px;
+}
+
+/* Estilos de mensajes de error */
+mat-error {
+  color: $error-color;
+  font-size: $font-size-small;
+}
+
+/* Contenedor de acciones centrado */
+mat-dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 20px;
+}
+
+.submit-button{
+    @extend .button;
+    background-color: $highlight-color !important;
+    color: white !important;
+}

@@ -1,0 +1,50 @@
+@import '../../../scss/responsive';
+@import '../../../scss/var';
+
+/* Estilo principal para el host del componente */
+:host {
+  background-color: $background-color;
+  min-height: 100vh;
+  display: block;
+}
+
+/* Contenedor de la grilla de usuarios */
+.user-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 20px;
+
+  /* Ajustes de grilla para pantallas medianas */
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Ajustes de grilla para pantallas pequeñas */
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Estilo para cada elemento de usuario */
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: $white;
+  border-radius: $border-radius;
+  box-shadow: 0 2px 5px $shadow-color;
+}
+
+/* Botones dentro de cada elemento de usuario */
+.user-item button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 5px;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

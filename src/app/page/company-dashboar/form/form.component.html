@@ -1,10 +1,10 @@
 <div class="formulario">
   <form class [formGroup]="companyForm" (ngSubmit)="submitForm()">
 
-    <!-- Campo Nombre -->
+    <!-- Fila: Nombre y Correo -->
     <div class="form-group pt-3 mx-3">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label>Nombre de la empresa</label>
           <input matInput type="text" id="nombre" formControlName="name" class="form-control">
           <small *ngIf="companyForm.get('name')?.invalid && companyForm.get('name')?.touched">
@@ -12,51 +12,51 @@
           </small>
         </div>
 
-        <!-- Campo Correo -->
-        <div class="col-md-4">
+        <div class="col-md-6">
           <label>Correo</label>
           <input matInput type="email" id="email" formControlName="email" class="form-control">
         </div>
-
-        <!-- Campo Sector -->
-        <div class="col-md-4">
-          <label>Selecciona el sector:</label>
-          <select id="sector" name="sector" formControlName="sector" class="form-control">
-            <option value="" disabled selected>Selecciona un sector</option>
-            <option value="tic">Tecnología de la Información y la Comunicación (TIC)</option>
-            <option value="finanzas">Finanzas y Banca</option>
-            <option value="salud">Salud y Farmacéutica</option>
-            <option value="energia">Energía y Servicios Públicos</option>
-            <option value="manufactura">Manufactura</option>
-            <option value="automotriz">Automotriz</option>
-            <option value="alimentacion">Alimentación y Bebidas</option>
-            <option value="construccion">Construcción e Infraestructura</option>
-            <option value="transporte">Transporte y Logística</option>
-            <option value="aeronautica">Aeronáutica y Espacio</option>
-            <option value="turismo">Turismo y Hotelería</option>
-            <option value="educacion">Educación y Formación</option>
-            <option value="agricultura">Agricultura y Agroindustria</option>
-            <option value="biotecnologia">Biotecnología</option>
-            <option value="retail">Comercio Minorista (Retail)</option>
-            <option value="seguros">Seguros</option>
-            <option value="medios">Medios de Comunicación y Entretenimiento</option>
-            <option value="consultoria">Consultoría y Servicios Profesionales</option>
-            <option value="inmobiliario">Inmobiliario y Construcción</option>
-            <option value="quimica">Química e Industria Petroquímica</option>
-            <option value="rrhh">Recursos Humanos</option>
-            <option value="moda">Moda y Textil</option>
-            <option value="ecommerce">E-commerce</option>
-            <option value="arte">Arte y Cultura</option>
-            <option value="deportes">Deportes y Ocio</option>
-            <option value="medioambiente">Medio Ambiente y Sostenibilidad</option>
-            <option value="legales">Servicios Legales</option>
-            <option value="investigacion">Investigación y Desarrollo (I+D)</option>
-            <option value="maritimo">Transporte Marítimo y Naval</option>
-          </select>
-        </div>
       </div>
-
     </div>
+
+
+    <!-- Campo Sector -->
+    <div class="form-group mx-3">
+      <label>Selecciona el sector:</label>
+      <select id="sector" name="sector" formControlName="sector" class="form-control">
+        <option value="" disabled selected>Selecciona un sector</option>
+        <option value="tic">Tecnología de la Información y la Comunicación (TIC)</option>
+        <option value="finanzas">Finanzas y Banca</option>
+        <option value="salud">Salud y Farmacéutica</option>
+        <option value="energia">Energía y Servicios Públicos</option>
+        <option value="manufactura">Manufactura</option>
+        <option value="automotriz">Automotriz</option>
+        <option value="alimentacion">Alimentación y Bebidas</option>
+        <option value="construccion">Construcción e Infraestructura</option>
+        <option value="transporte">Transporte y Logística</option>
+        <option value="aeronautica">Aeronáutica y Espacio</option>
+        <option value="turismo">Turismo y Hotelería</option>
+        <option value="educacion">Educación y Formación</option>
+        <option value="agricultura">Agricultura y Agroindustria</option>
+        <option value="biotecnologia">Biotecnología</option>
+        <option value="retail">Comercio Minorista (Retail)</option>
+        <option value="seguros">Seguros</option>
+        <option value="medios">Medios de Comunicación y Entretenimiento</option>
+        <option value="consultoria">Consultoría y Servicios Profesionales</option>
+        <option value="inmobiliario">Inmobiliario y Construcción</option>
+        <option value="quimica">Química e Industria Petroquímica</option>
+        <option value="rrhh">Recursos Humanos</option>
+        <option value="moda">Moda y Textil</option>
+        <option value="ecommerce">E-commerce</option>
+        <option value="arte">Arte y Cultura</option>
+        <option value="deportes">Deportes y Ocio</option>
+        <option value="medioambiente">Medio Ambiente y Sostenibilidad</option>
+        <option value="legales">Servicios Legales</option>
+        <option value="investigacion">Investigación y Desarrollo (I+D)</option>
+        <option value="maritimo">Transporte Marítimo y Naval</option>
+      </select>
+    </div>
+
 
     <!-- Campo Descripción -->
     <div class="form-group mt-3 mx-3">
@@ -133,7 +133,7 @@
 
     <!-- Botón enviar -->
     <div class="form-group mt-3 pb-3 text-end mx-3">
-      <button type="submit" class="btn btn-primary btn-lg" [disabled]="companyForm.invalid || isSubmitting">
+      <button type="submit" class="button-primary-custom" [disabled]="companyForm.invalid || isSubmitting">
         {{ isSubmitting ? 'Enviando...' : 'Enviar' }}
       </button>
     </div>

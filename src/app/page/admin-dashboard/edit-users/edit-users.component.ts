@@ -32,7 +32,7 @@ import { catchError, of } from 'rxjs';
     MatOptionModule
   ],
   templateUrl: './edit-users.component.html',
-  styleUrl: './edit-users.component.css'
+  styleUrl: './edit-users.component.scss'
 })
 export class EditUsersComponent {
 

@@ -1,0 +1,183 @@
+// company-dashboar.component.scss
+@import '../../../scss/var';
+@import '../../../scss/responsive';
+@import '../../../scss/buttons';
+
+:host {
+  display: block;
+  overflow-x: hidden;
+}
+
+.hero-section {
+  background: linear-gradient(180deg, $primary-color 0%, $secondary-color 100%);
+  color: white;
+  text-align: left;
+  width: 100%;
+  padding: 1.25rem 1.25rem; // Asegura que ambas secciones tengan el mismo padding
+  margin: 0; // Resetea cualquier margin heredado
+}
+
+
+.features-list {
+  padding-left: 20px;
+}
+
+.features-list li {
+  margin-bottom: 10px;
+}
+
+.image-content img {
+  width: 100%;
+  height: auto;
+  border-radius: $border-radius;
+  object-fit: contain;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* === Diseño del formulario === */
+.desing-form {
+  background-color: $background-color;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.img-form img {
+  width: 650px;
+  height: 445px;
+  border-radius: 5%;
+}
+
+// Selección de imagen en la hero-section
+.hero-section .img-form {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto; // Centramos la imagen
+  object-fit: cover; // Asegura que la imagen se ajuste correctamente
+  border-radius: 8px; // Añade bordes redondeados si es necesario
+}
+
+// Estilos responsivos para dispositivos pequeños (móviles)
+@media (max-width: 576px) {
+  .hero-section {
+    .hero-title {
+      font-size: 1.5rem;
+    }
+    .hero-description {
+      font-size: 0.9rem;
+    }
+
+    .features-list {
+      font-size: 0.9rem;
+    }
+  }
+
+  .image-content {
+    padding: 1rem 0;
+  }
+
+  .desing-form {
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .hero-section .img-form {
+    width: 90%; // Ajustamos a un tamaño menor para móviles
+  }
+}
+
+// Estilos para tablets (pantallas medianas)
+@media (min-width: 576px) and (max-width: 992px) {
+  .hero-section {
+    padding: 3rem 1.5rem;
+
+    .hero-title {
+      font-size: 1.8rem;
+    }
+
+    .hero-description,
+    .features-list {
+      font-size: 1rem;
+    }
+  }
+
+  .image-content {
+    img {
+      max-width: 90%;
+      margin: 0 auto;
+    }
+  }
+
+  .hero-section .img-form {
+    width: 100%; // Ajuste para tablets
+  }
+
+  .desing-form,
+  .img-form {
+    padding: 2rem 0;
+    text-align: center;
+  }
+}
+
+// Estilos para pantallas grandes (escritorio)
+@media (min-width: 992px) {
+  .hero-section {
+    padding: 4rem 2rem;
+
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+    }
+
+    .features-list {
+      font-size: 1.1rem;
+      padding-left: 2rem;
+    }
+  }
+
+  .image-content {
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .desing-form {
+    padding: 2rem 1rem;
+  }
+
+  .img-form {
+    width: 60%;
+    margin: 2rem auto;
+    display: block;
+  }
+}
+
+// stand-desing.component.scss
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.content-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 80%;
+  max-width: 1200px;
+  margin-top: 20px;
+  background-color: white;
+  padding: 10px;
+  border-radius: $border-radius;
+}
+

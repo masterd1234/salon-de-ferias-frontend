@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-create-user',
   standalone: true,
   templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.css'],
+  styleUrls: ['./create-user.component.scss'],
   imports: [
     CommonModule,
     ReactiveFormsModule,

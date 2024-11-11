@@ -28,7 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [CommonModule, MatDividerModule, MatButtonModule, MatCardModule, MatGridListModule, FormsModule, MatIconModule],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css'
+  styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
 

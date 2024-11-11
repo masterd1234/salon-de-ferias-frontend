@@ -77,8 +77,9 @@
 
     <!-- Acciones del diálogo -->
     <mat-dialog-actions>
-      <button mat-button (click)="onCancel()">Cancelar</button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="editUserForm.invalid">Guardar</button>
+      
+      <button class="button button--primary submit-button"  type="submit" [disabled]="editUserForm.invalid" mat-flat-button>Guardar</button>
+      <button class="button button--secondary" mat-flat-button (click)="onCancel()">Cancelar</button>
     </mat-dialog-actions>
   </form>
 </mat-dialog-content>

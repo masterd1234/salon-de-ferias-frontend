@@ -1,0 +1,73 @@
+@import '../../../../scss/responsive';
+@import '../../../../scss/var';
+@import '../../../../scss/buttons';
+
+/* Sección principal del componente */
+.role-section {
+  border-color: $primary-color;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border: solid 2px $primary-color;
+  min-height: 100vh;
+  margin-bottom: 0;
+  overflow: hidden; // Evitar que el contenido se desborde de los bordes redondeados
+}
+
+/* Encabezado con gradiente */
+.header-gradient {
+  background-color: $primary-color;
+  color: $white;
+  margin-bottom: 0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  overflow: hidden;
+  border: none;
+}
+
+/* Tarjetas de usuario */
+.user-card {
+  background-color: $white;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 2px 10px $shadow-color;
+  transition: transform 0.3s ease;
+  margin-bottom: 0;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+/* Botón Angular Material personalizado */
+.mat-button,
+.mat-stroked-button {
+  text-transform: none; // Desactivar texto en mayúsculas
+  margin-left: 10px;
+
+  &.mat-primary {
+    color: $primary-color;
+  }
+
+  &.mat-warn {
+    color: $error-color;
+  }
+}
+
+.delete-button {
+  @extend .button;
+  background-color: $error-color;
+
+  &:hover{
+    background-color: darken($error-color, 10%);
+  }
+}
+
+/* Margen superior del contenedor */
+.container-fluid {
+  margin-top: 20px;
+}
+
+/* Espaciado entre tarjetas en vista de fila */
+.row {
+  gap: 0px;
+}

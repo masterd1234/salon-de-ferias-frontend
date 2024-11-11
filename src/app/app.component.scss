@@ -5,12 +5,12 @@ body {
   font-family: 'Noto Sans', sans-serif !important;
 }
 
-/* Si usas Bootstrap u otro framework, sobrescribe las variables globales de fuente si es necesario */
+/* Sobrescribe las variables globales de fuente si es necesario */
 :root {
   --bs-body-font-family: 'Noto Sans', sans-serif;
 }
 
-/* Utiliza ::ng-deep para asegurar que el estilo se aplique incluso en componentes con encapsulación */
+/* Asegura que el estilo se aplique incluso en componentes con encapsulación */
 ::ng-deep * {
   font-family: 'Noto Sans', sans-serif;
 }
@@ -35,10 +35,10 @@ body {
   color: white;
   text-align: center;
   height: 64px;
-}
 
-.footer p {
-  margin: 0;
+  p {
+    margin: 0;
+  }
 }
 
 .container {
@@ -46,7 +46,7 @@ body {
   width: 100%;
 }
 
-mat-nav-list{
+mat-nav-list {
   margin-top: 15px;
 }
 
@@ -59,10 +59,10 @@ mat-sidenav {
   height: calc(100vh - 64px); /* Altura completa de la ventana menos la barra superior */
   overflow-y: auto; /* Permite scroll si el contenido de la barra lateral es largo */
   z-index: 1000;
-  background-color:white;/* Fondo de la barra lateral */
+  background-color: white; /* Fondo de la barra lateral */
 }
 
-.navbar-custom{
+.navbar-custom {
   position: fixed;
   top: 0;
   width: 100%;
@@ -86,61 +86,52 @@ mat-list-item {
   font-size: 14px; /* Ajusta el tamaño del texto */
   color: #002e4c; /* Color del texto */
   width: 100%; /* Asegura que ocupe todo el ancho del mat-list-item */
+
+  i {
+    font-size: 24px; /* Tamaño del ícono */
+    margin-bottom: 0; /* Espacio entre el ícono y el texto */
+  }
 }
-
-/* Aumentar el tamaño y espacio del ícono */
-.nav-link i {
-  font-size: 24px; /* Tamaño del ícono */
-  margin-bottom: 0; /* Espacio entre el ícono y el texto */
-}
-
-
-
 
 .mat-sidenav-container {
   margin-top: 0;
   padding-top: 64px; /* Altura de la barra superior */
-
 }
 
 /* Estilos para los botones */
 .btn-icon-text {
   background: none;
   border: none;
-  color:  #002e4c;
+  color: #002e4c;
   display: flex;
   flex-direction: column;
-  /* Coloca el texto debajo del icono */
   align-items: center;
   padding: 0;
   margin-left: 15px;
-  font-size: 12px;
-  /* Tamaño de texto más pequeño */
-}
+  font-size: 12px; /* Tamaño de texto más pequeño */
 
-.btn-icon-text i {
-  font-size: 20px;
-  /* Tamaño del icono */
-  margin-bottom: 2px;
-  /* Espacio entre icono y texto */
-}
+  i {
+    font-size: 20px; /* Tamaño del ícono */
+    margin-bottom: 2px; /* Espacio entre ícono y texto */
+  }
 
-.btn-icon-text span {
-  font-size: 10px;
-  /* Texto debajo del icono más pequeño */
-}
+  span {
+    font-size: 10px; /* Texto debajo del ícono más pequeño */
+  }
 
-.btn-icon-text:hover {
-  color: #00a89c;
-  /* Cambiar color al pasar el ratón */
+  &:hover {
+    color: #00a89c; /* Cambiar color al pasar el ratón */
+  }
 }
 
 .menu-btn {
   display: none;
-}
 
-.menu-btn:hover i {
-  color: #00a89c; /* Cambia el color del icono al pasar el ratón */
+  &:hover {
+    i {
+      color: #00a89c; /* Cambia el color del ícono al pasar el ratón */
+    }
+  }
 }
 
 /* Estilo del enlace de cierre de sesión */
@@ -150,12 +141,11 @@ mat-list-item {
   align-items: center;
   font-size: 14px;
   font-weight: bold;
-}
 
-
-.logout-link i {
-  font-size: 20px;
-  margin-right: 8px; /* Espacio entre el icono y el texto */
+  i {
+    font-size: 20px;
+    margin-right: 8px; /* Espacio entre el ícono y el texto */
+  }
 }
 
 /* Responsivo: reducir tamaño en pantallas pequeñas */
@@ -176,12 +166,12 @@ mat-list-item {
     z-index: 1300; /* Asegura que esté por encima del contenido */
   }
 
-  .navbar-custom{
+  .navbar-custom {
     padding: 0;
     margin: 0;
   }
 
-  .footer{
+  .footer {
     z-index: 1400;
   }
 
@@ -190,5 +180,3 @@ mat-list-item {
     padding: 0;
   }
 }
-
-

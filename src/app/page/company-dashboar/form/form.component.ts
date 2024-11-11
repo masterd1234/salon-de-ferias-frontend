@@ -20,7 +20,7 @@ import { MatOptionModule } from '@angular/material/core';
 @Component({
   selector: 'app-form-root',
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css'],
+  styleUrls: ['./form.component.scss'],
   standalone: true,
   imports: [CKEditorModule, CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatOptionModule]
 })

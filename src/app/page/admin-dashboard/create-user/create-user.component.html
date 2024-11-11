@@ -43,46 +43,48 @@
 
     <!-- Campos adicionales para rol "co" -->
     @if(createUserForm.get('rol')?.value === 'co'){
-      <mat-form-field class="full-width">
-        <mat-label>Nombre de la Empresa</mat-label>
-        <input matInput formControlName="company" placeholder="Nombre de la empresa">
-        <mat-error *ngIf="createUserForm.get('company')?.hasError('required')">
-          El nombre de la empresa es obligatorio.
-        </mat-error>
-      </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Nombre de la Empresa</mat-label>
+      <input matInput formControlName="company" placeholder="Nombre de la empresa">
+      <mat-error *ngIf="createUserForm.get('company')?.hasError('required')">
+        El nombre de la empresa es obligatorio.
+      </mat-error>
+    </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>CIF</mat-label>
-        <input matInput formControlName="cif" placeholder="A12345678">
-        <mat-error *ngIf="createUserForm.get('cif')?.hasError('required')">
-          El CIF es obligatorio.
-        </mat-error>
-      </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>CIF</mat-label>
+      <input matInput formControlName="cif" placeholder="A12345678">
+      <mat-error *ngIf="createUserForm.get('cif')?.hasError('required')">
+        El CIF es obligatorio.
+      </mat-error>
+    </mat-form-field>
     }
 
     <!-- Campos adicionales para rol "visitor" -->
     @if(createUserForm.get('rol')?.value === 'visitor'){
-      <mat-form-field class="full-width">
-        <mat-label>DNI</mat-label>
-        <input matInput formControlName="dni" placeholder="12345667A">
-        <mat-error *ngIf="createUserForm.get('dni')?.hasError('required')">
-          El DNI es obligatorio.
-        </mat-error>
-      </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>DNI</mat-label>
+      <input matInput formControlName="dni" placeholder="12345667A">
+      <mat-error *ngIf="createUserForm.get('dni')?.hasError('required')">
+        El DNI es obligatorio.
+      </mat-error>
+    </mat-form-field>
 
-      <mat-form-field class="full-width">
-        <mat-label>Estudios</mat-label>
-        <input matInput formControlName="studies" placeholder="Estudios del visitante">
-        <mat-error *ngIf="createUserForm.get('studies')?.hasError('required')">
-          Los estudios son obligatorios.
-        </mat-error>
-      </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Estudios</mat-label>
+      <input matInput formControlName="studies" placeholder="Estudios del visitante">
+      <mat-error *ngIf="createUserForm.get('studies')?.hasError('required')">
+        Los estudios son obligatorios.
+      </mat-error>
+    </mat-form-field>
     }
 
     <!-- Botones de acción -->
     <mat-dialog-actions class="action-buttons">
-      <button mat-button type="button" (click)="onClose()">Cancelar</button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="createUserForm.invalid">Crear Usuario</button>
+
+      <button class="button button--primary" mat-flat-button color="primary" type="submit"
+        [disabled]="createUserForm.invalid">Crear Usuario</button>
+      <button class="button button--secondary" mat-flat-button type="button" (click)="onClose()">Cancelar</button>
     </mat-dialog-actions>
   </form>
 </mat-dialog-content>

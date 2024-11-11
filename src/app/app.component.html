@@ -4,45 +4,38 @@
   <!-- Logo -->
   @if(!isLoggedIn()){
   <div>
-    <a class="navbar-brand" routerLink="/home">
-      <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
+    <a class="navbar-brand" routerLink="/home" aria-label="Home">
+      <img src="assets/logo.png" alt="Logo" style="width: 100px">
     </a>
   </div>
-  }@else if(isRol() === 'admin'){
-  <div>
-    <a class="navbar-brand" routerLink="/admin-dashboard">
-      <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
-    </a>
-  </div>
-  }@else if (isRol() === 'co') {
-  <div>
-    <a class="navbar-brand" routerLink="/company-dashboard">
-      <img src="../assets/logo.png" alt="Logo" style="width: 100px; height: auto;">
-    </a>
-  </div>
+  }@else {
+  <a class="navbar-brand" [routerLink]="isRol() === 'admin' ? '/admin-dashboard' : '/company-dashboard'"
+    aria-label="Dashboard">
+    <img src="assets/logo.png" alt="Logo" style="width: 100px">
+  </a>
   }
 
   @if(isLoggedIn() && !isSmallScreen){
   <mat-nav-list>
     @if(isRol() === 'admin'){
-    <button class="btn-icon-text" (click)="createUser()">
+    <button class="btn-icon-text" (click)="createUser()" aria-label="Crear Usuario">
       <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
     </button>
     }
-    <button class="btn-icon-text" (click)="logout()">
+    <button class="btn-icon-text" (click)="logout()" aria-label="Cerrar Sesión">
       <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Cerrar Sesión</span>
     </button>
   </mat-nav-list>
   }@else if (!isLoggedIn() && !isSmallScreen) {
-    <mat-nav-list>
-      <button class="btn-icon-text" routerLink="/login">
-        <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Iniciar Sesión</span>
-      </button>
-    </mat-nav-list>
+  <mat-nav-list>
+    <button class="btn-icon-text" routerLink="/login" aria-label="Iniciar Sesión">
+      <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Iniciar Sesión</span>
+    </button>
+  </mat-nav-list>
   }
   <!-- Botón de menú para pantallas pequeñas -->
-  @if(isSmallScreen && isLoggedIn()){
-  <button (click)="drawer.toggle()" class="menu-btn" *ngIf="isSmallScreen">
+  @if(isSmallScreen){
+  <button (click)="drawer.toggle()" class="menu-btn" *ngIf="isSmallScreen" aria-label="Abrir menú">
     <i class="fa-solid fa-bars"></i>
   </button>
   }
@@ -52,29 +45,30 @@
 <mat-sidenav-container>
   <!-- Barra Lateral -->
   @if(isLoggedIn()){
-  <mat-sidenav #drawer [mode]="sidenavMode" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav">
+  <mat-sidenav #drawer [mode]="sidenavMode" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav"
+    aria-label="Barra lateral">
     <mat-nav-list class="nav-list">
       @if(isRol()==='co'){
-      <mat-list-item class="mt-2"><a class="nav-link active" routerLink="/home"><i class="fa-solid fa-house"
-            style="color: #002e4c;"></i><span>Home</span></a></mat-list-item>
-            
-      <mat-list-item> <a class="nav-link active" routerLink="/profile" style="color: #002e4c;"> <i
+      <mat-list-item class="mt-2"><a class="nav-link active" routerLink="/home" aria-label="Home"><i
+            class="fa-solid fa-house" style="color: #002e4c;"></i><span>Home</span></a></mat-list-item>
+
+      <mat-list-item> <a class="nav-link active" routerLink="/profile" style="color: #002e4c;" aria-label="Perfil"> <i
             class="fa-solid fa-user" style="color: #002e4c;"></i><span>Perfil</span></a></mat-list-item>
 
-      <mat-list-item class="mt-2"><a class="nav-link active" routerLink="/offers"><i class="fa-solid fa-briefcase"
-            style="color: #002e4c;"></i><span>Ofertas</span></a></mat-list-item>
+      <mat-list-item class="mt-2"><a class="nav-link active" routerLink="/offers" aria-label="Ofertas"><i
+            class="fa-solid fa-briefcase" style="color: #002e4c;"></i><span>Ofertas</span></a></mat-list-item>
 
       @if(isSmallScreen){
       <mat-divider></mat-divider>
       <mat-list-item>
         @if(isRol() === 'admin'){
-        <a class="nav-link link" (click)="createUser()">
+        <a class="nav-link link" (click)="createUser()" aria-label="Cear Usuario">
           <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
         </a>
         }
       </mat-list-item>
       <mat-list-item>
-        <a class="nav-link link" (click)="logout()">
+        <a class="nav-link link" (click)="logout()" aria-label="Cerrar Sesión">
           <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Salir</span>
         </a>
       </mat-list-item>
@@ -82,6 +76,20 @@
       }
     </mat-nav-list>
   </mat-sidenav>
+  }@else {
+    @if(isSmallScreen){
+      <mat-sidenav #drawer [mode]="sidenavMode" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav"
+      aria-label="Barra lateral">
+        <mat-nav-list>
+          <mat-list-item>
+            <button class="btn-icon-text" routerLink="/login" aria-label="Iniciar Sesión">
+              <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Iniciar</span>
+            </button>
+          </mat-list-item>
+        </mat-nav-list>
+      </mat-sidenav>
+    }
+
   }
 
   <!-- Contenido principal -->

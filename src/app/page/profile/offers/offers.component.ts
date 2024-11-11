@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, MatInputModule, MatButtonModule, MatSelectModule, MatFormFieldModule, MatCardModule, CommonModule],
   templateUrl: './offers.component.html',
-  styleUrl: './offers.component.css'
+  styleUrl: './offers.component.scss'
 })
 export class OffersComponent {
 

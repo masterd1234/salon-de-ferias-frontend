@@ -14,7 +14,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 @Component({
   selector: 'app-banner-root',
   templateUrl: './banner.component.html',
-  styleUrls: ['./banner.component.css'],
+  styleUrls: ['./banner.component.scss'],
   standalone: true,
   imports: [CommonModule, MatDividerModule, ReactiveFormsModule, MatCardModule, MatSliderModule, MatFormFieldModule, FormsModule]
 })

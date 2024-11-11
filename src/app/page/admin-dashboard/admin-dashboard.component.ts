@@ -16,7 +16,7 @@ import { UserListComponent } from "./user-list/user-list.component";
   selector: 'app-admin-dashboard',
   standalone: true,
   templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.css'],
+  styleUrls: ['./admin-dashboard.component.scss'],
   imports: [
     CommonModule, // Importar CommonModule para funcionalidad básica
     UserListComponent

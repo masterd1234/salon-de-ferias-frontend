@@ -20,7 +20,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   standalone: true,
   imports: [RouterOutlet, RouterLink, CommonModule, MatSidenavModule, MatToolbarModule, MatListModule],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   /**

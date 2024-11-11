@@ -1,0 +1,55 @@
+@import "@angular/material/prebuilt-themes/indigo-pink.css"; // O el tema que prefieras
+
+// Colores personalizados
+:root {
+  --mat-primary: #002e4c;   // Color principal
+  --mat-accent: #00a89c;    // Color de acento
+  --mat-warn: #ff5252;      // Color de advertencia
+  --mat-background: #ffffff; // Fondo blanco
+}
+
+// Eliminar completamente el subrayado de los inputs
+.mat-form-field-underline {
+  display: none !important;  // Elimina la línea debajo de los inputs
+}
+
+// Deshabilitar el efecto ripple (ondulación) en los inputs
+.mat-form-field-ripple {
+  display: none !important;  // Oculta el efecto ripple al hacer clic o enfocar
+}
+
+// Estilo limpio sin borde al enfocar el input
+.mat-form-field-flex {
+  border-bottom: none !important;  // Elimina el borde inferior al enfocar
+}
+
+// Sobrescribir diálogos (modales)
+.mat-dialog-container {
+  background-color: var(--mat-background) !important;
+  color: var(--mat-primary) !important;
+  overflow: visible !important;  // Asegura que el modal permita el contenido visible fuera de su área
+  z-index: 1000 !important;  // Asegura que el modal esté encima de otros elementos
+}
+
+// Colores personalizados para botones de Angular Material
+.mat-raised-button.mat-primary {
+  background-color: var(--mat-primary) !important;
+  color: #ffffff !important;
+}
+
+.mat-raised-button.mat-accent {
+  background-color: var(--mat-accent) !important;
+  color: #ffffff !important;
+}
+
+.mat-raised-button.mat-warn {
+  background-color: var(--mat-warn) !important;
+  color: #ffffff !important;
+}
+
+// Panel del select personalizado
+.mat-select-panel {
+  z-index: 2000 !important;  // Asegura que el select esté por encima del modal
+  position: absolute !important;
+  max-height: 300px;  // Controla la altura del panel del select
+}

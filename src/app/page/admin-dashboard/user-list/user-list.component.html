@@ -8,10 +8,10 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">{{ user.name }}</h5>
                     <div>
-                        <button mat-stroked-button color="primary" (click)="editUser(user.id); $event.stopPropagation()">
+                        <button class="button button--primary mx-2" mat-flat-button color="primary" (click)="editUser(user.id); $event.stopPropagation()">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
-                        <button mat-stroked-button color="warn" (click)="deleteUser(user.id); $event.stopPropagation()">
+                        <button class="button button--primary delete-button mx-2" mat-flat-button color="warn" (click)="deleteUser(user.id); $event.stopPropagation()">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>

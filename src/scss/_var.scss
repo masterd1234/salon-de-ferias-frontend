@@ -1,0 +1,36 @@
+// _variables.scss
+
+// Colores
+$primary-color: #002E4C;
+$secondary-color: #4A768D;
+$highlight-color: rgb(17, 226, 17);
+$text-color: black;
+$muted-color: #666; // Color para texto secundario (small)
+$placeholder-color: #999; // Color para texto placeholder
+$background-color: #bdccdb;
+$secondary-background-color: #f9f9f9;
+$white: #ffffff;
+$disabled-color: #a5d6a7;
+$error-color: #dc3545;
+$border-color: #dcdcdc;
+$shadow-color: rgba(0, 0, 0, 0.1);
+$footer-background-color: $primary-color;
+$footer-text-color: white;
+
+
+// Bordes y sombras
+$border-radius: 8px;
+$button-border-radius: 4px;
+$box-shadow: 0px 4px 8px $shadow-color;
+// Colores de borde
+$input-border-color: #ccc; // Color de borde de inputs por defecto
+$input-focus-border-color: #aaa; // Color de borde cuando el input está en foco
+// Colores de enlaces y botones
+$link-color: #007bff; // Color de enlaces
+$btn-danger-color: #dc3545; // Color de botón de peligro
+
+// Tipografía
+$font-family-base: 'Noto Sans', sans-serif;
+$font-size-base: 16px;
+$font-size-small: 14px;
+$font-size-large: 18px;

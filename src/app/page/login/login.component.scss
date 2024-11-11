@@ -1,0 +1,63 @@
+@import '../../../scss/responsive';
+@import '../../../scss/var';
+@import '../../../scss/buttons';
+
+// Fondo del contenedor de la cabecera de inicio de sesión
+.bg-custom1 {
+  background: linear-gradient(180deg, $secondary-color 0%, $primary-color 100%);
+  color: $white;
+  padding: 50px;
+  text-align: center;
+}
+
+// Fondo del contenedor del formulario
+.bg-custom2 {
+  background-color: $background-color;
+  color: $text-color;
+  padding: 50px;
+  text-align: center;
+}
+
+.button--primary{
+  @extend .button--primary;
+  background-color: $highlight-color !important;
+  color: $white !important;
+}
+
+// Justificación del texto en los términos y política de privacidad
+.text-justify {
+  text-align: justify;
+}
+
+// Contenedor de logos de las empresas colaboradoras
+.logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  img {
+    max-width: 45%;
+    height: auto;
+  }
+}
+
+// Estilo para el checkbox de términos y políticas
+mat-checkbox {
+  display: block;
+  margin-bottom: 10px;
+
+  a {
+    text-decoration: none;
+    font-weight: bold;
+    color: $highlight-color;
+  }
+}
+
+// Ajustes de responsividad para pantallas medianas
+@media (max-width: 768px) {
+  .logos img {
+    max-width: 80%;
+  }
+}

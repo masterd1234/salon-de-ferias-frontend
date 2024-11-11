@@ -1,0 +1,189 @@
+@import '../../../scss/responsive';
+@import '../../../scss/var';
+@import '../../../scss/buttons';
+
+// Reset general
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:host {
+  background-color: $background-color;
+  min-height: 100vh;
+  width: 100%;
+  display: block;
+}
+
+// Contenedor general
+.container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+// Header
+.header {
+  background-color: $primary-color;
+  color: $white;
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 3.5rem;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+
+  nav ul {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+
+    li a {
+      cursor: pointer;
+      color: $white;
+      text-decoration: none;
+    }
+  }
+}
+
+// Ajustes para desplazamiento con la barra fija
+#acerca, #stand, #empresas, #contacto, #about-fair {
+  scroll-margin-top: 80px;
+}
+
+// Imagen de fondo y bienvenida
+.manual-image {
+  position: relative;
+  text-align: center;
+  margin-top: 5rem;
+
+  img {
+    width: 100%;
+    max-width: 1200px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: $border-radius;
+  }
+}
+
+.welcome-section {
+  position: relative;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: $white;
+  background: rgba(1, 20, 75, 0.6);
+  padding: 2rem;
+  border-radius: $border-radius;
+  max-width: 800px;
+  width: 50%;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .welcome-text {
+    color: $white;
+    margin: 0; // Eliminación de márgenes adicionales
+  }
+}
+
+// Contadores
+.counters {
+  display: flex;
+  justify-content: space-around;
+  padding: 2rem 0;
+  background-color: $primary-color;
+  color: $white;
+
+  .counter {
+    text-align: center;
+
+    h3 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+// Sección de contenido principal
+.content-section {
+  padding: 3rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .bloques {
+    margin-bottom: 2rem;
+  }
+
+  .content-cards {
+    display: flex;
+    justify-content: space-around;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .content-card {
+    background-color: $secondary-background-color;
+    padding: 2rem;
+    width: 30%;
+    border-radius: $border-radius;
+    text-align: center;
+    box-shadow: $box-shadow;
+
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+// Sección de la feria
+.about-fair {
+  padding: 3rem 2rem;
+  text-align: center;
+  background-color: $secondary-background-color;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: $font-size-small;
+    color: $muted-color;
+    margin: 0.5rem 0;
+  }
+
+  .fair-images {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+
+    img {
+      width: 300px;
+      height: 200px;
+      border-radius: $border-radius;
+      object-fit: cover;
+      box-shadow: $box-shadow;
+    }
+  }
+}
+
+// Botón personalizado con estilos de `_buttons.scss`
+.custom-button {
+  @extend .button--primary;
+  width: 100%;
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: $font-size-base;
+}

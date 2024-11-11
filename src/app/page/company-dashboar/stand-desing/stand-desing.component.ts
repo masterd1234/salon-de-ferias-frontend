@@ -16,7 +16,7 @@ import { BannerComponent } from "../../banner/banner.component";
 
 @Component({
   templateUrl: './stand-desing.component.html',
-  styleUrls: ['./stand-desing.component.css'],
+  styleUrls: ['./stand-desing.component.scss'],
   selector: 'app-desing-root',
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, MatSelectModule, CommonModule, ReactiveFormsModule, BannerComponent],

@@ -32,7 +32,7 @@ import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
   standalone: true,
   imports: [MatCheckboxModule, HttpClientModule, CommonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
 

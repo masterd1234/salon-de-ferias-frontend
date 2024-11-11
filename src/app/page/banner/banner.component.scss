@@ -1,0 +1,87 @@
+@import '../../../scss/responsive';
+@import '../../../scss/var';
+@import '../../../scss/buttons';
+
+/**
+ * Estilo general para el componente de formulario de carga de archivos.
+ */
+.stand-form {
+  width: 100%;
+  max-width: 100%;
+  background-color: $secondary-background-color;
+  margin-top: 3px;
+  margin-bottom: 10px;
+}
+
+/**
+ * Estilos de cabecera de cada tarjeta (logo, banner, póster).
+ */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+}
+
+/**
+ * Estilo del título de la tarjeta
+ */
+mat-card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/**
+ * Contenedor para la información del archivo
+ */
+.file-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  .file-name {
+    margin-left: 8px;
+    font-weight: bold;
+  }
+}
+
+/**
+ * Botón de eliminación de archivo, con fondo rojo y efectos de hover
+ */
+.delete-button {
+  @extend .button;
+  background-color: $error-color;
+
+  &:hover{
+    background-color: darken($error-color, 10%);
+  }
+}
+
+
+/**
+ * Oculta el input de archivo (file input) para personalizar el botón de carga.
+ */
+.file-input {
+  display: none;
+}
+
+/**
+ * Contenedor para los botones de acción.
+ */
+.action-button {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  align-items: center;
+
+  .mx-2 {
+    @extend .button--primary;
+    padding: 5px 10px;
+    border-radius: $button-border-radius;
+    font-size: $font-size-small;
+
+    &:active {
+      background-color: darken($highlight-color, 15%);
+    }
+  }
+}

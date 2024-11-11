@@ -1,0 +1,28 @@
+@import '../../../../scss/responsive';
+@import '../../../../scss/var';
+@import '../../../../scss/buttons';
+
+/* Inputs de ancho completo */
+.full-width {
+  width: 100%;
+}
+
+/* Estilos de los campos de formulario */
+.mat-form-field {
+  margin-bottom: 16px;
+}
+
+/* Contenedor de los botones de acción */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Estilos del contenedor del diálogo */
+.mat-dialog-container {
+  padding: 20px;
+  overflow: visible !important;
+}
+
+

@@ -22,7 +22,7 @@ import { MatCardModule } from '@angular/material/card';
     RouterLink, CommonModule, FormComponent, StandDesingComponent
   ],
   templateUrl: './company-dashboar.component.html',
-  styleUrl: './company-dashboar.component.css'
+  styleUrl: './company-dashboar.component.scss'
 })
 export class CompanyDashboarComponent {
   

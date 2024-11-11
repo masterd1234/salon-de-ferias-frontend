@@ -15,7 +15,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './videos.component.html',
-  styleUrls: ['./videos.component.css']
+  styleUrls: ['./videos.component.scss']
 })
 export class VideosComponent {
   /** 
