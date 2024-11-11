@@ -1,5 +1,6 @@
 import { Component, inject, signal, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { LoginComponent } from './page/login/login.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
 import { CreateUserComponent } from './page/admin-dashboard/create-user/create-user.component';
@@ -10,11 +11,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
-/**
- * @class AppComponent
- * @description Componente raíz de la aplicación que gestiona la estructura principal, el estado de sesión,
- * el rol del usuario, y ofrece funcionalidades para crear usuarios y navegar.
- */
+
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -23,102 +21,68 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  /**
-   * @property {string} title - Título de la aplicación.
-   */
   title = 'palacio-de-ferias';
 
-  /**
-   * @property {boolean} isSmallScreen - Indica si la pantalla es pequeña (para ajustar la navegación).
-   */
   isSmallScreen = false;
-
-  /**
-   * @property {MatSidenav} drawer - Referencia al componente de navegación lateral (sidenav).
-   * @ViewChild
-   */
   @ViewChild('drawer') drawer!: MatSidenav;
-
-  /**
-   * @property {'side' | 'over'} sidenavMode - Modo de visualización del `sidenav` dependiendo del tamaño de pantalla.
-   */
   sidenavMode: 'side' | 'over' = 'side';
-
-  /**
-   * @property {signal<boolean>} userCreatedSignal - Signal para notificar la creación de un usuario.
-   */
+  // Signal para notificar la creacion de un usuario
   userCreatedSignal = signal(false);
-
-  // Inyectamos AuthService, Router, MatDialog y Overlay
+  // Inyectamos AuthService y Router
   private authService = inject(AuthService);
   private router = inject(Router);
-  private dialog = inject(MatDialog);
+  private dialog = inject(MatDialog);  // Inyectar MatDialog para manejar el modal
   private overlay = inject(Overlay);
 
-  /**
-   * @constructor
-   * @param {BreakpointObserver} breakpointObserver - Observador de puntos de quiebre de pantalla para manejar tamaños responsivos.
-   */
   constructor(private breakpointObserver: BreakpointObserver) {
     this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).subscribe(result => {
       this.isSmallScreen = result.matches;
       this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
-    });
+    })
   }
 
-  /**
-   * @method toggleDrawer
-   * @description Abre o cierra el `drawer` en pantallas pequeñas.
-   * @returns {void}
-   */
+  // Método para abrir o cerrar el drawer en pantallas pequeñas
   toggleDrawer(): void {
     if (this.drawer) {
       this.drawer.toggle();
     }
   }
 
-  /**
-   * @method isLoggedIn
-   * @description Verifica si el usuario está autenticado revisando la presencia de un token en `localStorage`.
-   * @returns {boolean} `true` si el usuario está autenticado, `false` si no lo está.
-   */
+  // Verifica si el usuario está logueado
   isLoggedIn(): boolean {
-    return !!this.authService.getToken();
+    return !!this.authService.getToken();  // Comprueba si el token está presente en el localStorage
   }
 
-  /**
-   * @method isRol
-   * @description Verifica el rol del usuario (admin o co) decodificando el token de autenticación.
-   * @returns {string} Retorna `'admin'`, `'co'`, o una cadena vacía si no tiene un rol válido.
-   */
+  // Verifica si el usuario es Admin o CO
   isRol(): string {
     const tokenData = this.authService.decodeToken();
-    return tokenData?.rol === 'admin' ? 'admin' : tokenData?.rol === 'co' ? 'co' : '';
+
+    if (tokenData?.rol === 'admin') {
+      return 'admin';
+    } else if (tokenData?.rol === 'co') {
+      return 'co';
+    }
+
+    return ''; // Devuelve una cadena vacía si no es ni 'admin' ni 'co'
   }
 
-  /**
-   * @method logout
-   * @description Cierra la sesión del usuario eliminando el token de autenticación y redirige a la página de inicio.
-   * @returns {void}
-   */
+
+  // Método para cerrar sesión
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/home']);
+    this.authService.logout();  // Llama al método de logout del AuthService
+    this.router.navigate(['/home']);  // Redirige al usuario a la página de login
   }
 
-  /**
-   * @method createUser
-   * @description Abre un modal para crear un nuevo usuario, y establece `userCreatedSignal` a `true` si se crea uno.
-   * @returns {void}
-   */
+  // Método para abrir el modal y crear un nuevo usuario
   createUser(): void {
     const dialogRef = this.dialog.open(CreateUserComponent, {
       width: '500px',
-      hasBackdrop: true,
-      autoFocus: false,
+      hasBackdrop: true,  // Asegúrate de que tenga un fondo de sombra
+      autoFocus: false,   // Evita que el foco automático lo empuje hacia abajo
       scrollStrategy: this.overlay.scrollStrategies.reposition()
     });
 
+    // Cuando se cierra el modal
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Nuevo usuario creado:', result);
@@ -126,4 +90,5 @@ export class AppComponent {
       }
     });
   }
+
 }

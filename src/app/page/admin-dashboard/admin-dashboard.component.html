@@ -1,14 +1,9 @@
 <div class="admin-dashboard-container">
 
-  <!-- Grilla de componentes de usuario según su rol -->
+  <!-- Componentes hijos para cada rol -->
   <div class="user-grid">
-    <!-- Componente de administradores -->
-    <app-user-list [title]="'Administradores'" [role]="'admin'"></app-user-list>
-    
-    <!-- Componente de usuarios de empresa -->
-    <app-user-list [title]="'Empresas'" [role]="'co'"></app-user-list>
-    
-    <!-- Componente de usuarios visitantes -->
-    <app-user-list [title]="'visitantes'" [role]="'visitor'"></app-user-list>
+    <app-admin-users></app-admin-users>
+    <app-company-users></app-company-users>
+    <app-visitor-users></app-visitor-users>
   </div>
 </div>

@@ -10,17 +10,10 @@ import { MatOptionModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { catchError, of } from 'rxjs';
 
-/**
- * EditUsersComponent
- * 
- * Este componente proporciona una interfaz para editar la información de un usuario
- * mediante un formulario reactivo en un diálogo modal.
- */
 @Component({
   selector: 'app-edit-users',
   standalone: true,
-  imports: [
-    CommonModule,
+  imports: [CommonModule,
     ReactiveFormsModule,
     MatDialogModule,
     MatFormFieldModule,
@@ -29,54 +22,43 @@ import { catchError, of } from 'rxjs';
     MatDialogActions,
     MatDialogContent,
     MatSelectModule,
-    MatOptionModule
-  ],
+    MatOptionModule],
   templateUrl: './edit-users.component.html',
   styleUrl: './edit-users.component.scss'
 })
 export class EditUsersComponent {
 
-  /** Formulario reactivo para editar usuario */
   editUserForm: FormGroup;
-
-  /** ID del usuario que se está editando */
   userId: string;
 
-  /** Inyección de servicios y dependencias */
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<EditUsersComponent>);
   private userService = inject(UserService);
   private dialogData = inject(MAT_DIALOG_DATA);
 
-  /**
-   * Constructor del componente EditUsersComponent.
-   * Inicializa el formulario de edición de usuario y configura validaciones dinámicas
-   * basadas en el rol seleccionado.
-   */
   constructor() {
-    this.userId = this.dialogData.userId; // ID del usuario pasado al modal
+    this.userId = this.dialogData.userId; // Obtiene el ID del usuario pasado al modal
     this.editUserForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       rol: ['', Validators.required],
-      company: [''], // Campo adicional para rol "co"
+      // Campos adicionales para COs
+      company: [''],
       standId: [''],
       cif: [''],
-      dni: [''], // Campo adicional para rol "visitante"
+
+      // Campos adicionales para Visitantes
+      dni: [''],
       studies: ['']
     });
 
-    // Escucha cambios en el campo "rol" para actualizar validaciones
+    // Escuchar cambios en el campo "rol" para actualizar las validaciones
     this.editUserForm.get('rol')?.valueChanges.subscribe((rol) => {
       this.updateValidationsBasedOnRole(rol);
     });
   }
 
-  /**
-   * Actualiza las validaciones del formulario de acuerdo al rol seleccionado.
-   * 
-   * @param rol - El rol seleccionado, que puede ser "co", "visitor", o "admin".
-   */
+  // Función para actualizar validaciones dinámicas basadas en el rol seleccionado
   updateValidationsBasedOnRole(rol: string) {
     const companyControl = this.editUserForm.get('company');
     const standIdControl = this.editUserForm.get('standId');
@@ -84,7 +66,7 @@ export class EditUsersComponent {
     const dniControl = this.editUserForm.get('dni');
     const studiesControl = this.editUserForm.get('studies');
 
-    // Resetea las validaciones
+    // Resetear las validaciones
     companyControl?.clearValidators();
     standIdControl?.clearValidators();
     cifControl?.clearValidators();
@@ -92,17 +74,17 @@ export class EditUsersComponent {
     studiesControl?.clearValidators();
 
     if (rol === 'co') {
-      // Activar validaciones específicas para rol "co"
+      // Si el rol es CO, activamos las validaciones de empresa, standId y cif
       companyControl?.setValidators([Validators.required]);
       standIdControl?.setValidators([Validators.required]);
       cifControl?.setValidators([Validators.required]);
-    } else if (rol === 'visitor') {
-      // Activar validaciones específicas para rol "visitor"
+    } else if (rol === 'visitante') {
+      // Si el rol es visitante, activamos las validaciones de dni y estudios
       dniControl?.setValidators([Validators.required]);
       studiesControl?.setValidators([Validators.required]);
     }
 
-    // Actualiza el estado de los controles
+    // Aseguramos que se actualicen los estados de los controles
     companyControl?.updateValueAndValidity();
     standIdControl?.updateValueAndValidity();
     cifControl?.updateValueAndValidity();
@@ -110,14 +92,13 @@ export class EditUsersComponent {
     studiesControl?.updateValueAndValidity();
   }
 
-  /**
-   * Inicializa el componente y carga los datos del usuario en el formulario.
-   */
+
   ngOnInit(): void {
+    // Cargar los datos del usuario
     this.userService.getUserById(this.userId).pipe(
       catchError((error) => {
         console.error('Error al obtener el usuario', error);
-        return of(null); // Devuelve null en caso de error
+        return of(null);  // Devuelve null en caso de error para que no rompa el flujo
       })
     ).subscribe((user) => {
       if (user) {
@@ -134,28 +115,23 @@ export class EditUsersComponent {
     });
   }
 
-  /**
-   * Guarda los cambios realizados en el formulario.
-   * Si el formulario es válido, envía los datos al servicio y cierra el diálogo.
-   */
+  // Método para guardar los cambios
   onSave(): void {
     if (this.editUserForm.valid) {
       this.userService.updateUser(this.userId, this.editUserForm.value).pipe(
         catchError((error) => {
           console.error('Error al actualizar el usuario', error);
-          return of(null);
+          return of(null);  // Manejo de errores en caso de falla
         })
       ).subscribe((updatedUser) => {
         if (updatedUser) {
-          this.dialogRef.close(updatedUser); // Cierra el modal y pasa el usuario actualizado
+          this.dialogRef.close(updatedUser);  // Cierra el modal y pasa el usuario actualizado
         }
       });
     }
   }
 
-  /**
-   * Cierra el modal sin guardar cambios.
-   */
+  // Método para cerrar el modal sin guardar
   onCancel(): void {
     this.dialogRef.close();
   }

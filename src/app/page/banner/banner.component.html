@@ -1,32 +1,18 @@
-<!--
-  Componente Banner Component - Formulario para cargar el logo, banner y póster.
-  - Contiene un encabezado con un título.
-  - Cada sección incluye un botón para cargar archivos específicos.
-  - Los archivos permitidos deben ser en formato PNG y de un tamaño máximo de 5 MB.
--->
-
 <mat-card class="stand-form">
-  <!-- Formulario de subida con validación de Angular -->
   <form [formGroup]="formBanner" (ngSubmit)="onSubmit()">
 
-    <!-- Cabecera principal del formulario -->
-    <mat-card-header (click)="toggleContentVisibility()">
+    <mat-card-header  (click)="toggleContentVisibility()">
       <mat-card-title>
         <h2>Sube tu logo y banner</h2>
       </mat-card-title>
     </mat-card-header>
-
-    <!-- Contenido desplegable del formulario -->
     <mat-card-content *ngIf="isContentVisible">
-      
       <!-- Subida de Logo -->
       <mat-card class="mt-2">
         <mat-card-header class="card-header">
           <mat-card-title>Logo</mat-card-title>
-          <!-- Verifica si no hay un archivo de logo seleccionado -->
-          @if(!logoFileName){
-          <!-- Botón para añadir el logo -->
           <div class="action-button ml-auto d-flex">
+<<<<<<< HEAD
             <button type="button" class="button button--primary" (click)="logoInput.click()" mat-flat-button>
               <i class="fa-solid fa-upload"></i>
             </button>
@@ -45,32 +31,31 @@
             <input type="file" #logoInput (change)="onFileChange($event, 'logo')" class="file-input" />
           </div>
           }
-        </mat-card-header>
-
-        <!-- Información del archivo seleccionado -->
-        @if (logoFileName) {
-        <mat-divider style="width: 100%;"></mat-divider>
-        <mat-card-content class="mt-2">
-          <div class="file-info">
-            <mat-card-title>
-              <i class="fa-regular fa-image"></i>
-            </mat-card-title>
-            <span class="file-name">{{ logoFileName }}</span>
+=======
+            <button type="button" class="custom-button" (click)="logoInput.click()">Añadir Logo</button>
+            <input type="file" #logoInput (change)="onFileChange($event, 'logo')" class="file-input" />
           </div>
-        </mat-card-content>
-        }
+>>>>>>> parent of 53b618c (Añadir JavaDoc)
+        </mat-card-header>
       </mat-card>
 
       <!-- Subida de Banner -->
       <mat-card class="mt-2">
         <mat-card-header class="card-header">
           <mat-card-title>Banner</mat-card-title>
-          <!-- Botón para añadir el banner, deshabilitado si canUploadFiles es falso -->
           <div class="action-button ml-auto d-flex">
+<<<<<<< HEAD
             <input type="file" #bannerInput (change)="onFileChange($event, 'banner')" class="file-input" [disabled]="!canUploadFiles" />
             <button type="button" class="button button--primary" (click)="bannerInput.click()" [disabled]="!canUploadFiles" mat-flat-button>
               <i class="fa-solid fa-upload"></i>
             </button>
+=======
+            <input type="file" #bannerInput (change)="onFileChange($event, 'banner')" class="file-input"
+              [disabled]="!canUploadFiles" />
+            <button type="button" class="custom-button" (click)="bannerInput.click()"
+              [disabled]="!canUploadFiles">Añadir
+              Banner</button>
+>>>>>>> parent of 53b618c (Añadir JavaDoc)
           </div>
         </mat-card-header>
       </mat-card>
@@ -79,41 +64,50 @@
       <mat-card class="mt-2">
         <mat-card-header class="card-header">
           <mat-card-title>Poster</mat-card-title>
-          <!-- Botón para añadir el póster, deshabilitado si canUploadFiles es falso -->
           <div class="action-button ml-auto d-flex">
+<<<<<<< HEAD
             <input type="file" #posterInput (change)="onFileChange($event, 'poster')" class="file-input" [disabled]="!canUploadFiles" />
             <button type="button" class="button button--primary" (click)="posterInput.click()" [disabled]="!canUploadFiles" mat-flat-button>
               <i class="fa-solid fa-upload"></i>
             </button>
+=======
+            <input type="file" #posterInput (change)="onFileChange($event, 'poster')" class="file-input"
+              [disabled]="!canUploadFiles" />
+            <button type="button" class="custom-button" (click)="posterInput.click()"
+              [disabled]="!canUploadFiles">Añadir
+              Póster</button>
+>>>>>>> parent of 53b618c (Añadir JavaDoc)
           </div>
         </mat-card-header>
       </mat-card>
-
       <!-- Botón de Enviar -->
       <div class="action-button ml-auto d-flex">
         <button mat-raised-button color="primary" type="submit" class="button button--primary mt-2" mat-flat-button>Enviar</button>
       </div>
     </mat-card-content>
 
-    <!-- Sección de Vista Previa y Ajuste (opcional)
+
+    <!-- Vista previa y ajuste del logo -->
     <div class="image-container" *ngIf="logoUrl">
       <h4>Ajuste del Logo</h4>
       <div class="image-viewport">
-        <img [src]="logoUrl" alt="Logo Preview" class="resizable-image" [style.transform]="logoTransform" 
-             (wheel)="onZoom($event)" (mousedown)="startDragging($event)" />
+        <img [src]="logoUrl" alt="Logo Preview" class="resizable-image" [style.transform]="logoTransform"
+          (wheel)="onZoom($event)" (mousedown)="startDragging($event)" />
       </div>
     </div>
 
+    <!-- Vista previa del banner -->
     <div *ngIf="bannerUrl" class="preview-tab">
       <h4>Vista previa del Banner</h4>
       <img [src]="bannerUrl" alt="Banner Preview" class="preview-img" />
     </div>
 
+    <!-- Vista previa del póster -->
     <div *ngIf="posterUrl" class="preview-tab">
       <h4>Vista previa del Póster</h4>
       <img [src]="posterUrl" alt="Poster Preview" class="preview-img" />
     </div>
-    -->
+
 
   </form>
 </mat-card>

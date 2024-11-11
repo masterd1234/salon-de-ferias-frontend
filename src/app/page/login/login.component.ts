@@ -12,21 +12,6 @@ import { jwtDecode } from 'jwt-decode';
 import { AuthService } from '../../services/auth.service';
 import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
 
-/**
- * LoginComponent
- * 
- * Este componente gestiona el formulario de inicio de sesión de usuarios
- * para la aplicación. Incluye campos para el usuario o correo electrónico,
- * la contraseña y dos casillas de verificación para aceptar la política
- * de privacidad y los términos y condiciones.
- * 
- * Funcionalidades principales:
- * - Validación de formulario con campos obligatorios.
- * - Ocultación/muestreo de la contraseña.
- * - Envío de credenciales al servicio de autenticación y redirección 
- *   según el rol del usuario.
- */
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -36,69 +21,59 @@ import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
 })
 export class LoginComponent {
 
-  // Control de visibilidad de la contraseña
-  hide = true;
+  hide = true; //signal para ocultar/mostrar la contraseña
+  privacyAccepted = false; //signal para aceptar la política de privacidad
+  termsAccepted = false;  //signal para aceptar los terminos y condiciones
+  loginForm: FormGroup; // Formulario reactivo
 
-  // Estados de aceptación para los checkbox de política de privacidad y términos y condiciones
-  privacyAccepted = false;
-  termsAccepted = false;
-
-  // Formulario reactivo para capturar las credenciales de inicio de sesión
-  loginForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {
-    // Configuración del formulario de inicio de sesión
+    // Configuramos el formulario reactivo
     this.loginForm = this.fb.group({
-      nameOrEmail: ['', [Validators.required]], // Campo requerido para nombre o correo
-      password: ['', [Validators.required, Validators.minLength(6)]] // Campo requerido para contraseña
+      nameOrEmail: ['', [Validators.required]], // Campo nombre de usuario requerido
+      password: ['', [Validators.required, Validators.minLength(6)]], // Campo contraseña requerido con mínimo 6 caracteres
     });
   }
 
-  /**
-   * Alterna la visibilidad de la contraseña entre texto y oculto.
-   */
+
+  // Alternar visibilidad de la contraseña
   togglePasswordVisibility(): void {
     this.hide = !this.hide;
   }
 
-  /**
-   * Maneja el cambio en el checkbox de política de privacidad.
-   * 
-   * @param event - El cambio del checkbox
-   */
+
+  // Cambiar el estado de aceptación de la política de privacidad
   onPrivacyChange(event: MatCheckboxChange): void {
     this.privacyAccepted = event.checked;
   }
 
-  /**
-   * Maneja el cambio en el checkbox de términos y condiciones.
-   * 
-   * @param event - El cambio del checkbox
-   */
+
+  // Cambiar el estado de aceptación de los términos y condiciones
   onTermsChange(event: MatCheckboxChange): void {
     this.termsAccepted = event.checked;
   }
 
-  /**
-   * Envía el formulario de inicio de sesión si es válido y 
-   * las condiciones son aceptadas.
-   */
+  // Método para manejar el envío del formulario
   login(): void {
     if (this.loginForm.valid && this.privacyAccepted && this.termsAccepted) {
       const { nameOrEmail, password } = this.loginForm.value;
 
+      // Llamada al servicio de autenticación
       this.authService.login(nameOrEmail, password).subscribe({
         next: (response) => {
+          // Verifica si el token está presente en la respuesta
           if (response.token) {
+            // Guardamos el token JWT en el localStorage
             this.authService.setToken(response.token);
             const decodedToken: any = jwtDecode(response.token);
             const userRole = decodedToken.rol;
 
-            // Redirige según el rol del usuario
+            
+            // Redirigir al dashboard o área según el rol
             if (userRole === 'admin') {
               this.router.navigate(['/admin-dashboard']);
             } else if (userRole === 'co') {
@@ -118,4 +93,6 @@ export class LoginComponent {
       alert('Por favor, completa el formulario correctamente y acepta los términos.');
     }
   }
+
+
 }

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MatDialogModule, MatDialogActions, MatDialogContent } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,20 +8,21 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { UserService } from '../../../services/admin.service';
 import { AuthService } from '../../../services/auth.service';
+import { signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-/**
- * CreateUserComponent
- * 
- * Este componente permite crear un nuevo usuario mediante un formulario en un modal de diálogo.
- */
 @Component({
   selector: 'app-create-user',
   standalone: true,
   templateUrl: './create-user.component.html',
+<<<<<<< HEAD
   styleUrls: ['./create-user.component.scss'],
   imports: [
     CommonModule,
+=======
+  styleUrls: ['./create-user.component.css'],
+  imports: [CommonModule,
+>>>>>>> parent of 53b618c (Añadir JavaDoc)
     ReactiveFormsModule,
     MatDialogModule,
     MatFormFieldModule,
@@ -35,22 +36,14 @@ import { CommonModule } from '@angular/common';
 })
 export class CreateUserComponent {
 
-  /** Formulario reactivo para crear usuario */
   createUserForm: FormGroup;
+  isSubmitting = signal(false); // signal para manejar el estado de envío
 
-  /** Estado de envío del formulario */
-  isSubmitting = signal(false);
-
-  /** Dependencias inyectadas */
   private dialogRef = inject(MatDialogRef<CreateUserComponent>);
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
 
-  /**
-   * Constructor del componente CreateUserComponent.
-   * Configura el formulario reactivo y las validaciones de los campos.
-   */
   constructor() {
     // Configuración del formulario reactivo
     this.createUserForm = this.fb.group({
@@ -58,92 +51,86 @@ export class CreateUserComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       rol: ['', Validators.required],
-      company: [''],  // Campo adicional para rol "co"
+      // Campos adicionales para COs
+      company: [''],
       cif: [''],
-      dni: [''],  // Campo adicional para rol "visitor"
+
+      // Campos adicionales para Visitantes
+      dni: [''],
       studies: ['']
     });
 
-    // Actualizar validaciones en base al rol seleccionado
+    // Escuchar cambios en el campo "rol" para actualizar las validaciones
     this.createUserForm.get('rol')?.valueChanges.subscribe((rol) => {
-      this.updateFieldValidations(rol);
+      // Limpiar validaciones anteriores
+      this.createUserForm.get('company')?.clearValidators();
+      this.createUserForm.get('cif')?.clearValidators();
+      this.createUserForm.get('dni')?.clearValidators();
+      this.createUserForm.get('studies')?.clearValidators();
+
+      if (rol === 'co') {
+        // Si el rol es "co", añadir validaciones para los campos de empresa
+        this.createUserForm.get('company')?.setValidators([Validators.required]);
+        this.createUserForm.get('cif')?.setValidators([Validators.required]);
+      } else if (rol === 'visitor') {
+        // Si el rol es "visitor", añadir validaciones para los campos de visitante
+        this.createUserForm.get('dni')?.setValidators([Validators.required]);
+        this.createUserForm.get('studies')?.setValidators([Validators.required]);
+      }
+
+      // Actualizar estado de validación
+      this.createUserForm.get('company')?.updateValueAndValidity();
+      this.createUserForm.get('cif')?.updateValueAndValidity();
+      this.createUserForm.get('dni')?.updateValueAndValidity();
+      this.createUserForm.get('studies')?.updateValueAndValidity();
     });
   }
 
-  /**
-   * Actualiza las validaciones de los campos en función del rol seleccionado.
-   * 
-   * @param rol - El rol seleccionado, puede ser "co" o "visitor".
-   */
-  private updateFieldValidations(rol: string) {
-    this.createUserForm.get('company')?.clearValidators();
-    this.createUserForm.get('cif')?.clearValidators();
-    this.createUserForm.get('dni')?.clearValidators();
-    this.createUserForm.get('studies')?.clearValidators();
 
-    if (rol === 'co') {
-      this.createUserForm.get('company')?.setValidators([Validators.required]);
-      this.createUserForm.get('cif')?.setValidators([Validators.required]);
-    } else if (rol === 'visitor') {
-      this.createUserForm.get('dni')?.setValidators([Validators.required]);
-      this.createUserForm.get('studies')?.setValidators([Validators.required]);
-    }
 
-    this.createUserForm.get('company')?.updateValueAndValidity();
-    this.createUserForm.get('cif')?.updateValueAndValidity();
-    this.createUserForm.get('dni')?.updateValueAndValidity();
-    this.createUserForm.get('studies')?.updateValueAndValidity();
-  }
 
-  /**
-   * Maneja el envío del formulario.
-   * Si es válido, envía los datos del nuevo usuario al servicio y cierra el modal.
-   */
+
+  // Método para manejar el envío del formulario
   onSubmit(): void {
     if (this.createUserForm.valid) {
       const newUser = this.createUserForm.value;
-      this.cleanFieldsBasedOnRole(newUser);
+      // Eliminar los campos vacíos y no relevantes dependiendo del rol
+      if (newUser.rol === 'co') {
+        delete newUser.dni;  // No se necesita dni para 'co'
+        delete newUser.studies;  // No se necesita studies para 'co'
+      } else if (newUser.rol === 'visitor') {
+        delete newUser.company;  // No se necesita company para 'visitor'
+        delete newUser.cif;  // No se necesita cif para 'visitor'
+      }
+      console.log('Datos enviados:', newUser);  // Agrega esto para depuración
 
+      // Obtenemos el token del AuthService
       const token = this.authService.getToken();
       if (!token) {
         console.error('No token available');
         return;
       }
 
+      // Activar el signal de envío
       this.isSubmitting.set(true);
 
+      // Llamada al servicio para crear el usuario
       this.userService.createUser(newUser).subscribe({
         next: (response) => {
           console.log('Usuario creado exitosamente', response);
-          this.dialogRef.close(response);
-          this.isSubmitting.set(false);
+          this.dialogRef.close(response);  // Cierra el modal y pasa el nuevo usuario creado
+          this.isSubmitting.set(false);    // Desactivar el estado de envío
         },
         error: (err) => {
           console.error('Error al crear el usuario', err);
-          this.isSubmitting.set(false);
+          this.isSubmitting.set(false);    // Desactivar el estado de envío
         }
       });
     }
   }
 
-  /**
-   * Elimina los campos irrelevantes del objeto `newUser` dependiendo del rol seleccionado.
-   * 
-   * @param newUser - Objeto de usuario a limpiar.
-   */
-  private cleanFieldsBasedOnRole(newUser: any) {
-    if (newUser.rol === 'co') {
-      delete newUser.dni;
-      delete newUser.studies;
-    } else if (newUser.rol === 'visitor') {
-      delete newUser.company;
-      delete newUser.cif;
-    }
-  }
 
-  /**
-   * Cierra el diálogo sin crear un usuario.
-   */
+  // Método para cerrar el modal sin crear usuario
   onClose(): void {
     this.dialogRef.close();
   }

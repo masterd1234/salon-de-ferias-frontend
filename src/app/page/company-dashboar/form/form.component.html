@@ -11,11 +11,53 @@
             El nombre es obligatorio y debe tener al menos 3 caracteres.
           </small>
         </div>
+<<<<<<< HEAD
 
         <div class="col-md-6">
           <label>Correo</label>
           <input matInput type="email" id="email" formControlName="email" class="form-control">
         </div>
+=======
+        <div class="col-md-4">
+          <label>Correo</label>
+          <input matInput type="email" id="email" formControlName="email" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label>Selecciona el sector:</label>
+          <select id="sector" name="sector" formControlName="sector" class="form-control">
+            <option value="" disabled selected>Selecciona un sector</option>
+            <option value="tic">Tecnología de la Información y la Comunicación (TIC)</option>
+            <option value="finanzas">Finanzas y Banca</option>
+            <option value="salud">Salud y Farmacéutica</option>
+            <option value="energia">Energía y Servicios Públicos</option>
+            <option value="manufactura">Manufactura</option>
+            <option value="automotriz">Automotriz</option>
+            <option value="alimentacion">Alimentación y Bebidas</option>
+            <option value="construccion">Construcción e Infraestructura</option>
+            <option value="transporte">Transporte y Logística</option>
+            <option value="aeronautica">Aeronáutica y Espacio</option>
+            <option value="turismo">Turismo y Hotelería</option>
+            <option value="educacion">Educación y Formación</option>
+            <option value="agricultura">Agricultura y Agroindustria</option>
+            <option value="biotecnologia">Biotecnología</option>
+            <option value="retail">Comercio Minorista (Retail)</option>
+            <option value="seguros">Seguros</option>
+            <option value="medios">Medios de Comunicación y Entretenimiento</option>
+            <option value="consultoria">Consultoría y Servicios Profesionales</option>
+            <option value="inmobiliario">Inmobiliario y Construcción</option>
+            <option value="quimica">Química e Industria Petroquímica</option>
+            <option value="rrhh">Recursos Humanos</option>
+            <option value="moda">Moda y Textil</option>
+            <option value="ecommerce">E-commerce</option>
+            <option value="arte">Arte y Cultura</option>
+            <option value="deportes">Deportes y Ocio</option>
+            <option value="medioambiente">Medio Ambiente y Sostenibilidad</option>
+            <option value="legales">Servicios Legales</option>
+            <option value="investigacion">Investigación y Desarrollo (I+D)</option>
+            <option value="maritimo">Transporte Marítimo y Naval</option>
+          </select>
+        </div>
+>>>>>>> parent of 53b618c (Añadir JavaDoc)
       </div>
     </div>
 
@@ -88,8 +130,7 @@
           <input type="text" id="additional-button-link" formControlName="additionalButtonLink" class="form-control">
         </div>
       </div>
-      <button type="button" class="btn btn-secondary mt-2" (click)="addLink()" [disabled]="!canAddLink()">Añadir
-        enlace</button>
+      <button type="button" class="btn btn-secondary mt-2" (click)="addLink()" [disabled]="!canAddLink()">Añadir enlace</button>
     </div>
 
     <!-- Campo para subir archivos -->
@@ -99,19 +140,15 @@
       <small *ngIf="fileError">{{ fileError }}</small>
     </div>
 
-    <!-- Lista de enlaces y archivos -->
     <div class="form-group mt-3 mx-3">
       <div class="row">
-
         <!-- Lista de enlaces añadidos -->
         <div *ngIf="links.length > 0" class="col-md-6">
           <label>Enlaces añadidos:</label>
           <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center"
-              *ngFor="let link of links.controls; let i = index">
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let link of links.controls; let i = index">
               <a [href]="link.value.additionalButtonLink" target="_blank">{{ link.value.additionalButtonTitle }}</a>
-              <button type="button" class="btn btn-danger btn-sm" (click)="removeLink(i)"><i
-                  class="fa fa-trash"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeLink(i)"><i class="fa fa-trash"></i></button>
             </li>
           </ul>
         </div>
@@ -120,11 +157,9 @@
         <div *ngIf="uploadedFiles.length > 0" class="col-md-6">
           <label>Archivos subidos:</label>
           <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center"
-              *ngFor="let file of uploadedFiles; let i = index">
+            <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let file of uploadedFiles; let i = index">
               <span>{{ file.name }}</span>
-              <button type="button" class="btn btn-danger btn-sm" (click)="removeFile(i)"><i
-                  class="fa-solid fa-trash"></i></button>
+              <button type="button" class="btn btn-danger btn-sm" (click)="removeFile(i)"><i class="fa-solid fa-trash"></i></button>
             </li>
           </ul>
         </div>

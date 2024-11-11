@@ -24,14 +24,14 @@
       <mat-label>Contraseña</mat-label>
       <input matInput formControlName="password" placeholder="Contraseña" type="password">
       <mat-error *ngIf="createUserForm.get('password')?.invalid && createUserForm.get('password')?.touched">
-        La contraseña es obligatoria y debe tener al menos 6 caracteres.
+        La contraseña es obligatoria.
       </mat-error>
     </mat-form-field>
 
     <!-- Campo Selección de Rol -->
     <mat-form-field class="full-width">
       <mat-label>Rol</mat-label>
-      <mat-select formControlName="rol" panelClass="custom-select-panel">
+      <mat-select formControlName="rol" panelClass="custom-select-panel" placeholder="Seleccionar Rol">
         <mat-option value="admin">Administrador</mat-option>
         <mat-option value="co">Empresa</mat-option>
         <mat-option value="visitor">Visitante</mat-option>
@@ -41,8 +41,9 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Campos adicionales para rol "co" -->
+    <!-- Campos adicionales para co -->
     @if(createUserForm.get('rol')?.value === 'co'){
+<<<<<<< HEAD
     <mat-form-field class="full-width">
       <mat-label>Nombre de la Empresa</mat-label>
       <input matInput formControlName="company" placeholder="Nombre de la empresa">
@@ -58,10 +59,30 @@
         El CIF es obligatorio.
       </mat-error>
     </mat-form-field>
+=======
+      <!-- Campo nombre de la empresa -->
+      <mat-form-field class="full-width">
+        <mat-label>Nombre de la Empresa</mat-label>
+        <input matInput formControlName="company" placeholder="Nombre de la empresa">
+        @if(createUserForm.get('company')?.hasError('required')){
+          <mat-error> El nombre de la empresa es obligatorio.</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Campo CIF -->
+      <mat-form-field class="full-width">
+        <mat-label>CIF</mat-label>
+        <input matInput formControlName="cif" placeholder="A12345678">
+        @if(createUserForm.get('cif')?.hasError('required')){
+          <mat-error> El CIF es obligatorio.</mat-error>
+        }
+      </mat-form-field>
+>>>>>>> parent of 53b618c (Añadir JavaDoc)
     }
 
-    <!-- Campos adicionales para rol "visitor" -->
+    <!-- Campos adicionales para visitantes -->
     @if(createUserForm.get('rol')?.value === 'visitor'){
+<<<<<<< HEAD
     <mat-form-field class="full-width">
       <mat-label>DNI</mat-label>
       <input matInput formControlName="dni" placeholder="12345667A">
@@ -77,6 +98,25 @@
         Los estudios son obligatorios.
       </mat-error>
     </mat-form-field>
+=======
+      <!-- Campo nombre de la empresa -->
+      <mat-form-field class="full-width">
+        <mat-label>DNI</mat-label>
+        <input matInput formControlName="dni" placeholder="12345667A">
+        @if(createUserForm.get('dni')?.hasError('required')){
+          <mat-error> El DNI es obligatorio.</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Campo CIF -->
+      <mat-form-field class="full-width">
+        <mat-label>Estudios</mat-label>
+        <input matInput formControlName="studies" placeholder="Estudios del visitante">
+        @if(createUserForm.get('studies')?.hasError('studies')){
+          <mat-error> Los estidios son obligatorio.</mat-error>
+        }
+      </mat-form-field>
+>>>>>>> parent of 53b618c (Añadir JavaDoc)
     }
 
     <!-- Botones de acción -->

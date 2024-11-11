@@ -1,10 +1,6 @@
-/**
- * StandDesingComponent - Este componente permite a los usuarios seleccionar y personalizar el diseño de un stand
- * en una feria virtual, incluyendo la selección de una imagen de stand y un recepcionista.
- * Incluye funcionalidades para la carga de imágenes personalizadas y la vista previa en tiempo real.
- */
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -23,65 +19,42 @@ import { BannerComponent } from "../../banner/banner.component";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StandDesingComponent implements OnInit {
-  /** Signal para almacenar imágenes de los stands disponibles */
+  // Signals para almacenar las imágenes y la selección actual
   standImages = signal<string[]>([]);
-  /** Signal para almacenar imágenes de los recepcionistas disponibles */
   receptionistImages = signal<string[]>([]);
-  /** Imagen de stand seleccionada actualmente */
   selectedStand = signal<string | null>(null);
-  /** Imagen de recepcionista seleccionada actualmente */
   selectedReceptionist = signal<string | null>(null);
 
-  /** Señal computada que indica si se pueden subir archivos, en función de la selección de stand y recepcionista */
-  canUploadFiles = computed(() => !!this.selectedStand() && !!this.selectedReceptionist());
+ // Señal computada para saber si se pueden subir archivos
+ canUploadFiles = computed(() => !!this.selectedStand() && !!this.selectedReceptionist());
 
-  /** Nombre de la empresa (opcional) */
+  // Otros campos para manejar el estado de la aplicación
   nombre: string | null = '';
-  /** Descripción de la empresa (opcional) */
   descripcion: string | null = '';
-  /** Bandera para verificar si se ha cargado una imagen de logo */
   imagenCargada: boolean = false;
-  /** Bandera para indicar el estado de subida de la imagen */
   imagenSubiendo: boolean = false;
-  /** URL del logo subido */
   imageSrc: string | null = null;
-  /** Habilitar la opción para subir un stand personalizado */
-  customStandEnabled: boolean = false;
+  customStandEnabled: boolean = false;  // Para habilitar la subida de stand personalizado
 
-  /**
-   * Constructor de StandDesingComponent - Inicializa los servicios de imagen y empresa, y carga imágenes de stand y recepcionista.
-   * @param imageService Servicio para obtener las imágenes de stand y recepcionista.
-   * @param cdr ChangeDetectorRef para forzar la detección de cambios.
-   * @param companyService Servicio para enviar la selección de stand y recepcionista al backend.
-   */
   constructor(private imageService: ImageService, private cdr: ChangeDetectorRef, private companyService: CompanyService) {
     this.standImages.set(this.imageService.getStand());
     this.receptionistImages.set(this.imageService.getReceptionist());
   }
 
-  /** Método del ciclo de vida OnInit */
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  /**
-   * Activa o desactiva la opción de subir un stand personalizado.
-   * @param event Evento de cambio del checkbox.
-   */
+  // Función para activar/desactivar la opción de subir stand personalizado
   toggleCustomStand(event: any): void {
     this.customStandEnabled = event.target.checked;
   }
 
-  /**
-   * Abre el diálogo de selección de archivo para subir un stand personalizado.
-   */
+  // Método para abrir el diálogo de selección de archivo para el stand personalizado
   uploadCustomStand(): void {
     const fileInput = document.getElementById('standUpload') as HTMLInputElement;
     fileInput.click();
   }
 
-  /**
-   * Maneja la subida del stand personalizado, verificando tipo de archivo y tamaño.
-   * @param event Evento de cambio del archivo.
-   */
+  // Manejo de la subida del stand personalizado
   handleStandUpload(event: any): void {
     const archivo = event?.target?.files?.[0];
     if (archivo && archivo.type === 'image/jpeg' && archivo.size <= 5 * 1024 * 1024) {
@@ -98,11 +71,7 @@ export class StandDesingComponent implements OnInit {
     }
   }
 
-  /**
-   * Selecciona una imagen de stand o recepcionista.
-   * @param image URL de la imagen seleccionada.
-   * @param type Tipo de imagen seleccionada: 'stand' o 'receptionist'.
-   */
+  // Método para seleccionar una imagen de stand o recepcionista
   selectImage(image: string, type: 'stand' | 'receptionist') {
     if (type === 'stand') {
       this.selectedStand.set(image);
@@ -111,21 +80,12 @@ export class StandDesingComponent implements OnInit {
     }
   }
 
-  /**
-   * Verifica si una imagen está seleccionada.
-   * @param image Imagen a verificar.
-   * @param selectedImage Imagen seleccionada actual.
-   * @returns boolean - true si la imagen está seleccionada, de lo contrario false.
-   */
+  // Verificar si una imagen está seleccionada
   isSelected(image: string, selectedImage: string | null): boolean {
     return image === selectedImage;
   }
 
-  /**
-   * Maneja el desplazamiento del carrusel de imágenes.
-   * @param type Tipo de carrusel: 'stand' o 'receptionist'.
-   * @param direction Dirección del desplazamiento: 'left' o 'right'.
-   */
+  // Método para manejar el scroll de los carruseles
   scroll(type: 'stand' | 'receptionist', direction: 'left' | 'right') {
     const container = document.querySelector(
       type === 'stand' ? '.stand-carousel' : '.receptionist-carousel'
@@ -140,9 +100,6 @@ export class StandDesingComponent implements OnInit {
     }
   }
 
-  /**
-   * Envía la selección actual de stand y recepcionista al backend.
-   */
   submitSelection() {
     let URLStand = this.selectedStand();
     let URLRecep = this.selectedReceptionist();
@@ -157,7 +114,10 @@ export class StandDesingComponent implements OnInit {
       return;
     }
   
-    const selection = { URLStand, URLRecep };
+    const selection = {
+      URLStand,
+      URLRecep
+    };
     // Llama al servicio para enviar los datos al backend
     this.companyService.addStanAndRecep(selection).subscribe(
       (response) => {
@@ -171,9 +131,7 @@ export class StandDesingComponent implements OnInit {
     );
   }
 
-  /**
-   * Limpia la selección actual de stands y recepcionistas.
-   */
+  // Método para limpiar la selección de stands y recepcionistas
   clearSelection() {
     this.selectedStand.set(null);
     this.selectedReceptionist.set(null);
@@ -181,4 +139,7 @@ export class StandDesingComponent implements OnInit {
     this.imagenCargada = false;
     this.cdr.detectChanges();  // Forzar la actualización de la vista
   }
+
+
+
 }

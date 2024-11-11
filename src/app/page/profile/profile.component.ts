@@ -17,22 +17,15 @@ import { OffersService } from '../../services/offers.service';
 import { OffersComponent } from './offers/offers.component';
 import { MatIconModule } from '@angular/material/icon';
 
-/**
- * @class ProfileComponent
- * @description La clase `ProfileComponent` es responsable de mostrar y gestionar el perfil de usuario,
- * incluyendo información de la empresa, videos asociados y ofertas. Es un componente independiente de Angular
- * diseñado para manejar características interactivas y responsivas.
- */
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, MatButtonModule, MatCardModule, MatGridListModule, FormsModule, MatIconModule],
+  imports: [CommonModule, MatDividerModule, MatButtonModule, MatCardModule, VideosComponent, MatGridListModule, FormsModule, MatIconModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
 
-  /** Mapa que asocia códigos de sectores con nombres descriptivos en español */
   sectorsMap: { [key: string]: string } = {
     tic: 'Tecnología de la Información y la Comunicación (TIC)',
     finanzas: 'Finanzas y Banca',
@@ -65,109 +58,82 @@ export class ProfileComponent {
     maritimo: 'Transporte Marítimo y Naval'
   };
 
-  /** Variables de control para la visualización de texto completo o truncado en las descripciones */
+  // Propiedades para "Descripción"
   showFullText: boolean = false;
   truncatedDescription: string = '';
   fullDescription: string = '';
+
+  // Propiedades para "Información Adicional"
   showFullAdditionalInfo: boolean = false;
   truncatedAdditionalInfo: string = '';
   fullAdditionalInfo: string = '';
 
-  /** Lista de ofertas obtenidas del servicio de ofertas */
+
+  
   offers: Offer[] = [];
   expandedOfferId: string | null = null;
-  
-  /** URL de un nuevo video ingresado por el usuario */
   newVideo: string = '';
-  /** Lista de videos en formato seguro */
   videos: SafeResourceUrl[] = [];
-  /** Signal para almacenar la lista de usuarios */
-  users = signal<any[]>([]);
-  /** Signal para almacenar los datos de la empresa */
+  users = signal<any[]>([]);  // Signal para almacenar los usuarios
   company = signal<Company | null>(null);
-  
-  /** URL de la imagen de perfil */
-  profileImageUrl: string | null = null;
-  /** Número de columnas para la cuadrícula, adaptable a tamaños de pantalla */
-  cols: number = 3;
-  /** Flag para indicar si la pantalla es pequeña */
+  profileImageUrl: string | null = null; // Aquí defines si hay una URL para la imagen o no
+  cols: number = 3; // Número de columnas predeterminado para pantallas grandes
   isSmallScreen: boolean = false;
 
-  /** Servicios inyectados necesarios para las operaciones de autenticación, empresa, videos y ofertas */
   private authService = inject(AuthService);
   private companyService = inject(CompanyService);
   private sanitazer = inject(DomSanitizer);
   private videoService = inject(VideoService);
   private offerService = inject(OffersService);
+  
 
-  /**
-   * @constructor
-   * Constructor de la clase `ProfileComponent`.
-   * Inicializa la carga de ofertas, videos y datos de la empresa.
-   * También configura una URL de imagen de perfil inicial.
-   * @param dialog Servicio de diálogo de Angular Material para abrir diálogos.
-   */
   constructor(public dialog: MatDialog) {
     this.loadOffers();
     this.loadVideos();
-    this.getCompanyData();
+    this.getCompanyData();  // Llamar al método cuando se inicializa el componente
     this.profileImageUrl = '';
   }
 
-  /**
-   * Inicializa el componente y configura columnas responsivas y el tamaño de pantalla.
-   */
   ngOnInit():void{
     this.loadOffers();
     this.loadVideos();
-    this.setGridCols();
+    this.setGridCols(); //Establece el número de columnas al cargar el componente
     this.checkScreenSize();
   }
   
-  /**
-   * Alterna el estado de visualización entre texto completo y truncado.
-   */
+  // Alterna el estado de mostrar el texto completo
   toggleText() {
     this.showFullText = !this.showFullText;
   }
-
-  /**
-   * Alterna entre mostrar texto completo o truncado en "Información Adicional".
-   */
+  // Alterna entre mostrar texto completo o truncado para "Información Adicional"
   toggleAdditionalInfo() {
     this.showFullAdditionalInfo = !this.showFullAdditionalInfo;
   }
 
-  /**
-   * @param code Código del sector.
-   * @returns El nombre completo del sector en español.
-   */
+  // Método para recuperar el nombre completo del sector
   getSectorName(code: string | undefined): string {
     return this.sectorsMap[code || ''] || 'Sector no definido';
   }
 
-  /**
-   * Obtiene los datos de la empresa desde el servicio `CompanyService`.
-   * Establece las descripciones completas y truncadas para mostrar en el perfil.
-   */
+  // Método para obtener los datos de la empresa y configurar descripciones
   getCompanyData() {
     this.companyService.getCompany().subscribe({
       next: (data) => {
         this.company.set(data);
+
+        // Establecer descripciones completa y truncada
         this.fullDescription = data.description || '';
-        this.truncatedDescription = this.truncateHTML(this.fullDescription, 100);
+        this.truncatedDescription = this.truncateHTML(this.fullDescription, 100); // Limitar a 100 caracteres o menos si quieres
+
+        // Configurar "Información Adicional"
         this.fullAdditionalInfo = data.additional_information || '';
-        this.truncatedAdditionalInfo = this.truncateHTML(this.fullAdditionalInfo, 100);
+        this.truncatedAdditionalInfo = this.truncateHTML(this.fullAdditionalInfo, 100); // Limitar a 100 caracteres
       },
       error: (error) => console.error('Error al obtener la información de la empresa', error)
     });
   }
 
-  /**
-   * @param html Cadena de HTML a truncar.
-   * @param limit Límite de caracteres.
-   * @returns Cadena truncada en HTML manteniendo etiquetas válidas.
-   */
+  // Función para truncar HTML y mantener etiquetas válidas (ya creada antes)
   truncateHTML(html: string, limit: number): string {
     const div = document.createElement("div");
     div.innerHTML = html;
@@ -190,10 +156,12 @@ export class ProfileComponent {
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         const element = node as HTMLElement;
         truncated += `<${element.tagName.toLowerCase()}${getAttributes(element)}>`;
+
         for (let i = 0; i < element.childNodes.length; i++) {
           traverse(element.childNodes[i]);
           if (charCount >= limit) break;
         }
+
         truncated += `</${element.tagName.toLowerCase()}>`;
       }
     }
@@ -208,53 +176,60 @@ export class ProfileComponent {
     return truncated;
   }
 
-  /**
-   * @returns El rol del usuario ('admin', 'co' o una cadena vacía).
-   */
+
+
+  // Verifica si el usuario es Admin o CO
   isRol(): string {
     const tokenData = this.authService.decodeToken();
-    return tokenData?.rol === 'admin' ? 'admin' : tokenData?.rol === 'co' ? 'co' : '';
+
+    if (tokenData?.rol === 'admin') {
+      return 'admin';
+    } else if (tokenData?.rol === 'co') {
+      return 'co';
+    }
+
+    return ''; // Devuelve una cadena vacía si no es ni 'admin' ni 'co'
   }
 
-  /**
-   * Desplaza la vista hacia la sección de información del perfil.
-   */
   scrollToSection() {
     const section = document.getElementById('informacion-section');
-    section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
-  /**
-   * Carga videos desde el backend y los sanitiza.
-   */
+  //PARTE DE LOS VIDEOS
+
+  // Cargar videos desde el backend
   loadVideos() {
     this.videoService.getVideos().subscribe(data => {
-      this.videos = data.map(video => video.url 
-        ? this.sanitazer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${video.url}`) 
-        : null).filter((video): video is SafeResourceUrl => video !== null);
+      this.videos = data
+        .map(video => {
+          if (video.url) {
+            return this.sanitazer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${video.url}`);
+          } else {
+            console.error("URL del video es inválida:", video);
+            return null;
+          }
+        })
+        .filter((video): video is SafeResourceUrl => video !== null); // Filtra valores nulos
     });
   }
-
-  /**
-   * @param url URL del video de YouTube.
-   * @returns ID del video o `null` si no es válido.
-   */
+  // Obtener el ID del video de YouTube
   getYouTubeVideoId(url: string): string | null {
     const regExp = /^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
-    return match && match[2].length === 11 ? match[2] : null;
+    return (match && match[2].length === 11) ? match[2] : null;
   }
 
-  /**
-   * Agrega un nuevo video si la URL es válida.
-   */
+  // Agregar una nueva URL de video
   addVideo() {
     if (this.newVideo) {
-      const videoId = this.getYouTubeVideoId(this.newVideo);
+      const videoId = this.getYouTubeVideoId(this.newVideo);  // Extraer el ID
       if (videoId) {
         this.videoService.addVideo(videoId).subscribe(() => {
           this.videos.push(this.sanitizeUrl(`https://www.youtube.com/embed/${videoId}`));
-          this.newVideo = '';
+          this.newVideo = ''; // Limpiar el campo de texto
         }, error => {
           alert('Error al agregar el video.');
         });
@@ -264,45 +239,49 @@ export class ProfileComponent {
     }
   }
 
-  /**
-   * @param url URL del video.
-   * @returns URL sanitizada segura para el recurso.
-   */
+
+  // Sanitizar la URL
   sanitizeUrl(url: string): SafeResourceUrl {
     return this.sanitazer.bypassSecurityTrustResourceUrl(url);
   }
 
-  /**
-   * Abre un diálogo para añadir un nuevo video.
-   */
   openVideoDialog(): void {
-    const dialogRef = this.dialog.open(VideosComponent, { width: '300px' });
+    const dialogRef = this.dialog.open(VideosComponent, {
+      width: '300px',
+    });
+
     dialogRef.afterClosed().subscribe(videoUrl => {
-      if (videoUrl) this.addVideo();
+      if (videoUrl) {
+        this.addVideo();
+      }
     });
   }
 
-  /** Cambia el número de columnas al redimensionar la pantalla y verifica el tamaño de la misma. */
+  //ajustes responsive
+
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.setGridCols();
+    this.setGridCols(); // Cambia el número de columnas al redimensionar la pantalla
     this.checkScreenSize();
   }
 
-  /** Configura el tamaño de pantalla como "pequeña" si el ancho es menor o igual a 768px. */
   checkScreenSize(): void {
-    this.isSmallScreen = window.innerWidth <= 768;
+    this.isSmallScreen = window.innerWidth <= 768; // Define como "pantalla pequeña" el ancho menor o igual a 600px
   }
 
-  /** Establece el número de columnas de la cuadrícula según el ancho de la ventana. */
   setGridCols() {
     const width = window.innerWidth;
-    this.cols = width <= 480 ? 1 : width <= 768 ? 2 : 3;
+    if (width <= 480) {
+      this.cols = 1; // 1 columna en móviles
+    } else if (width <= 768) {
+      this.cols = 2; // 2 columnas en tablets
+    } else {
+      this.cols = 3; // 3 columnas en pantallas grandes
+    }
   }
 
-  /**
-   * Carga las ofertas desde el backend.
-   */
+  //Ofertas
+
   loadOffers(){
     this.offerService.getOffersById().subscribe(
       (data) => {
@@ -315,47 +294,32 @@ export class ProfileComponent {
     );
   }
 
-  /**
-   * Alterna la visualización de los detalles de una oferta.
-   * @param offerId ID de la oferta.
-   */
   toggleOfferDetails(offerId: string) {
     this.expandedOfferId = this.expandedOfferId === offerId ? null : offerId;
   }
 
-  /**
-   * Cierra los detalles de una oferta.
-   * @param event Evento de clic.
-   */
   closeOfferDetails(event: Event) {
     event.stopPropagation();
     this.expandedOfferId = null;
   }
 
-  /**
-   * Elimina una oferta del backend.
-   * @param offerId ID de la oferta.
-   */
   deleteOffer(offerId: string) {
     this.offerService.deleterOffer(offerId).subscribe(
       (response) => {
         console.log('Oferta eliminada:', response);
         this.loadOffers();
-      }, 
-      (error) => {
+      }, (error) =>{
         console.error('Error al eliminar oferta:', error);
       }
     );
   }
 
-  /**
-   * Agrega una nueva oferta al backend.
-   * @param offerData Datos de la oferta a agregar.
-   */
+  // Envía los datos del formulario al backend usando el servicio
   addOffer(offerData: Offer) {
     this.offerService.addOffer(offerData).subscribe(
       (response) => {
         console.log('Oferta añadida con éxito:', response);
+        // Puedes agregar aquí lógica adicional, como actualizar la lista de ofertas
         this.loadOffers();
       },
       (error) => {
@@ -364,13 +328,17 @@ export class ProfileComponent {
     );
   }
 
-  /**
-   * Abre un diálogo para añadir una nueva oferta.
-   */
   openOfferDialog(): void {
-    const dialogRef = this.dialog.open(OffersComponent, { width: '400px' });
+    const dialogRef = this.dialog.open(OffersComponent, {
+      width: '400px'
+    });
+
     dialogRef.afterClosed().subscribe(offerData => {
-      if (offerData) this.addOffer(offerData);
+      if (offerData) {
+        this.addOffer(offerData); // Llama a una función para procesar los datos de la oferta
+      }
     });
   }
+
+
 }
