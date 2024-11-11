@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 /**
@@ -10,57 +11,29 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [ FormsModule ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  /** 
-   * @property {number} companiesCount - Contador de empresas mostrado en la página.
-   */
+  // Contadores existentes
   companiesCount = 0;
-  
-  /** 
-   * @property {number} usersCount - Contador de usuarios mostrado en la página.
-   */
   usersCount = 0;
-  
-  /** 
-   * @property {number} visitsCount - Contador de visitas mostrado en la página.
-   */
   visitsCount = 0;
 
-  /**
-   * @private
-   * @property {number} companiesTarget - Objetivo final de empresas.
-   */
-  private companiesTarget = 50;
+  private companiesTarget = 50; // Objetivo de empresas
+  private usersTarget = 100;    // Objetivo de usuarios
+  private visitsTarget = 7;     // Objetivo de visitas
 
-  /**
-   * @private
-   * @property {number} usersTarget - Objetivo final de usuarios.
-   */
-  private usersTarget = 100;
+  // Nuevo contador de cuenta atrás
+  countdownTime: number = 259200; // Duración en segundos (ej. 5 minutos)
+  countdownDisplay: string = '';
+  private countdownInterval: any;
 
-  /**
-   * @private
-   * @property {number} visitsTarget - Objetivo final de visitas.
-   */
-  private visitsTarget = 7;
-
-  /**
-   * @constructor
-   * @param {Router} router - Servicio de enrutamiento de Angular para manejar la navegación.
-   */
   constructor(private router: Router) {}
 
-  /**
-   * @method navigateToSection
-   * @description Navega a una sección específica de la página, desplazándose suavemente hacia el elemento
-   * identificado por el `sectionId`.
-   * @param {string} sectionId - ID de la sección a la que se debe desplazar.
-   */
-  navigateToSection(sectionId: string): void {
+  // Navega a una sección específica de la página
+  navigateToSection(sectionId: string) {
     this.router.navigate([], { fragment: sectionId }).then(() => {
       const element = document.getElementById(sectionId);
       if (element) {
@@ -69,40 +42,63 @@ export class HomeComponent {
     });
   }
 
-  /**
-   * @method ngOnInit
-   * @description Método del ciclo de vida de Angular que se llama al inicializar el componente.
-   * Inicia los contadores.
-   */
-  ngOnInit(): void {
+  ngOnInit() {
     this.startCounting();
+    this.startCountdown(); // Iniciar el contador de cuenta atrás
   }
 
-  /**
-   * @method startCounting
-   * @description Inicia el conteo progresivo para cada contador (companies, users, visits).
-   */
-  startCounting(): void {
+  ngOnDestroy() {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
+  }
+
+  // Inicia los contadores existentes
+  startCounting() {
     this.incrementCounter('companiesCount', this.companiesTarget, 10);
     this.incrementCounter('usersCount', this.usersTarget, 10);
     this.incrementCounter('visitsCount', this.visitsTarget, 1);
   }
 
-  /**
-   * @method incrementCounter
-   * @description Incrementa el valor de un contador de forma progresiva hasta alcanzar su objetivo.
-   * @param {'companiesCount' | 'usersCount' | 'visitsCount'} counter - El contador a incrementar.
-   * @param {number} target - El objetivo final que debe alcanzar el contador.
-   * @param {number} interval - Intervalo de tiempo en milisegundos entre cada incremento.
-   */
-  incrementCounter(counter: 'companiesCount' | 'usersCount' | 'visitsCount', target: number, interval: number): void {
+  incrementCounter(counter: 'companiesCount' | 'usersCount' | 'visitsCount', target: number, interval: number) {
     const intervalId = setInterval(() => {
       if (this[counter] < target) {
-        this[counter] += Math.ceil(target / 100); // Incremento progresivo
+        this[counter] += Math.ceil(target / 100); // Aumenta en partes del 1% del objetivo
       } else {
-        this[counter] = target; // Fija el contador en el objetivo
+        this[counter] = target; // Fija al objetivo final
         clearInterval(intervalId);
       }
     }, interval);
+  }
+
+  // Nuevo contador de cuenta atrás
+  startCountdown(): void {
+    this.updateCountdownDisplay();
+    this.countdownInterval = setInterval(() => {
+      if (this.countdownTime > 0) {
+        this.countdownTime--;
+        this.updateCountdownDisplay();
+      } else {
+        clearInterval(this.countdownInterval);
+      }
+    }, 1000);
+  }
+
+  updateCountdownDisplay(): void {
+    const days = Math.floor(this.countdownTime / (24 * 3600));
+    const hours = Math.floor((this.countdownTime % (24 * 3600)) / 3600);
+    const minutes = Math.floor((this.countdownTime % 3600) / 60);
+    const seconds = this.countdownTime % 60;
+    
+    this.countdownDisplay = `${this.pad(days)}d ${this.pad(hours)}h ${this.pad(minutes)}m ${this.pad(seconds)}s`;
+  }
+
+  pad(num: number): string {
+    return num < 10 ? '0' + num : num.toString();
+  }
+
+  onSubmitContactForm() {
+    alert('Formulario de contacto enviado correctamente');
+    // Aquí puedes implementar la lógica para enviar los datos a un backend
   }
 }
