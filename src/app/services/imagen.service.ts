@@ -13,7 +13,9 @@ export class ImageService {
     './assets/stand4.png',
     './assets/stand6.png',
     './assets/stand7.png',
-    './assets/stand8.png'
+    './assets/stand8.png',
+    './assets/stand9.png',
+    './assets/stand10.png'
   ]);
 
   receptionistImages = signal<string[]>([
@@ -31,7 +33,9 @@ export class ImageService {
       './assets/stand4.png',
       './assets/stand6.png',
       './assets/stand7.png',
-      './assets/stand8.png'
+      './assets/stand8.png',
+      './assets/stand9.png',
+      './assets/stand10.png'
     ];
     return of(images);
   }
@@ -55,14 +59,39 @@ export class ImageService {
   getStandConfig(stand: string): any {
     const configs: Record<string, any> = {
       './assets/stand1.png': {
-        receptionistPosition: { x: 0.6, y: 0.355  }, // Ajusta según las proporciones relativas del círculo
+        receptionistPosition: { x: 0.6, y: 0.355 }, // Ajusta según las proporciones relativas del círculo
         receptionistScale: 0.1, // Escala relativa
         receptionistOpacity: 1, // Opacidad
+        logoPosition: {
+          x: 0.3,
+          y: 0.63,
+          width: 0.4,
+          height: 0.1
+        },
+        bannerPosition: {
+          x: 0.35,
+          y: 0.370,
+          width: 0.308,
+          height: 0.155,
+        },
+
       },
       './assets/stand2.png': {
         receptionistPosition: { x: 0.6, y: 0.349 }, // Relativo al canvas
         receptionistScale: 0.1, // Tamaño relativo
-        receptionistOpacity: 1, // Opacidad
+        receptionistOpacity: 1,
+        logoPosition: {
+          x: 0.35,
+          y: 0.63,
+          width: 0.4,
+          height: 0.1
+        },
+        bannerPosition: {
+          x: 0.43,
+          y: 0.302,
+          width: 0.235,
+          height: 0.235,
+        }
       },
       './assets/stand3.png': {
         receptionistPosition: { x: 0.2, y: 0.378 }, // Relativo al canvas
@@ -85,6 +114,16 @@ export class ImageService {
         receptionistOpacity: 1, // Opacidad
       },
       './assets/stand8.png': {
+        receptionistPosition: { x: 0.425, y: 0.372 }, // Relativo al canvas
+        receptionistScale: 0.08, // Tamaño relativo
+        receptionistOpacity: 1, // Opacidad
+      },
+      './assets/stand9.png': {
+        receptionistPosition: { x: 0.425, y: 0.372 }, // Relativo al canvas
+        receptionistScale: 0.08, // Tamaño relativo
+        receptionistOpacity: 1, // Opacidad
+      },
+      './assets/stand10.png': {
         receptionistPosition: { x: 0.425, y: 0.372 }, // Relativo al canvas
         receptionistScale: 0.08, // Tamaño relativo
         receptionistOpacity: 1, // Opacidad

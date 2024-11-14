@@ -5,7 +5,7 @@
 
     <div class="row">
       <!-- Incluye el componente BannerComponent dentro de StandDesingComponent -->
-      <app-banner-root [canUploadFiles]="canUploadFiles()"></app-banner-root>
+      <app-banner-root [canUploadFiles]="canUploadFiles()" (filesUploaded)="updateFiles($event)"></app-banner-root>
       <!-- Carrusel del stand -->
        <div class="col-12">
         <div class="row">

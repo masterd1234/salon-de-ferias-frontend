@@ -65,28 +65,84 @@
       <mat-card class="mt-2">
         <mat-card-header class="card-header">
           <mat-card-title>Banner</mat-card-title>
-          <!-- Botón para añadir el banner, deshabilitado si canUploadFiles es falso -->
+          <!-- Verifica si no hay un archivo de banner seleccionado -->
+          @if(!bannerFileName){
+          <!-- Botón para añadir el banner -->
           <div class="action-button ml-auto d-flex">
-            <input type="file" #bannerInput (change)="onFileChange($event, 'banner')" class="file-input" [disabled]="!canUploadFiles" />
             <button type="button" class="button button--primary" (click)="bannerInput.click()" [disabled]="!canUploadFiles" mat-flat-button>
               <i class="fa-solid fa-upload"></i>
             </button>
+            <!-- Input de archivo oculto para subir el banner -->
+            <input type="file" #bannerInput (change)="onFileChange($event, 'banner')" class="file-input" />
           </div>
+          }@else{
+          <!-- Opciones de editar o eliminar el banner ya seleccionado -->
+          <div class="action-button ml-auto d-flex">
+            <button mat-flat-button class="button button--primary delete-button" color="warn" mat-flat-button>
+              <i class="fa-solid fa-trash"></i>
+            </button>
+            <button mat-flat-button class="button button--primary" (click)="bannerInput.click()" mat-flat-button>
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <input type="file" #bannerInput (change)="onFileChange($event, 'banner')" class="file-input" />
+          </div>
+          }
         </mat-card-header>
+
+        <!-- Información del archivo seleccionado -->
+        @if (bannerFileName) {
+        <mat-divider style="width: 100%;"></mat-divider>
+        <mat-card-content class="mt-2">
+          <div class="file-info">
+            <mat-card-title>
+              <i class="fa-regular fa-image"></i>
+            </mat-card-title>
+            <span class="file-name">{{ bannerFileName }}</span>
+          </div>
+        </mat-card-content>
+        }
       </mat-card>
 
       <!-- Subida de Póster -->
       <mat-card class="mt-2">
         <mat-card-header class="card-header">
           <mat-card-title>Poster</mat-card-title>
-          <!-- Botón para añadir el póster, deshabilitado si canUploadFiles es falso -->
+          <!-- Verifica si no hay un archivo de banner seleccionado -->
+          @if(!posterFileName){
+          <!-- Botón para añadir el banner -->
           <div class="action-button ml-auto d-flex">
-            <input type="file" #posterInput (change)="onFileChange($event, 'poster')" class="file-input" [disabled]="!canUploadFiles" />
             <button type="button" class="button button--primary" (click)="posterInput.click()" [disabled]="!canUploadFiles" mat-flat-button>
               <i class="fa-solid fa-upload"></i>
             </button>
+            <!-- Input de archivo oculto para subir el banner -->
+            <input type="file" #posterInput (change)="onFileChange($event, 'poster')" class="file-input" />
           </div>
+          }@else{
+          <!-- Opciones de editar o eliminar el banner ya seleccionado -->
+          <div class="action-button ml-auto d-flex">
+            <button mat-flat-button class="button button--primary delete-button" color="warn" mat-flat-button>
+              <i class="fa-solid fa-trash"></i>
+            </button>
+            <button mat-flat-button class="button button--primary" (click)="posterInput.click()" mat-flat-button>
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <input type="file" #posterInput (change)="onFileChange($event, 'poster')" class="file-input" />
+          </div>
+          }
         </mat-card-header>
+
+        <!-- Información del archivo seleccionado -->
+        @if (posterFileName) {
+        <mat-divider style="width: 100%;"></mat-divider>
+        <mat-card-content class="mt-2">
+          <div class="file-info">
+            <mat-card-title>
+              <i class="fa-regular fa-image"></i>
+            </mat-card-title>
+            <span class="file-name">{{ posterFileName }}</span>
+          </div>
+        </mat-card-content>
+        }
       </mat-card>
 
       <!-- Botón de Enviar -->
@@ -94,26 +150,5 @@
         <button mat-raised-button color="primary" type="submit" class="button button--primary mt-2" mat-flat-button>Enviar</button>
       </div>
     </mat-card-content>
-
-    <!-- Sección de Vista Previa y Ajuste (opcional)
-    <div class="image-container" *ngIf="logoUrl">
-      <h4>Ajuste del Logo</h4>
-      <div class="image-viewport">
-        <img [src]="logoUrl" alt="Logo Preview" class="resizable-image" [style.transform]="logoTransform" 
-             (wheel)="onZoom($event)" (mousedown)="startDragging($event)" />
-      </div>
-    </div>
-
-    <div *ngIf="bannerUrl" class="preview-tab">
-      <h4>Vista previa del Banner</h4>
-      <img [src]="bannerUrl" alt="Banner Preview" class="preview-img" />
-    </div>
-
-    <div *ngIf="posterUrl" class="preview-tab">
-      <h4>Vista previa del Póster</h4>
-      <img [src]="posterUrl" alt="Poster Preview" class="preview-img" />
-    </div>
-    -->
-
   </form>
 </mat-card>

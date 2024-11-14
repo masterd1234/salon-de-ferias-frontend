@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -16,6 +16,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 })
 export class BannerComponent implements OnInit {
   @Input() canUploadFiles: boolean = false;
+  @Output() filesUploaded = new EventEmitter<{ logo: string | null, banner: string | null, poster: string | null }>();
   formBanner!: FormGroup;
   bannerUrl: string | null = null;
   posterUrl: string | null = null;
@@ -56,20 +57,22 @@ export class BannerComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-
+  
       if (file.type !== 'image/png') {
         alert("Por favor sube solo archivos en formato PNG.");
         return;
       }
-
+  
       if (file.size > 5 * 1024 * 1024) {
         alert("El archivo no debe superar los 5 MB.");
         return;
       }
-
+  
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
+  
+        // Actualiza la URL del archivo correspondiente
         if (type === 'banner') {
           this.bannerUrl = result;
           this.bannerFileName = file.name;
@@ -80,6 +83,14 @@ export class BannerComponent implements OnInit {
           this.logoUrl = result;
           this.logoFileName = file.name;
         }
+  
+        // Emitir el estado actual al padre
+        this.filesUploaded.emit({
+          logo: this.logoUrl,
+          banner: this.bannerUrl,
+          poster: this.posterUrl,
+        });
+  
         this.cdr.detectChanges();
       };
       reader.readAsDataURL(file);
