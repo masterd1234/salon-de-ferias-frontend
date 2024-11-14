@@ -1,0 +1,19 @@
+<div *ngIf="timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0 else finished" class="countdown-container">
+  <div class="countdown">
+    <div class="time-box">
+      <span class="time">{{ timeLeft.days }}</span>
+      <span class="label">días</span>
+    </div>
+    <div class="time-box">
+      <span class="time">{{ timeLeft.hours }}</span>
+      <span class="label">horas</span>
+    </div>
+    <div class="time-box">
+      <span class="time">{{ timeLeft.minutes }}</span>
+      <span class="label">minutos</span>
+    </div>
+  </div>
+  </div>
+  <ng-template #finished>
+    <p>¡La cuenta regresiva ha terminado!</p>
+  </ng-template>

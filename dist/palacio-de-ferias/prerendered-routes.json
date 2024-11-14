@@ -1,6 +1,5 @@
 {
   "routes": [
-    "/",
     "/admin-dashboard",
     "/company-dashboard",
     "/home",

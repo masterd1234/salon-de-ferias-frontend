@@ -9,13 +9,14 @@ import { CompanyService } from '../../services/company.service';
 import { Company } from '../../../models/company.model';
 import { VideosComponent } from "./videos/videos.component";
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { VideoService } from '../../services/videos.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Offer } from '../../../models/offers.model';
 import { OffersService } from '../../services/offers.service';
 import { OffersComponent } from './offers/offers.component';
 import { MatIconModule } from '@angular/material/icon';
+import { EditFormComponent } from './edit-form/edit-form.component';
 
 /**
  * @class ProfileComponent
@@ -26,7 +27,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, MatButtonModule, MatCardModule, MatGridListModule, FormsModule, MatIconModule],
+  imports: [CommonModule, MatDividerModule, MatButtonModule, MatCardModule, MatGridListModule, ReactiveFormsModule, MatIconModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -93,6 +94,9 @@ export class ProfileComponent {
   /** Flag para indicar si la pantalla es pequeña */
   isSmallScreen: boolean = false;
 
+    // Formulario reactivo para la URL del video
+    videoForm: FormGroup;
+
   /** Servicios inyectados necesarios para las operaciones de autenticación, empresa, videos y ofertas */
   private authService = inject(AuthService);
   private companyService = inject(CompanyService);
@@ -107,7 +111,10 @@ export class ProfileComponent {
    * También configura una URL de imagen de perfil inicial.
    * @param dialog Servicio de diálogo de Angular Material para abrir diálogos.
    */
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private fb: FormBuilder) {
+    this.videoForm = this.fb.group({
+      newVideo: ['', [Validators.required, Validators.pattern(/^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/)]]
+    });
     this.loadOffers();
     this.loadVideos();
     this.getCompanyData();
@@ -160,6 +167,42 @@ export class ProfileComponent {
         this.truncatedAdditionalInfo = this.truncateHTML(this.fullAdditionalInfo, 100);
       },
       error: (error) => console.error('Error al obtener la información de la empresa', error)
+    });
+  }
+
+  openEditDialog(): void {
+    const companyData = this.company();
+    if (!companyData) {
+      console.error('No se pudieron cargar los datos de la empresa');
+      return;
+    } // Datos actuales de la empresa
+    const formGroup = this.fb.group({
+      name: [companyData?.name || '', Validators.required],
+      description: [companyData?.description || '', Validators.required],
+      additional_information: [companyData?.additional_information || ''],
+      email: [companyData?.email || '', Validators.email],
+      sector: [companyData?.sector || ''],
+      additionalButtonTitle: [''], // Campo para título de enlace adicional
+        additionalButtonLink: [''],
+      links: this.fb.array(companyData?.link || []),
+    });
+
+    const dialogRef = this.dialog.open(EditFormComponent, {
+      width: '500px',
+      height: '90vh',
+      data: { form: formGroup },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.saveCompanyData(result); // Guardar datos actualizados
+      }
+    });
+  }
+
+  saveCompanyData(companyData: Company): void {
+    this.companyService.updateCompany(companyData).subscribe(() => {
+      this.getCompanyData(); // Refrescar los datos
     });
   }
 
@@ -249,12 +292,12 @@ export class ProfileComponent {
    * Agrega un nuevo video si la URL es válida.
    */
   addVideo() {
-    if (this.newVideo) {
-      const videoId = this.getYouTubeVideoId(this.newVideo);
+    if (this.videoForm.valid) {
+      const videoId = this.getYouTubeVideoId(this.videoForm.value.newVideo);
       if (videoId) {
         this.videoService.addVideo(videoId).subscribe(() => {
           this.videos.push(this.sanitizeUrl(`https://www.youtube.com/embed/${videoId}`));
-          this.newVideo = '';
+          this.videoForm.reset();
         }, error => {
           alert('Error al agregar el video.');
         });
@@ -307,7 +350,6 @@ export class ProfileComponent {
     this.offerService.getOffersById().subscribe(
       (data) => {
         this.offers = data;
-        console.log('Ofertas obtenidas:', this.offers);
       },
       (error) => {
         console.error('Error al obtener ofertas:', error);

@@ -18,11 +18,19 @@
 <!-- Sección de bienvenida -->
 <div class="welcome-section">
   <div class="welcome-text">
-    <h2>Bienvenidos a la Feria Virtual</h2>
-    <p>Texto de bienvenida o slogan aquí.</p>
+
+    <h2>LA FERIA VIRTUAL EMPIEZA EN:</h2>
+    <div class="countdown-timer">
+      <app-countdown-timer></app-countdown-timer>
+
+    </div>
   </div>
 </div>
-
+  <!-- Sección de logos -->
+  <div class="logos-container">
+    <img src="assets/logo_FM.png" alt="Logo 1" />
+    <img src="assets/logo_MD.png" alt="Logo 2" />
+  </div>
 <!-- Nueva sección sobre la Feria -->
 <div id="acerca" class="about-fair">
   <h2>Acerca de la Feria</h2>
@@ -55,7 +63,7 @@
 
 <!--texto para las empresas-->
 <div id="empresas" class="about-fair">
-  <h2>sobre las empresas</h2>
+  <h2>Sobre las empresas</h2>
   <p>La feria es un evento que reúne a empresas líderes en el sector y ofrece una plataforma para conectar con
     profesionales, explorar oportunidades de trabajo y conocer las últimas tendencias de la industria.</p>
   <p>Durante el evento, podrás asistir a diversas charlas, interactuar con representantes de empresas, y descubrir
@@ -78,24 +86,6 @@
   </div>
 </div>
 
-
-<!--texto para las empresas-->
-<div class="about-fair">
-  <p>La feria es un evento que reúne a empresas líderes en el sector y ofrece una plataforma para conectar con
-    profesionales, explorar oportunidades de trabajo y conocer las últimas tendencias de la industria.</p>
-  <p>Durante el evento, podrás asistir a diversas charlas, interactuar con representantes de empresas, y descubrir
-    productos y servicios innovadores.</p>
-</div>
-
-
-<!-- Sección de logos -->
-<div class="logos-container">
-  <img src="assets/logo_FM.png" alt="Logo 1" />
-  <img src="assets/logo_MD.png" alt="Logo 2" />
-  <img src="assets/logo.png" alt="Logo 3" />
-</div>
-
-
 <!-- Sección de servicios -->
 <div id="contacto" class="content-section">
   <h2 class="bloques">¿Qué obtienes al visitar nuestra feria?</h2>
@@ -116,3 +106,38 @@
     </div>
   </div>
 </div>
+
+
+
+<!-- Nueva sección de contacto -->
+<div id="contact" class="contact-section">
+  <h2>Contacto</h2>
+  <p>¿Tienes alguna pregunta o comentario? ¡Nos encantaría saber de ti!</p>
+  <!-- Cambia ngForm a formGroup -->
+  <form [formGroup]="contactForm" (ngSubmit)="onSubmitContactForm()" class="contact-form">
+    <div class="form-group">
+      <label for="name">Nombre</label>
+      <input type="text" id="name" formControlName="name" placeholder="Tu nombre">
+      <div *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+        <small>El nombre es requerido.</small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email">Correo electrónico</label>
+      <input type="email" id="email" formControlName="email" placeholder="Tu correo electrónico">
+      <div *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+        <small>Correo electrónico no válido.</small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="message">Mensaje</label>
+      <textarea id="message" formControlName="message" placeholder="Tu mensaje"></textarea>
+      <div *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
+        <small>El mensaje es requerido.</small>
+      </div>
+    </div>
+    <button type="submit" [disabled]="contactForm.invalid">Enviar</button>
+  </form>
+
+</div>
+

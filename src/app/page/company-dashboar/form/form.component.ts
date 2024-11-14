@@ -1,5 +1,5 @@
 
-import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, AfterViewInit, Inject, PLATFORM_ID, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { isPlatformBrowser } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
@@ -36,7 +36,8 @@ export class FormComponent implements AfterViewInit {
   /** Mensaje de error si falla el envío del formulario */
   errorMessage: string = '';
   /** Grupo de formulario que contiene todos los campos de la empresa */
-  companyForm: FormGroup;
+  companyForm!: FormGroup;
+  @Input() form!: FormGroup; // Aceptar un FormGroup externo
   /** Lista de archivos subidos */
   uploadedFiles: File[] = [];
   /** Estado de envío para deshabilitar el botón de enviar mientras se procesa */
@@ -51,18 +52,29 @@ export class FormComponent implements AfterViewInit {
    * @param companyService Servicio para realizar la petición de envío
    */
   constructor(@Inject(PLATFORM_ID) private platformId: any, private fb: FormBuilder, private companyService: CompanyService) {
-    this.companyForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      description: ['', Validators.required],
-      additional_information: [''],
-      email:  [''],
-      sector: [''],
-      additionalButtonTitle: [''],  // Campo para el título del enlace temporal
-      additionalButtonLink: [''],   // Campo para el link temporal
-      links: this.fb.array([])      // Arreglo de enlaces adicionales
-    });
   }
 
+
+  ngOnInit(): void {
+     // Si no se proporciona un formulario desde el padre, inicializa el formulario interno
+     if (!this.form) {
+      this.companyForm = this.fb.group({
+        name: ['', [Validators.required, Validators.minLength(3)]],
+        description: ['', Validators.required],
+        additional_information: [''],
+        email: ['', Validators.email],
+        sector: [''],
+        additionalButtonTitle: [''], // Campo para título de enlace adicional
+        additionalButtonLink: [''],  // Campo para link adicional
+        links: this.fb.array([])     // Arreglo de enlaces adicionales
+      });
+    }
+  }
+
+    // Getter para acceder al FormGroup activo (ya sea externo o interno)
+    get activeForm(): FormGroup {
+      return this.form || this.companyForm;
+    }
   /**
    * Ciclo de vida - ngAfterViewInit. Carga el editor solo en el navegador.
    */
@@ -87,7 +99,7 @@ export class FormComponent implements AfterViewInit {
    * @returns FormArray de enlaces adicionales en el formulario
    */
   get links(): FormArray {
-    return this.companyForm.get('links') as FormArray;
+    return this.activeForm.get('links') as FormArray;
   }
 
   /**
@@ -95,15 +107,15 @@ export class FormComponent implements AfterViewInit {
    * @returns boolean - true si los campos de enlace están válidos, de lo contrario false
    */
   canAddLink(): boolean {
-    return (this.companyForm.get('additionalButtonTitle')?.valid ?? false) && (this.companyForm.get('additionalButtonLink')?.valid ?? false);
+    return (this.activeForm.get('additionalButtonTitle')?.valid ?? false) && (this.activeForm.get('additionalButtonLink')?.valid ?? false);
   }
 
   /**
    * Añade un nuevo enlace al FormArray de enlaces si el título y el link son válidos.
    */
   addLink() {
-    const title = this.companyForm.get('additionalButtonTitle')?.value;
-    const link = this.companyForm.get('additionalButtonLink')?.value;
+    const title = this.activeForm.get('additionalButtonTitle')?.value;
+    const link = this.activeForm.get('additionalButtonLink')?.value;
 
     if (title && link) {
       const linkGroup = this.fb.group({
@@ -112,8 +124,8 @@ export class FormComponent implements AfterViewInit {
       });
 
       this.links.push(linkGroup);
-      this.companyForm.get('additionalButtonTitle')?.reset();
-      this.companyForm.get('additionalButtonLink')?.reset();
+      this.activeForm.get('additionalButtonTitle')?.reset();
+      this.activeForm.get('additionalButtonLink')?.reset();
     }
   }
 
@@ -156,8 +168,8 @@ export class FormComponent implements AfterViewInit {
    * Maneja los mensajes de éxito y error.
    */
   submitForm() {
-    if (this.companyForm.valid) {
-      const formData = this.companyForm.value;
+    if (this.activeForm.valid) {
+      const formData = this.activeForm.value;
 
       // Eliminar los campos nulos si no se necesitan
       if (!formData.additionalButtonTitle) delete formData.additionalButtonTitle;

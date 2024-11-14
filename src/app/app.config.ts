@@ -2,7 +2,6 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
-import { getAuth, provideAuth } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /**
@@ -32,9 +31,5 @@ export const appConfig: ApplicationConfig = {
      */
     provideHttpClient(withFetch()),
 
-    /**
-     * @description Proveedor del servicio de autenticación de Firebase, configurado para autenticar usuarios.
-     */
-    provideAuth(() => getAuth())
   ]
 };

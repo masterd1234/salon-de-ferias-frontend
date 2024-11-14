@@ -1,125 +1,202 @@
-/**
- * StandDesingComponent - Este componente permite a los usuarios seleccionar y personalizar el diseño de un stand
- * en una feria virtual, incluyendo la selección de una imagen de stand y un recepcionista.
- * Incluye funcionalidades para la carga de imágenes personalizadas y la vista previa en tiempo real.
- */
-import { Component, computed, signal } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { ImageService } from '../../../services/imagen.service';
-import { ReactiveFormsModule } from '@angular/forms';
 import { CompanyService } from '../../../services/company.service';
-import { BannerComponent } from "../../banner/banner.component";
+import { ChangeDetectorRef } from '@angular/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BannerComponent } from '../../banner/banner.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 
+/**
+ * Componente `StandDesingComponent`
+ * Permite a los usuarios seleccionar y personalizar el diseño de un stand
+ * en una feria virtual, incluyendo la selección de una imagen de stand y una recepcionista.
+ * Además, incluye una vista previa en tiempo real de las selecciones.
+ */
 @Component({
   templateUrl: './stand-desing.component.html',
   styleUrls: ['./stand-desing.component.scss'],
   selector: 'app-desing-root',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatSelectModule, CommonModule, ReactiveFormsModule, BannerComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [MatFormFieldModule,MatDividerModule , MatCardModule ,MatInputModule, MatSelectModule, CommonModule, ReactiveFormsModule, BannerComponent, MatIconModule, MatGridListModule],
 })
 export class StandDesingComponent implements OnInit {
-  /** Signal para almacenar imágenes de los stands disponibles */
-  standImages = signal<string[]>([]);
-  /** Signal para almacenar imágenes de los recepcionistas disponibles */
-  receptionistImages = signal<string[]>([]);
-  /** Imagen de stand seleccionada actualmente */
+  /** Referencia al elemento canvas utilizado para la vista previa */
+  @ViewChild('previewCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+
+  /** Lista de imágenes de stands disponibles */
+  standImages: string[] = [];
+
+  /** Lista de imágenes de recepcionistas disponibles */
+  receptionistImages: string[] = [];
+
+  /** Imagen de stand seleccionada */
   selectedStand = signal<string | null>(null);
-  /** Imagen de recepcionista seleccionada actualmente */
+
+  /** Imagen de recepcionista seleccionada */
   selectedReceptionist = signal<string | null>(null);
 
-  /** Señal computada que indica si se pueden subir archivos, en función de la selección de stand y recepcionista */
+  /** Configuración actual del stand seleccionada */
+  currentStandConfig: any = null;
+
+  /** URL de la imagen cargada */
+  imageSrc: string | null = null;
+
+  /** Bandera para verificar si una imagen ha sido cargada */
+  imagenCargada: boolean = false;
+
+  private isDragging = false;
+private startX = 0;
+private scrollLeft = 0;
+
+  /**
+   * Señal computada que indica si se pueden subir archivos, 
+   * en función de la selección de stand y recepcionista.
+   */
   canUploadFiles = computed(() => !!this.selectedStand() && !!this.selectedReceptionist());
 
-  /** Nombre de la empresa (opcional) */
-  nombre: string | null = '';
-  /** Descripción de la empresa (opcional) */
-  descripcion: string | null = '';
-  /** Bandera para verificar si se ha cargado una imagen de logo */
-  imagenCargada: boolean = false;
-  /** Bandera para indicar el estado de subida de la imagen */
-  imagenSubiendo: boolean = false;
-  /** URL del logo subido */
-  imageSrc: string | null = null;
-  /** Habilitar la opción para subir un stand personalizado */
-  customStandEnabled: boolean = false;
-
   /**
-   * Constructor de StandDesingComponent - Inicializa los servicios de imagen y empresa, y carga imágenes de stand y recepcionista.
-   * @param imageService Servicio para obtener las imágenes de stand y recepcionista.
-   * @param cdr ChangeDetectorRef para forzar la detección de cambios.
+   * Constructor de StandDesingComponent
+   * @param imageService Servicio para obtener las imágenes de stands y recepcionistas.
    * @param companyService Servicio para enviar la selección de stand y recepcionista al backend.
+   * @param cdr ChangeDetectorRef para gestionar cambios en la vista.
    */
-  constructor(private imageService: ImageService, private cdr: ChangeDetectorRef, private companyService: CompanyService) {
-    this.standImages.set(this.imageService.getStand());
-    this.receptionistImages.set(this.imageService.getReceptionist());
-  }
+  constructor(
+    private imageService: ImageService,
+    private companyService: CompanyService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  /** Método del ciclo de vida OnInit */
-  ngOnInit(): void {}
-
-  /**
-   * Activa o desactiva la opción de subir un stand personalizado.
-   * @param event Evento de cambio del checkbox.
-   */
-  toggleCustomStand(event: any): void {
-    this.customStandEnabled = event.target.checked;
+  /** Método del ciclo de vida `OnInit` para inicializar datos */
+  ngOnInit(): void {
+    this.standImages = this.imageService.getStand(); // Obtiene las rutas de imágenes de stands
+    this.receptionistImages = this.imageService.getReceptionist(); // Obtiene las rutas de imágenes de recepcionistas
   }
 
   /**
-   * Abre el diálogo de selección de archivo para subir un stand personalizado.
+   * Método para seleccionar un stand.
+   * @param stand URL de la imagen del stand seleccionada.
    */
-  uploadCustomStand(): void {
-    const fileInput = document.getElementById('standUpload') as HTMLInputElement;
-    fileInput.click();
+  selectStand(stand: string): void {
+    this.selectedStand.set(stand);
+    this.currentStandConfig = this.imageService.getStandConfig(stand) || {};
+    this.drawCanvas();
   }
 
   /**
-   * Maneja la subida del stand personalizado, verificando tipo de archivo y tamaño.
-   * @param event Evento de cambio del archivo.
+   * Método para seleccionar una recepcionista.
+   * @param receptionist URL de la imagen de la recepcionista seleccionada.
    */
-  handleStandUpload(event: any): void {
-    const archivo = event?.target?.files?.[0];
-    if (archivo && archivo.type === 'image/jpeg' && archivo.size <= 5 * 1024 * 1024) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        const nuevoStand = e.target.result;
-        this.standImages.set([nuevoStand, ...this.standImages()]);  // Agregar el nuevo stand al principio
-        this.selectedStand.set(nuevoStand);  // Seleccionar automáticamente el nuevo stand
-        this.cdr.detectChanges();  // Forzar la actualización de la vista
+  selectReceptionist(receptionist: string): void {
+    this.selectedReceptionist.set(receptionist);
+    this.drawCanvas();
+  }
+
+  /**
+   * Dibuja el canvas de vista previa con las selecciones actuales.
+   */
+  drawCanvas(): void {
+    const canvas = this.canvasRef.nativeElement;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      console.error('No se pudo obtener el contexto del canvas');
+      return;
+    }
+
+    // Configura las dimensiones internas del canvas para alta resolución
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    const canvasWidth = canvas.clientWidth * devicePixelRatio;
+    const canvasHeight = canvas.clientHeight * devicePixelRatio;
+
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
+
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+    if (this.selectedStand()) {
+      const standImage = new Image();
+      standImage.src = this.selectedStand()!;
+      standImage.onload = () => {
+        this.drawImageContain(ctx, standImage, canvas.clientWidth, canvas.clientHeight);
+        this.drawReceptionist(ctx);
       };
-      reader.readAsDataURL(archivo);
-    } else {
-      alert('Solo se permiten imágenes en formato .jpg con un tamaño máximo de 5Mb');
     }
   }
 
   /**
-   * Selecciona una imagen de stand o recepcionista.
-   * @param image URL de la imagen seleccionada.
-   * @param type Tipo de imagen seleccionada: 'stand' o 'receptionist'.
+   * Dibuja una imagen en el canvas utilizando el modo `object-fit: contain`.
+   * @param ctx Contexto de renderizado del canvas.
+   * @param image Imagen a dibujar.
+   * @param canvasWidth Ancho del canvas.
+   * @param canvasHeight Alto del canvas.
    */
-  selectImage(image: string, type: 'stand' | 'receptionist') {
-    if (type === 'stand') {
-      this.selectedStand.set(image);
-    } else {
-      this.selectedReceptionist.set(image);
-    }
+  drawImageContain(ctx: CanvasRenderingContext2D, image: HTMLImageElement, canvasWidth: number, canvasHeight: number): void {
+    const scale = Math.min(canvasWidth / image.width, canvasHeight / image.height);
+    const width = image.width * scale;
+    const height = image.height * scale;
+    const x = (canvasWidth - width) / 2;
+    const y = (canvasHeight - height) / 2;
+
+    ctx.drawImage(image, x, y, width, height);
   }
 
-  /**
-   * Verifica si una imagen está seleccionada.
-   * @param image Imagen a verificar.
-   * @param selectedImage Imagen seleccionada actual.
-   * @returns boolean - true si la imagen está seleccionada, de lo contrario false.
-   */
-  isSelected(image: string, selectedImage: string | null): boolean {
-    return image === selectedImage;
-  }
+/**
+ * Dibuja la imagen de la recepcionista en el canvas.
+ * @param ctx Contexto de renderizado del canvas.
+ */
+drawReceptionist(ctx: CanvasRenderingContext2D): void {
+  if (!this.selectedReceptionist() || !this.currentStandConfig) return;
+
+  const receptionistImage = new Image();
+  receptionistImage.src = this.selectedReceptionist()!;
+
+  receptionistImage.onload = () => {
+    const canvas = ctx.canvas;
+
+    // Escalar stand y obtener dimensiones reales en el canvas
+    const standImage = new Image();
+    standImage.src = this.selectedStand()!;
+
+    standImage.onload = () => {
+      const scale = Math.min(
+        canvas.clientWidth / standImage.width,
+        canvas.clientHeight / standImage.height
+      );
+
+      // Tamaño y posición real del stand en el canvas
+      const standWidth = standImage.width * scale;
+      const standHeight = standImage.height * scale;
+      const standX = (canvas.clientWidth - standWidth) / 2; // Centrado horizontal
+      const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
+
+      // Coordenadas relativas de la recepcionista
+      const { x, y } = this.currentStandConfig.receptionistPosition || { x: 0, y: 0 };
+      const scaleReceptionist = this.currentStandConfig.receptionistScale || 0.1;
+
+      // Convertir coordenadas relativas a absolutas
+      const recX = standX + x * standWidth;
+      const recY = standY + y * standHeight;
+
+      // Calcular dimensiones del recepcionista
+      const recWidth = standWidth * scaleReceptionist;
+      const recHeight = (receptionistImage.height / receptionistImage.width) * recWidth;
+
+      // Dibujar recepcionista
+      ctx.globalAlpha = this.currentStandConfig.receptionistOpacity || 1;
+      ctx.drawImage(receptionistImage, recX, recY, recWidth, recHeight);
+      ctx.globalAlpha = 1; // Restablecer opacidad
+    };
+  };
+}
+
 
   /**
    * Maneja el desplazamiento del carrusel de imágenes.
@@ -130,12 +207,12 @@ export class StandDesingComponent implements OnInit {
     const container = document.querySelector(
       type === 'stand' ? '.stand-carousel' : '.receptionist-carousel'
     ) as HTMLElement;
-
+  
     if (container) {
-      const scrollAmount = 300;
+      const scrollAmount = container.offsetWidth / 2; // Desplazamiento dinámico (mitad del contenedor)
       container.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     }
   }
@@ -143,22 +220,20 @@ export class StandDesingComponent implements OnInit {
   /**
    * Envía la selección actual de stand y recepcionista al backend.
    */
-  submitSelection() {
-    let URLStand = this.selectedStand();
-    let URLRecep = this.selectedReceptionist();
-  
-    // Verificar si son null, y asignar un valor predeterminado
-    if (URLStand === null || URLStand === '') {
+  submitSelection(): void {
+    const URLStand = this.selectedStand();
+    const URLRecep = this.selectedReceptionist();
+
+    if (!URLStand) {
       alert('Debes seleccionar un Stand.');
       return;
     }
-    if (URLRecep === null || URLRecep === '') {
+    if (!URLRecep) {
       alert('Debes seleccionar un Recepcionista.');
       return;
     }
-  
+
     const selection = { URLStand, URLRecep };
-    // Llama al servicio para enviar los datos al backend
     this.companyService.addStanAndRecep(selection).subscribe(
       (response) => {
         console.log('Datos enviados exitosamente:', response);
@@ -174,11 +249,46 @@ export class StandDesingComponent implements OnInit {
   /**
    * Limpia la selección actual de stands y recepcionistas.
    */
-  clearSelection() {
+  clearSelection(): void {
     this.selectedStand.set(null);
     this.selectedReceptionist.set(null);
     this.imageSrc = null;
     this.imagenCargada = false;
-    this.cdr.detectChanges();  // Forzar la actualización de la vista
+    this.cdr.detectChanges();
   }
+
+  /**
+ * Habilita el arrastre en el carrusel.
+ * @param event Evento de ratón o toque.
+ */
+enableDrag(event: MouseEvent | TouchEvent): void {
+  const container = (event.target as HTMLElement).closest('.images-container') as HTMLElement;
+  if (!container) return;
+
+  this.isDragging = true;
+  this.startX = (event instanceof MouseEvent ? event.pageX : event.touches[0].pageX) - container.offsetLeft;
+  this.scrollLeft = container.scrollLeft;
+}
+
+/**
+ * Desplaza el carrusel durante el arrastre.
+ * @param event Evento de ratón o toque.
+ */
+drag(event: MouseEvent | TouchEvent): void {
+  if (!this.isDragging) return;
+  const container = (event.target as HTMLElement).closest('.images-container') as HTMLElement;
+  if (!container) return;
+
+  event.preventDefault();
+  const x = (event instanceof MouseEvent ? event.pageX : event.touches[0].pageX) - container.offsetLeft;
+  const walk = (x - this.startX) * 2; // Multiplica por 2 para mayor sensibilidad
+  container.scrollLeft = this.scrollLeft - walk;
+}
+
+/**
+ * Deshabilita el arrastre.
+ */
+disableDrag(): void {
+  this.isDragging = false;
+}
 }

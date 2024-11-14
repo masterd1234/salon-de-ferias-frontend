@@ -50,6 +50,11 @@ export class CompanyService {
         return this.http.post(this.apiUrl, companyData, { headers });
     }
 
+    updateCompany(companyData: Company) {
+        const headers = this.getHeaders();
+        return this.http.post(this.apiUrl, companyData, { headers });
+      }
+
     /**
      * @method addStanAndRecep
      * @description Envía la selección de 'stan' y 'recep' al backend.

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 /**
@@ -13,7 +12,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-videos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './videos.component.html',
   styleUrls: ['./videos.component.scss']
 })
@@ -24,12 +23,21 @@ export class VideosComponent {
    */
   videoUrl: string = '';
 
+    /** 
+   * Formulario reactivo para la URL del video.
+   */
+    videoForm: FormGroup;
+
   /**
    * @constructor
    * @param {MatDialogRef<VideosComponent>} dialogRef - Referencia al diálogo de Angular Material, 
    * que permite controlar la instancia del modal desde el componente.
    */
-  constructor(public dialogRef: MatDialogRef<VideosComponent>) {}
+  constructor(public dialogRef: MatDialogRef<VideosComponent>,private fb: FormBuilder) {
+    this.videoForm = this.fb.group({
+      videoUrl: ['', [Validators.required, Validators.pattern(/^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/)]]
+    });
+  }
 
   /**
    * @method addVideo

@@ -1,11 +1,5 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './page/login/login.component';
-import { AdminDashboardComponent } from './page/admin-dashboard/admin-dashboard.component';
 import { authGuard } from './guards/auth.guard';
-import { CompanyDashboarComponent } from './page/company-dashboar/company-dashboar.component';
-import { ProfileComponent } from './page/profile/profile.component';
-import { AllOffersComponent } from './page/all-offers/all-offers.component';
-import { HomeComponent } from './page/home/home.component';
 
 /**
  * @constant {Routes} routes
@@ -15,53 +9,69 @@ export const routes: Routes = [
     /**
      * Ruta principal de la aplicación.
      * @path /
-     * @component HomeComponent
+     * @component HomeComponent (cargado de forma diferida)
      */
-    { path: '', component: HomeComponent },
-    
+    {
+         path: '', redirectTo: 'home', pathMatch: 'full' 
+    },
+
     /**
      * Ruta de la página de inicio.
      * @path /home
-     * @component HomeComponent
+     * @component HomeComponent (cargado de forma diferida)
      */
-    { path: 'home', component: HomeComponent },
+    {
+        path: 'home',
+        loadComponent: () => import('./page/home/home.component').then(m => m.HomeComponent)
+    },
 
     /**
      * Ruta para la página de inicio de sesión.
      * @path /login
-     * @component LoginComponent
+     * @component LoginComponent (cargado de forma diferida)
      */
-    { path: 'login', component: LoginComponent },
+    {
+        path: 'login',
+        loadComponent: () => import('./page/login/login.component').then(m => m.LoginComponent)
+    },
 
     /**
-     * Ruta para el panel de administración, protegida por `authGuard`.
+     * Ruta para el panel de administración, protegida por `authGuard` y cargada de forma diferida.
      * @path /admin-dashboard
-     * @component AdminDashboardComponent
-     * @canActivate [authGuard]
      */
-    { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [authGuard] },
+    {
+        path: 'admin-dashboard',
+        loadComponent: () => import('./page/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
+        canActivate: [authGuard]
+    },
 
     /**
-     * Ruta para el panel de la empresa, protegida por `authGuard`.
+     * Ruta para el panel de la empresa, protegida por `authGuard` y cargada de forma diferida.
      * @path /company-dashboard
-     * @component CompanyDashboarComponent
-     * @canActivate [authGuard]
      */
-    { path: 'company-dashboard', component: CompanyDashboarComponent, canActivate: [authGuard] },
+    {
+        path: 'company-dashboard',
+        loadComponent: () => import('./page/company-dashboar/company-dashboar.component').then(m => m.CompanyDashboarComponent),
+        canActivate: [authGuard]
+    },
 
     /**
-     * Ruta para el perfil del usuario, protegida por `authGuard`.
+     * Ruta para el perfil del usuario, protegida por `authGuard` y cargada de forma diferida.
      * @path /profile
-     * @component ProfileComponent
-     * @canActivate [authGuard]
      */
-    { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+    {
+        path: 'profile',
+        loadComponent: () => import('./page/profile/profile.component').then(m => m.ProfileComponent),
+        canActivate: [authGuard]
+    },
 
     /**
-     * Ruta para ver todas las ofertas, protegida por `authGuard`.
+     * Ruta para ver todas las ofertas, protegida por `authGuard` y cargada de forma diferida.
      * @path /offers
-     * @component AllOffersComponent
-     * @canActivate [authGuard]
      */
-    { path: 'offers', component: AllOffersComponent, canActivate: [authGuard] }
+    {
+        path: 'offers',
+        loadComponent: () => import('./page/all-offers/all-offers.component').then(m => m.AllOffersComponent),
+        canActivate: [authGuard]
+    }
 ];

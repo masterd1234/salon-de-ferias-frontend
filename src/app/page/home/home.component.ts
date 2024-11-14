@@ -1,66 +1,51 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CountdownTimerComponent } from "./countdown-timer/countdown-timer.component";
 
-/**
- * @class HomeComponent
- * @description Este componente muestra el panel de inicio con estadísticas que aumentan
- * progresivamente (empresas, usuarios y visitas) hasta alcanzar un objetivo definido.
- * También permite la navegación a diferentes secciones de la página usando desplazamiento suave.
- */
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule, CountdownTimerComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
-  /** 
-   * @property {number} companiesCount - Contador de empresas mostrado en la página.
-   */
+export class HomeComponent implements OnInit {
+  // Contadores existentes
   companiesCount = 0;
-
-  /** 
-   * @property {number} usersCount - Contador de usuarios mostrado en la página.
-   */
   usersCount = 0;
-
-  /** 
-   * @property {number} visitsCount - Contador de visitas mostrado en la página.
-   */
   visitsCount = 0;
 
-  /**
-   * @private
-   * @property {number} companiesTarget - Objetivo final de empresas.
-   */
-  private companiesTarget = 50;
+  private companiesTarget = 50; // Objetivo de empresas
+  private usersTarget = 100;    // Objetivo de usuarios
+  private visitsTarget = 7;     // Objetivo de visitas
 
-  /**
-   * @private
-   * @property {number} usersTarget - Objetivo final de usuarios.
-   */
-  private usersTarget = 100;
+  countdownTime: number = 10; // Duración en segundos (ej. 5 minutos)
+  countdownDisplay: string = '';
+  private countdownInterval: any;
 
-  /**
-   * @private
-   * @property {number} visitsTarget - Objetivo final de visitas.
-   */
-  private visitsTarget = 7;
+  // Formulario reactivo
+  contactForm!: FormGroup;
 
-  /**
-   * @constructor
-   * @param {Router} router - Servicio de enrutamiento de Angular para manejar la navegación.
-   */
-  constructor(private router: Router) {}
+  constructor(private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef) {}
 
-  /**
-   * @method navigateToSection
-   * @description Navega a una sección específica de la página, desplazándose suavemente hacia el elemento
-   * identificado por el `sectionId`.
-   * @param {string} sectionId - ID de la sección a la que se debe desplazar.
-   */
-  navigateToSection(sectionId: string): void {
+  ngOnInit() {
+    setTimeout(() => this.startCounting(), 500); // Inicia después de 500 ms
+    this.initializeForm(); // Inicializar el formulario reactivo
+  }
+
+  // Inicializa el formulario reactivo con validaciones
+  private initializeForm() {
+    this.contactForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      message: ['', Validators.required]
+    });
+  }
+
+  // Navega a una sección específica de la página
+  navigateToSection(sectionId: string) {
     this.router.navigate([], { fragment: sectionId }).then(() => {
       const element = document.getElementById(sectionId);
       if (element) {
@@ -69,40 +54,40 @@ export class HomeComponent {
     });
   }
 
-  /**
-   * @method ngOnInit
-   * @description Método del ciclo de vida de Angular que se llama al inicializar el componente.
-   * Inicia los contadores.
-   */
-  ngOnInit(): void {
-    this.startCounting();
+  // Inicia los contadores existentes
+  startCounting() {
+    this.incrementCounterWithAnimation('companiesCount', this.companiesTarget);
+    this.incrementCounterWithAnimation('usersCount', this.usersTarget);
+    this.incrementCounterWithAnimation('visitsCount', this.visitsTarget);
   }
 
-  /**
-   * @method startCounting
-   * @description Inicia el conteo progresivo para cada contador (companies, users, visits).
-   */
-  startCounting(): void {
-    this.incrementCounter('companiesCount', this.companiesTarget, 10);
-    this.incrementCounter('usersCount', this.usersTarget, 10);
-    this.incrementCounter('visitsCount', this.visitsTarget, 1);
-  }
-
-  /**
-   * @method incrementCounter
-   * @description Incrementa el valor de un contador de forma progresiva hasta alcanzar su objetivo.
-   * @param {'companiesCount' | 'usersCount' | 'visitsCount'} counter - El contador a incrementar.
-   * @param {number} target - El objetivo final que debe alcanzar el contador.
-   * @param {number} interval - Intervalo de tiempo en milisegundos entre cada incremento.
-   */
-  incrementCounter(counter: 'companiesCount' | 'usersCount' | 'visitsCount', target: number, interval: number): void {
-    const intervalId = setInterval(() => {
-      if (this[counter] < target) {
-        this[counter] += Math.ceil(target / 100); // Incremento progresivo
-      } else {
-        this[counter] = target; // Fija el contador en el objetivo
-        clearInterval(intervalId);
+  incrementCounterWithAnimation(counter: 'companiesCount' | 'usersCount' | 'visitsCount', target: number) {
+    const increment = Math.ceil(target / 100);
+  
+    const updateCounter = () => {
+      if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+        if (this[counter] < target) {
+          this[counter] += increment;
+          this.cdr.markForCheck(); // Marca el componente para la detección de cambios
+          window.requestAnimationFrame(updateCounter);
+        } else {
+          this[counter] = target;
+        }
       }
-    }, interval);
+    };
+  
+    if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+      window.requestAnimationFrame(updateCounter);
+    }
+  }
+
+  // Maneja el envío del formulario
+  onSubmitContactForm() {
+    if (this.contactForm.valid) {
+      console.log('Formulario enviado:', this.contactForm.value);
+      alert('Formulario de contacto enviado correctamente');
+    } else {
+      alert('Por favor, completa todos los campos requeridos');
+    }
   }
 }
