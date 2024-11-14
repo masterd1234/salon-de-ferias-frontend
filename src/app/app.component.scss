@@ -1,3 +1,5 @@
+@import '../scss/var';
+
 /* Asegúrate de que el estilo se aplique a todo el cuerpo de la aplicación */
 body {
   margin: 0;
@@ -16,7 +18,8 @@ body {
 }
 
 .app-background {
-  background-image: url('/assets/fondo.png');
+  background-color: $background-color;
+  object-fit: cover;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
