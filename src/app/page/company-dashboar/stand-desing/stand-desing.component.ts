@@ -30,6 +30,9 @@ export class StandDesingComponent implements OnInit {
   /** Referencia al elemento canvas utilizado para la vista previa */
   @ViewChild('previewCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
+  /** Bandera para habilitar el envío de archivos */
+  canSendFiles: boolean = false;
+
   /** Lista de imágenes de stands disponibles */
   standImages: string[] = [];
 
@@ -51,17 +54,20 @@ export class StandDesingComponent implements OnInit {
   /** Bandera para verificar si una imagen ha sido cargada */
   imagenCargada: boolean = false;
 
+  /** Imágenes cargadas */
   bannerImages: string | null = null;
   posterImages: string | null = null;
   logoImages: string | null = null;
 
+  /** Estado de arrastre */
   private isDragging = false;
   private startX = 0;
   private scrollLeft = 0;
 
   /**
-   * Señal computada que indica si se pueden subir archivos, 
+   * Señal computada que indica si se pueden subir archivos,
    * en función de la selección de stand y recepcionista.
+   * @returns {boolean} `true` si ambas selecciones están hechas, `false` de lo contrario.
    */
   canUploadFiles = computed(() => !!this.selectedStand() && !!this.selectedReceptionist());
 
@@ -102,16 +108,18 @@ export class StandDesingComponent implements OnInit {
     this.drawCanvas();
   }
 
+  /**
+ * Actualiza los archivos cargados desde el componente hijo.
+ * @param files Objeto que contiene los archivos cargados (logo, banner, poster).
+ */
   updateFiles(files: { logo: string | null, banner: string | null, poster: string | null }) {
-    console.log("Archivos recibidos desde el hijo:", files);
-
     // Puedes manejar los datos recibidos aquí
     if (files.logo) {
       this.logoImages = files.logo;
     }
     if (files.banner) {
       this.bannerImages = files.banner;
-    
+
       const selectedStand = this.selectedStand(); // Obtén el valor actual del signal
       if (selectedStand) {
         // Asegúrate de que el stand seleccionado no sea null
@@ -175,33 +183,42 @@ export class StandDesingComponent implements OnInit {
   }
 
 
+  /**
+   * Dibuja el poster en el canvas.
+   * @param ctx Contexto del canvas para renderizado.
+   */
   drawPoster(ctx: CanvasRenderingContext2D) {
     throw new Error('Method not implemented.');
   }
+
+  /**
+ * Dibuja el banner en el canvas.
+ * @param ctx Contexto del canvas para renderizado.
+ */
   drawBanner(ctx: CanvasRenderingContext2D) {
     if (this.bannerImages) {
       const bannerImage = new Image();
       bannerImage.src = this.bannerImages;
-  
+
       bannerImage.onload = () => {
         const canvas = ctx.canvas;
-  
+
         // Escalar stand y obtener dimensiones reales en el canvas
         const standImage = new Image();
         standImage.src = this.selectedStand()!;
-  
+
         standImage.onload = () => {
           const scale = Math.min(
             canvas.clientWidth / standImage.width,
             canvas.clientHeight / standImage.height
           );
-  
+
           // Tamaño y posición real del stand en el canvas
           const standWidth = standImage.width * scale;
           const standHeight = standImage.height * scale;
           const standX = (canvas.clientWidth - standWidth) / 2; // Centrado horizontal
           const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
-  
+
           // Coordenadas relativas del banner
           const { x, y, width, height } = this.currentStandConfig.bannerPosition || {
             x: 0.1,
@@ -209,46 +226,48 @@ export class StandDesingComponent implements OnInit {
             width: 0.8,
             height: 0.3,
           };
-  
+
           // Coordenadas absolutas del banner dentro del stand
           const bannerX = standX + x * standWidth;
           const bannerY = standY + y * standHeight;
           const bannerWidth = standWidth * width;
           const bannerHeight = standHeight * height;
-  
+
           // Dibuja el banner directamente sin clipping
           this.drawImageContain(ctx, bannerImage, bannerWidth, bannerHeight, bannerX, bannerY);
         };
       };
     }
   }
-  
-  
 
+  /**
+   * Dibuja el logo en el canvas.
+   * @param ctx Contexto del canvas para renderizado.
+   */
   drawLogo(ctx: CanvasRenderingContext2D) {
     if (this.logoImages) {
       const logoImage = new Image();
       logoImage.src = this.logoImages;
-  
+
       logoImage.onload = () => {
         const canvas = ctx.canvas;
-  
+
         // Escalar stand y obtener dimensiones reales en el canvas
         const standImage = new Image();
         standImage.src = this.selectedStand()!;
-  
+
         standImage.onload = () => {
           const scale = Math.min(
             canvas.clientWidth / standImage.width,
             canvas.clientHeight / standImage.height
           );
-  
+
           // Tamaño y posición real del stand en el canvas
           const standWidth = standImage.width * scale;
           const standHeight = standImage.height * scale;
           const standX = (canvas.clientWidth - standWidth) / 2; // Centrado horizontal
           const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
-  
+
           // Coordenadas relativas del logo
           const { x, y, width, height } = this.currentStandConfig.logoPosition || {
             x: 0.1,
@@ -256,13 +275,13 @@ export class StandDesingComponent implements OnInit {
             width: 0.8,
             height: 0.3,
           };
-  
+
           // Coordenadas absolutas del logo dentro del stand
           const logoX = standX + x * standWidth;
           const logoY = standY + y * standHeight;
           const logoWidth = standWidth * width;
           const logoHeight = standHeight * height;
-  
+
           // Dibuja el logo directamente sin clipping
           this.drawImageContain(ctx, logoImage, logoWidth, logoHeight, logoX, logoY);
         };
@@ -290,16 +309,24 @@ export class StandDesingComponent implements OnInit {
     const height = image.height * scale;
     const x = targetX + (targetWidth - width) / 2;
     const y = targetY + (targetHeight - height) / 2;
-  
+
     ctx.drawImage(image, x, y, width, height);
   }
+
+  /**
+  * Dibuja la imagen del stand ajustada al canvas.
+  * @param ctx Contexto del canvas.
+  * @param image Imagen del stand.
+  * @param targetWidth Ancho del canvas.
+  * @param targetHeight Alto del canvas.
+  */
   drawImageContainStand(ctx: CanvasRenderingContext2D, image: HTMLImageElement, targetWidth: number, targetHeight: number): void {
     const scale = Math.min(targetWidth / image.width, targetHeight / image.height);
     const width = image.width * scale;
     const height = image.height * scale;
     const x = (targetWidth - width) / 2;
     const y = (targetHeight - height) / 2;
-  
+
     ctx.drawImage(image, x, y, width, height);
   }
 
@@ -382,7 +409,7 @@ export class StandDesingComponent implements OnInit {
       alert('Debes seleccionar un Recepcionista.');
       return;
     }
-
+    this.canSendFiles = true;
     const selection = { URLStand, URLRecep };
     this.companyService.addStanAndRecep(selection).subscribe(
       (response) => {
@@ -404,15 +431,15 @@ export class StandDesingComponent implements OnInit {
     this.selectedReceptionist.set(null);
     this.imageSrc = null;
     this.imagenCargada = false;
-  
+
     // Limpia el contenido del canvas
     const canvas = this.canvasRef.nativeElement;
     const ctx = canvas.getContext('2d');
-  
+
     if (ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-  
+
     this.cdr.detectChanges();
   }
 

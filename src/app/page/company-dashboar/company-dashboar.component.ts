@@ -2,11 +2,13 @@
 import { Component, computed, signal, WritableSignal } from '@angular/core';
 import { ImageService } from '../../services/imagen.service';
 import { CarouselComponent, CarouselControlComponent, CarouselInnerComponent, CarouselItemComponent } from '@coreui/angular';
-import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from "./form/form.component";
 import { StandDesingComponent } from "./stand-desing/stand-desing.component";
 import { MatCardModule } from '@angular/material/card';
+import { CompanyService } from '../../services/company.service';
+import { Router, RouterLink } from '@angular/router';
+
 
 /**
  * CompanyDashboarComponent - Componente principal del panel de control de la empresa.
@@ -19,7 +21,7 @@ import { MatCardModule } from '@angular/material/card';
   standalone: true,
   imports: [
     CarouselComponent, MatCardModule, CarouselControlComponent, CarouselInnerComponent, CarouselItemComponent,
-    RouterLink, CommonModule, FormComponent, StandDesingComponent
+   CommonModule, FormComponent, StandDesingComponent, RouterLink
   ],
   templateUrl: './company-dashboar.component.html',
   styleUrl: './company-dashboar.component.scss'
@@ -50,9 +52,9 @@ export class CompanyDashboarComponent {
   ngOnInit(): void {
     this.imageService.getStands().subscribe(images => {
       this.slides = images;
-    });
+    });// Verificar si los formularios están completos al cargar el componente
   }
-
+  
   /**
    * Establece el estado de selección del stand.
    * @param selected - Booleano que indica si el stand está seleccionado.

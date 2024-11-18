@@ -50,16 +50,38 @@ export class CompanyService {
         return this.http.post(this.apiUrl, companyData, { headers });
     }
 
+        /**
+     * Actualiza la información de la empresa en el backend.
+     * 
+     * @function updateCompany
+     * @memberof CompanyService
+     * @param {Company} companyData - Objeto con los datos actualizados de la empresa.
+     * @returns {Observable<any>} 
+     * Un Observable con la respuesta de la API tras la actualización.
+     * 
+     * @example
+     * companyService.updateCompany({ name: 'Nueva Empresa', address: 'Nueva Dirección' }).subscribe(response => {
+     *   console.log(response.message); // Mensaje de éxito
+     * });
+     */
     updateCompany(companyData: Company) {
         const headers = this.getHeaders();
         return this.http.post(this.apiUrl, companyData, { headers });
-      }
+    }
 
     /**
-     * @method addStanAndRecep
-     * @description Envía la selección de 'stan' y 'recep' al backend.
-     * @param {selection} selection - Objeto con los datos de selección a añadir.
-     * @returns {Observable<any>} Observable con la respuesta de la API.
+     * Envía la selección de 'stan' y 'recep' al backend.
+     * 
+     * @function addStanAndRecep
+     * @memberof CompanyService
+     * @param {Object} selection - Objeto con los datos de selección a añadir.
+     * @returns {Observable<any>} 
+     * Un Observable con la respuesta de la API.
+     * 
+     * @example
+     * companyService.addStanAndRecep({ stan: 'stand1', recep: 'recep1' }).subscribe(response => {
+     *   console.log(response.message); // Mensaje de éxito
+     * });
      */
     addStanAndRecep(selection: selection): Observable<any> {
         const headers = this.getHeaders();
@@ -67,12 +89,42 @@ export class CompanyService {
     }
 
     /**
-     * @method getCompany
-     * @description Recupera la información de la empresa desde el backend.
-     * @returns {Observable<any>} Observable con los datos de la empresa.
-     */
+      * Recupera la información de la empresa desde el backend.
+      * 
+      * @function getCompany
+      * @memberof CompanyService
+      * @returns {Observable<any>} 
+      * Un Observable que emite los datos de la empresa.
+      * 
+      * @example
+      * companyService.getCompany().subscribe(companyData => {
+      *   console.log(companyData.name); // Nombre de la empresa
+      *   console.log(companyData.address); // Dirección de la empresa
+      * });
+      */
     getCompany(): Observable<any> {
         const headers = this.getHeaders();
         return this.http.get(`${this.apiUrl}/getCompany`, { headers });
+    }
+
+    /**
+     * Consulta al backend para verificar el estado de los formularios de la empresa.
+     * 
+     * @function getCompanyDataStatus
+     * @memberof CompanyService
+     * @returns {Observable<{ isStandComplete: boolean; isAdditionalInfoComplete: boolean }>} 
+     * Un Observable que emite un objeto con dos propiedades:
+     * - `isStandComplete`: Indica si el formulario del stand está completo.
+     * - `isAdditionalInfoComplete`: Indica si la información adicional está completa.
+     * 
+     * @example
+     * companyService.getCompanyDataStatus().subscribe(status => {
+     *   console.log(status.isStandComplete); // true o false
+     *   console.log(status.isAdditionalInfoComplete); // true o false
+     * });
+     */
+    getCompanyDataStatus(): Observable<{ isStandComplete: boolean; isAdditionalInfoComplete: boolean }> {
+        const headers = this.getHeaders();
+        return this.http.get<{ isStandComplete: boolean; isAdditionalInfoComplete: boolean }>( 'https://backend-node-wpf9.onrender.com/company/status', { headers });
     }
 }

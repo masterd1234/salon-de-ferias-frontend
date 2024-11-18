@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
@@ -9,6 +9,7 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CompanyService } from './services/company.service';
 
 /**
  * @class AppComponent
@@ -33,6 +34,8 @@ export class AppComponent {
    */
   isSmallScreen = false;
 
+  companyDashboardComplete: boolean = false;
+
   /**
    * @property {MatSidenav} drawer - Referencia al componente de navegación lateral (sidenav).
    * @ViewChild
@@ -54,6 +57,7 @@ export class AppComponent {
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private overlay = inject(Overlay);
+  private companyService = inject(CompanyService);
 
   /**
    * @constructor
@@ -64,7 +68,9 @@ export class AppComponent {
       this.isSmallScreen = result.matches;
       this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
     });
+
   }
+
 
   /**
    * @method toggleDrawer

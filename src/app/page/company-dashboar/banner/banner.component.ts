@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, EventEmitter, Output, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -7,6 +7,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSliderModule } from '@angular/material/slider';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
+/**
+ * Componente `BannerComponent`
+ * Proporciona funcionalidades para subir y gestionar archivos relacionados con un banner,
+ * incluyendo previsualización, zoom y posicionamiento de imágenes.
+ */
 @Component({
   selector: 'app-banner-root',
   templateUrl: './banner.component.html',
@@ -15,33 +20,71 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   imports: [CommonModule, MatDividerModule, ReactiveFormsModule, MatCardModule, MatSliderModule, MatFormFieldModule]
 })
 export class BannerComponent implements OnInit {
+  /**
+   * Permite habilitar o deshabilitar la subida de archivos.
+   */
   @Input() canUploadFiles: boolean = false;
+
+  /**
+   * Permite habilitar o deshabilitar el envío de archivos.
+   */
+  @Input() canSendFiles: boolean = false;
+
+  /**
+   * Evento que emite los archivos subidos (logo, banner, póster).
+   */
   @Output() filesUploaded = new EventEmitter<{ logo: string | null, banner: string | null, poster: string | null }>();
+
+  /** Formulario reactivo para gestionar los archivos. */
   formBanner!: FormGroup;
+
+  /** URL de previsualización de archivos subidos. */
   bannerUrl: string | null = null;
   posterUrl: string | null = null;
   logoUrl: string | null = null;
+
+  /** Transformaciones y configuraciones visuales. */
   logoTransform: string = 'scale(1)';
   zoom: number = 1;
   logoPosition = { x: 0, y: 0 };
+
+  /** Indicador de diseño responsivo. */
   isSmallScreen: boolean = false;
+
+  /** Bandera para alternar visibilidad del contenido. */
   isContentVisible: boolean = false;
+
+  /** Nombres de los archivos subidos. */
   logoFileName: string = '';
   bannerFileName: string = '';
   posterFileName: string = '';
 
+  /**
+   * Constructor del componente.
+   * @param fb FormBuilder para construir formularios reactivos.
+   * @param cdr ChangeDetectorRef para detectar cambios en la vista.
+   * @param breakpointObserver BreakpointObserver para manejar diseño responsivo.
+   */
   constructor(
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
-    private breakpointObserver: BreakpointObserver
-  ) { 
+    private breakpointObserver: BreakpointObserver,
+    private zone: NgZone
+  ) {
     this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).subscribe(result => {
-      this.isSmallScreen = result.matches;
-      this.cdr.detectChanges();
+      this.zone.run(() => {
+        this.isSmallScreen = result.matches;
+      });
     });
   }
 
+  /**
+   * Inicializa el formulario al cargar el componente.
+   */
   ngOnInit() {
+    this.canUploadFiles = this.canUploadFiles ?? false;
+    this.canSendFiles = this.canSendFiles ?? false;
+  
     this.formBanner = this.fb.group({
       logo: ['', Validators.required],
       banner: [''],
@@ -49,29 +92,37 @@ export class BannerComponent implements OnInit {
     });
   }
 
+  /**
+   * Alterna la visibilidad del contenido adicional.
+   */
   toggleContentVisibility() {
     this.isContentVisible = !this.isContentVisible;
   }
 
+  /**
+   * Maneja el cambio de archivos subidos.
+   * @param event Evento de cambio del input file.
+   * @param type Tipo de archivo: 'logo', 'banner' o 'poster'.
+   */
   onFileChange(event: Event, type: string) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-  
+
       if (file.type !== 'image/png') {
         alert("Por favor sube solo archivos en formato PNG.");
         return;
       }
-  
+
       if (file.size > 5 * 1024 * 1024) {
         alert("El archivo no debe superar los 5 MB.");
         return;
       }
-  
+
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
-  
+
         // Actualiza la URL del archivo correspondiente
         if (type === 'banner') {
           this.bannerUrl = result;
@@ -83,57 +134,38 @@ export class BannerComponent implements OnInit {
           this.logoUrl = result;
           this.logoFileName = file.name;
         }
-  
+
         // Emitir el estado actual al padre
         this.filesUploaded.emit({
           logo: this.logoUrl,
           banner: this.bannerUrl,
           poster: this.posterUrl,
         });
-  
-        this.cdr.detectChanges();
+
+        // Solo detecta cambios si es estrictamente necesario
+        if (!this.zone.isStable) {
+          this.zone.run(() => this.cdr.detectChanges());
+        }
       };
       reader.readAsDataURL(file);
     }
   }
 
+  /**
+   * Maneja el envío del formulario si es válido.
+   */
   onSubmit() {
     if (this.formBanner.valid) {
-      console.log("Formulario enviado:", this.formBanner.value);
-      this.formBanner.reset();
-      this.bannerUrl = null;
-      this.posterUrl = null;
-      this.logoUrl = null;
-      this.logoFileName = '';
-      this.bannerFileName = '';
-      this.posterFileName = '';
+      if (this.canSendFiles) {
+        console.log("Formulario enviado:", this.formBanner.value);
+        this.formBanner.reset();
+        this.bannerUrl = null;
+        this.posterUrl = null;
+        this.logoUrl = null;
+        this.logoFileName = '';
+        this.bannerFileName = '';
+        this.posterFileName = '';
+      }
     }
-  }
-
-  onZoom(event: WheelEvent) {
-    event.preventDefault();
-    const zoomFactor = 0.05;
-    this.zoom += event.deltaY > 0 ? -zoomFactor : zoomFactor;
-    this.zoom = Math.min(Math.max(0.5, this.zoom), 2);
-    this.logoTransform = `scale(${this.zoom})`;
-  }
-
-  startDragging(event: MouseEvent) {
-    const initialX = event.clientX - this.logoPosition.x;
-    const initialY = event.clientY - this.logoPosition.y;
-
-    const onMouseMove = (moveEvent: MouseEvent) => {
-      this.logoPosition.x = moveEvent.clientX - initialX;
-      this.logoPosition.y = moveEvent.clientY - initialY;
-      this.logoTransform = `translate(${this.logoPosition.x}px, ${this.logoPosition.y}px) scale(${this.zoom})`;
-    };
-
-    const onMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
   }
 }

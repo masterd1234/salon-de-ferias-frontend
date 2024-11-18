@@ -96,17 +96,47 @@ export class ImageService {
       './assets/stand3.png': {
         receptionistPosition: { x: 0.2, y: 0.378 }, // Relativo al canvas
         receptionistScale: 0.1, // Tamaño relativo
-        receptionistOpacity: 1, // Opacidad
+        receptionistOpacity: 1,
+        logoPosition: {
+          x: 0.08,
+          y: 0.65,
+          width: 0.4,
+          height: 0.1
+        },       
+         bannerPosition: {
+          x: 0.498,
+          y: 0.237,
+          width: 0.35,
+          height: 0.35,
+        }
       },
       './assets/stand4.png': {
         receptionistPosition: { x: 0.650, y: 0.348 }, // Relativo al canvas
         receptionistScale: 0.1, // Tamaño relativo
-        receptionistOpacity: 1, // Opacidad
+        receptionistOpacity: 1,
+        logoPosition: {
+          x: 0.16,
+          y: 0.6,
+          width: 0.6,
+          height: 0.13
+        },
+        bannerPosition: {
+          x: 0.23,
+          y: 0.068,
+          width: 0.542,
+          height: 0.7,
+        }
       },
       './assets/stand6.png': {
         receptionistPosition: { x: 0.675, y: 0.372 }, // Relativo al canvas
         receptionistScale: 0.1, // Tamaño relativo
-        receptionistOpacity: 1, // Opacidad
+        receptionistOpacity: 1,
+        logoPosition: {
+          x: 0.62,
+          y: 0.58,
+          width: 0.3,
+          height: 0.5
+        },
       },
       './assets/stand7.png': {
         receptionistPosition: { x: 0.55, y: 0.437 }, // Relativo al canvas

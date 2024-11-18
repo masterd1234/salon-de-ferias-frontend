@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { AuthService } from '../../services/auth.service';
 import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
+import { CompanyService } from '../../services/company.service';
 
 /**
  * LoginComponent
@@ -49,7 +50,8 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private companyService: CompanyService
   ) {
     // Configuración del formulario de inicio de sesión
     this.loginForm = this.fb.group({

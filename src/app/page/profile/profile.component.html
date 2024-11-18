@@ -1,8 +1,10 @@
 <div class="container">
   <div class="profile-header">
-    <button mat-button class="button button--secondary back-button">
-      <strong>&larr; Atrás</strong>
-    </button>
+    @if(company()){
+      <button class="button button--primary mx-2" mat-flat-button >
+        <i class="fas fa-edit"></i>
+      </button>
+    }
   </div>
 
   @if(company()) {
