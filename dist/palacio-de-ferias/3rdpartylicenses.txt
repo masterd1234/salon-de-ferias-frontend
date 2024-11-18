@@ -194,6 +194,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 --------------------------------------------------------------------------------
+Package: ngx-cookie-service
+License: "MIT"
+
+
+--------------------------------------------------------------------------------
 Package: @angular/common
 License: "MIT"
 
