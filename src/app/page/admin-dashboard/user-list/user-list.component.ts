@@ -50,11 +50,18 @@ export class UserListComponent implements OnInit {
    * Carga los usuarios y los filtra por rol
    */
   loadUsers(): void {
-    this.userService.getAllUsersByType('all').subscribe(
-      (data) => this.users.set(data.filter((user) => user.rol === this.role)),
-      (error) => console.error(`Error al cargar los usuarios de rol ${this.role}`, error)
-    );
+    this.userService.getAllUsersByType('all').subscribe({
+      next: (usersArray) => {
+        const filteredUsers = usersArray.filter(user => user.rol === this.role);
+        this.users.set(filteredUsers); // Actualiza la señal con los usuarios filtrados
+      },
+      error: (err) => {
+        console.error(`Error al cargar los usuarios de rol ${this.role}:`, err);
+      }
+    });
   }
+  
+  
 
   /**
    * Alterna la visibilidad de información adicional de un usuario.

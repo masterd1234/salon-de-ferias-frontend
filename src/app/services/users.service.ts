@@ -41,16 +41,15 @@ export class UserService {
  * @returns {Observable<Usuario[]>} Observable con los usuarios o lista vacía en caso de error.
  */
   getAllUsersByType(userType: 'companies' | 'visitors' | 'admins' | 'all'): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.apiUrl}/${userType}`, { withCredentials: true }).pipe(
-      map((response: any) => {
-        return response.companies || []; // Ajusta si la respuesta tiene un formato específico
-      }),
+    return this.http.get<{ users: Usuario[] }>(`${this.apiUrl}/${userType}`, { withCredentials: true }).pipe(
+      map((response) => response.users || []), // Extrae la propiedad `users` o usa un array vacío
       catchError(error => {
         console.error(`Error al obtener usuarios del tipo ${userType}:`, error);
         return of([]); // Retorna lista vacía en caso de error
       })
     );
   }
+  
 
   /**
      * @method getUserById

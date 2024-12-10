@@ -16,14 +16,16 @@
   <!-- Menú para pantallas grandes -->
   @if(logged() && !isSmallScreen) {
   <mat-nav-list>
-    @if(isRol() === 'admin') {
-    <button class="btn-icon-text" (click)="createUser()" aria-label="Crear Usuario">
-      <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
-    </button>
-    }
-    <button class="btn-icon-text" (click)="logout()" aria-label="Cerrar Sesión">
-      <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Cerrar Sesión</span>
-    </button>
+    <div class="acction-button">
+      @if(isRol() === 'admin') {
+      <button class="btn-icon-text" (click)="createUser()" aria-label="Crear Usuario">
+        <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
+      </button>
+      }
+      <button class="btn-icon-text" (click)="logout()" aria-label="Cerrar Sesión">
+        <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Cerrar Sesión</span>
+      </button>
+    </div>
   </mat-nav-list>
   }@else if (!logged() && !isSmallScreen) {
   <mat-nav-list class="button-nav mx-3">

@@ -20,9 +20,36 @@
 }
 
 /* Estilos del contenedor del diálogo */
-.mat-dialog-container {
+mat-dialog-content{
   padding: 20px;
   overflow: visible !important;
+  height: 70vh;
 }
 
+/**
+ * Contenedor para la información del archivo
+ */
+ .file-info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 
+  .file-name {
+      margin-left: 8px;
+      font-weight: bold;
+  }
+}
+
+// Ajustes de responsividad para pantallas medianas
+@media (max-width: 768px) {
+  .logos img {
+      max-width: 80%;
+  }
+}
+
+/**
+ * Oculta el input de archivo (file input) para personalizar el botón de carga.
+ */
+ .file-input {
+  display: none;
+}

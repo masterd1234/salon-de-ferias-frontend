@@ -129,7 +129,8 @@ export class AppComponent {
    */
   createUser(): void {
     const dialogRef = this.dialog.open(CreateUserComponent, {
-      width: '500px',
+      width: '70%',
+      height: 'auto',
       hasBackdrop: true,
       autoFocus: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition()

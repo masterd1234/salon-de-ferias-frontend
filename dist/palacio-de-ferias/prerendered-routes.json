@@ -4,7 +4,9 @@
     "/company-dashboard",
     "/home",
     "/login",
+    "/map",
     "/offers",
-    "/profile"
+    "/profile",
+    "/register"
   ]
 }
