@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { MapComponent } from './page/map/map.component';
 
 /**
  * @constant {Routes} routes
@@ -24,6 +25,17 @@ export const routes: Routes = [
         path: 'home',
         loadComponent: () => import('./page/home/home.component').then(m => m.HomeComponent)
     },
+    
+    {
+        path: 'register',
+        loadComponent: () => import('./page/register/register.component').then(m => m.RegisterComponent)
+    },
+
+    {
+        path: 'map',
+        loadComponent: () => import('./page/map/map.component').then(m => m.MapComponent),
+
+    },
 
     /**
      * Ruta para la página de inicio de sesión.
@@ -42,7 +54,6 @@ export const routes: Routes = [
     {
         path: 'admin-dashboard',
         loadComponent: () => import('./page/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
-        canActivate: [authGuard]
     },
 
     /**
@@ -52,7 +63,7 @@ export const routes: Routes = [
     {
         path: 'company-dashboard',
         loadComponent: () => import('./page/company-dashboar/company-dashboar.component').then(m => m.CompanyDashboarComponent),
-        canActivate: [authGuard]
+        
     },
 
     /**
@@ -62,7 +73,7 @@ export const routes: Routes = [
     {
         path: 'profile',
         loadComponent: () => import('./page/profile/profile.component').then(m => m.ProfileComponent),
-        canActivate: [authGuard]
+   
     },
 
     /**
@@ -72,6 +83,6 @@ export const routes: Routes = [
     {
         path: 'offers',
         loadComponent: () => import('./page/all-offers/all-offers.component').then(m => m.AllOffersComponent),
-        canActivate: [authGuard]
+      
     }
 ];

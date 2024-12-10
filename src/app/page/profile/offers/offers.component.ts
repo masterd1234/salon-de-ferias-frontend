@@ -8,6 +8,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { OffersService } from '../../../services/offers.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
+import { provinciasEspana } from '../../../../models/offers/provincias.model';
+import { JobTypeMap } from '../../../../models/offers/jobType.model';
+import { sectorsMap } from '../../../../models/offers/sector.model';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 /**
  * OffersComponent
@@ -25,7 +29,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-offers',
   standalone: true,
-  imports: [ReactiveFormsModule, MatInputModule, MatButtonModule, MatSelectModule, MatFormFieldModule, MatCardModule, CommonModule],
+  imports: [ReactiveFormsModule, MatGridListModule, MatInputModule, MatButtonModule, MatSelectModule, MatFormFieldModule, MatCardModule, CommonModule],
   templateUrl: './offers.component.html',
   styleUrl: './offers.component.scss'
 })
@@ -33,6 +37,13 @@ export class OffersComponent {
 
   // Formulario reactivo para crear una nueva oferta de trabajo
   offerForm: FormGroup;
+  location = provinciasEspana;
+
+  JobTypeMap = JobTypeMap;
+  jobTypeKeys = Object.keys(JobTypeMap);
+
+  sectorName = sectorsMap;
+  sectorKeys = Object.keys(sectorsMap);
 
   constructor(
     private fb: FormBuilder,
@@ -43,10 +54,13 @@ export class OffersComponent {
       position: ['', Validators.required],      // Campo obligatorio para la posición
       location: ['', Validators.required],      // Campo obligatorio para la ubicación
       description: ['', Validators.required],   // Campo obligatorio para la descripción
+      sector: ['', Validators.required],        // Campo obligatorio para el sector
       workplace_type: [''],                     // Campo opcional para el tipo de lugar de trabajo
-      job_type: ['']                            // Campo opcional para el tipo de trabajo
+      job_type: [''],                            // Campo opcional para el tipo de trabajo
+      link: ['', Validators.required]
     });
   }
+
 
   /**
    * Método para añadir la oferta de trabajo.
@@ -54,7 +68,16 @@ export class OffersComponent {
    */
   addOffer() {
     if (this.offerForm.valid) {
-      this.dialogRef.close(this.offerForm.value); // Cierra el diálogo y envía los datos de la oferta
+      // Obtener el valor del formulario
+      let formData = this.offerForm.value;
+  
+      // Transformar la primera letra de "location" a mayúscula
+      if (formData.location) {
+        formData.location = formData.location.charAt(0).toUpperCase() + formData.location.slice(1).toLowerCase();
+      }
+  
+      // Cerrar el diálogo y enviar los datos formateados
+      this.dialogRef.close(formData);
     }
   }
 

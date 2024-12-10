@@ -18,49 +18,6 @@
 
     <!-- Contenido desplegable del formulario -->
     <mat-card-content *ngIf="isContentVisible">
-      
-      <!-- Subida de Logo -->
-      <mat-card class="mt-2">
-        <mat-card-header class="card-header">
-          <mat-card-title>Logo</mat-card-title>
-          <!-- Verifica si no hay un archivo de logo seleccionado -->
-          @if(!logoFileName){
-          <!-- Botón para añadir el logo -->
-          <div class="action-button ml-auto d-flex">
-            <button type="button" class="button button--primary" (click)="logoInput.click()" mat-flat-button>
-              <i class="fa-solid fa-upload"></i>
-            </button>
-            <!-- Input de archivo oculto para subir el logo -->
-            <input type="file" #logoInput (change)="onFileChange($event, 'logo')" class="file-input" />
-          </div>
-          }@else{
-          <!-- Opciones de editar o eliminar el logo ya seleccionado -->
-          <div class="action-button ml-auto d-flex">
-            <button mat-flat-button class="button button--primary delete-button" color="warn" mat-flat-button>
-              <i class="fa-solid fa-trash"></i>
-            </button>
-            <button mat-flat-button class="button button--primary" (click)="logoInput.click()" mat-flat-button>
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <input type="file" #logoInput (change)="onFileChange($event, 'logo')" class="file-input" />
-          </div>
-          }
-        </mat-card-header>
-
-        <!-- Información del archivo seleccionado -->
-        @if (logoFileName) {
-        <mat-divider style="width: 100%;"></mat-divider>
-        <mat-card-content class="mt-2">
-          <div class="file-info">
-            <mat-card-title>
-              <i class="fa-regular fa-image"></i>
-            </mat-card-title>
-            <span class="file-name">{{ logoFileName }}</span>
-          </div>
-        </mat-card-content>
-        }
-      </mat-card>
-
       <!-- Subida de Banner -->
       <mat-card class="mt-2">
         <mat-card-header class="card-header">
@@ -69,7 +26,8 @@
           @if(!bannerFileName){
           <!-- Botón para añadir el banner -->
           <div class="action-button ml-auto d-flex">
-            <button type="button" class="button button--primary" (click)="bannerInput.click()" [disabled]="!canUploadFiles" mat-flat-button>
+            <button type="button" class="button button--primary" (click)="bannerInput.click()"
+              [disabled]="!canUploadFiles" mat-flat-button>
               <i class="fa-solid fa-upload"></i>
             </button>
             <!-- Input de archivo oculto para subir el banner -->
@@ -87,12 +45,17 @@
             <input type="file" #bannerInput (change)="onFileChange($event, 'banner')" class="file-input" />
           </div>
           }
+          <!-- Información del archivo seleccionado -->
         </mat-card-header>
 
         <!-- Información del archivo seleccionado -->
         @if (bannerFileName) {
         <mat-divider style="width: 100%;"></mat-divider>
         <mat-card-content class="mt-2">
+          <div mat-card-avatar class="custom-avatar" [ngStyle]="{
+              'background-image': 'url(' + bannerUrl + ')',
+            }">
+          </div>
           <div class="file-info">
             <mat-card-title>
               <i class="fa-regular fa-image"></i>
@@ -111,7 +74,8 @@
           @if(!posterFileName){
           <!-- Botón para añadir el banner -->
           <div class="action-button ml-auto d-flex">
-            <button type="button" class="button button--primary" (click)="posterInput.click()" [disabled]="!canUploadFiles" mat-flat-button>
+            <button type="button" class="button button--primary" (click)="posterInput.click()"
+              [disabled]="!canUploadFiles" mat-flat-button>
               <i class="fa-solid fa-upload"></i>
             </button>
             <!-- Input de archivo oculto para subir el banner -->
@@ -133,16 +97,20 @@
 
         <!-- Información del archivo seleccionado -->
         @if (posterFileName) {
-        <mat-divider style="width: 100%;"></mat-divider>
-        <mat-card-content class="mt-2">
-          <div class="file-info">
-            <mat-card-title>
-              <i class="fa-regular fa-image"></i>
-            </mat-card-title>
-            <span class="file-name">{{ posterFileName }}</span>
-          </div>
-        </mat-card-content>
-        }
+          <mat-divider style="width: 100%;"></mat-divider>
+          <mat-card-content class="mt-2">
+            <div mat-card-avatar class="custom-avatar" [ngStyle]="{
+                'background-image': 'url(' + posterUrl + ')',
+              }">
+            </div>
+            <div class="file-info">
+              <mat-card-title>
+                <i class="fa-regular fa-image"></i>
+              </mat-card-title>
+              <span class="file-name">{{ posterFileName }}</span>
+            </div>
+          </mat-card-content>
+          }
       </mat-card>
     </mat-card-content>
   </form>

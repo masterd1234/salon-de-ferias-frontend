@@ -47,4 +47,25 @@ export interface Offer {
    * @property {string} [createdAt] - Fecha de creación de la oferta, en formato de cadena (opcional).
    */
   createdAt?: string;
+
+    /**
+   * @property {string} [sector] - Fecha de creación de la oferta, en formato de cadena (opcional).
+   */
+    sector?: string;
+
+    logo?: {
+      url: string;
+      id: string;
+    }
+
+    link: string;
+}
+export interface ExtendedOffer extends Offer {
+  aspectType: string;
+}
+
+export interface OffersResponse {
+  offers?: Offer[];
+  message: string;
+  success: boolean;
 }

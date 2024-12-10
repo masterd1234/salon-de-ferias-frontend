@@ -1,1 +1,97 @@
-<p>all-offers works!</p>
+<div class="offers-container">
+  <div class="offers-header">
+    <img src="../../../assets/background-offers.png" alt="Encabezado Ofertas" />
+  </div>
+
+  <div class="offers-filter d-flex align-items-center">
+    <div class="row w-100">
+      <h1>BUSCAR OFERTAS</h1>
+
+      <form [formGroup]="filtersForm" class="filters">
+
+        <!--Filtro por palabra clave-->
+        <mat-form-field appearance="outline">
+          <mat-label>Palabra Clave</mat-label>
+          <input  matInput formControlName = "keyword">
+        </mat-form-field>
+
+        <!-- FILTRO DE PROVINCIA -->
+        <mat-form-field appearance="outline">
+          <mat-label>Provincia</mat-label>
+          <mat-select formControlName="province">
+            <mat-option *ngFor="let province of provinces" [value]="province">{{ province }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- FILTRO DE Modalidad-->
+        <mat-form-field appearance="outline">
+          <mat-label>Modalidad</mat-label>
+          <mat-select formControlName="mode">
+            <mat-option *ngFor="let modalities of modalities" [value]="modalities">{{ modalities }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- FILTRO DE SECTOR -->
+        <mat-form-field appearance="outline">
+          <mat-label>Sector</mat-label>
+          <mat-select formControlName="sector">
+            <mat-option *ngFor="let key of sectorKeys" [value]="key">{{ sectorName [key] }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- FILTRO DE EMPRESA -->
+        <mat-form-field appearance="outline">
+          <mat-label>Empresa</mat-label>
+          <mat-select formControlName="company">
+            <mat-option *ngFor="let company of companies" [value]="company">{{ company }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- FILTRO DE Tipo de Oferta -->
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de Oferta</mat-label>
+          <mat-select formControlName="offerType">
+            <mat-option *ngFor="let key of jobTypeKeys" [value]="key">{{ JobTypeMap[key] }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
+
+      <div class="action-button">
+
+        <button class="button button--primary mx-2" (click)="resetFilters()">
+          <i class="fa-solid fa-rotate-right px-3"></i>Reiniciar Filtros
+        </button>
+        <button class = "button button--primary mx-2" (click)="applyFilters()"> <i class="fa-solid fa-filter px-3"></i>Aplicar filtros</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTADO DE OFERTAS -->
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>
+        Ofertas
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-divider class="mt-2 w-100"></mat-divider>
+
+    <mat-card-content *ngIf="filteredOffers">
+      <mat-card *ngFor="let offer of filteredOffers" class="offer-card mt-3" (click)="offer.id ? toggleOfferDetails(offer.id) : null">
+        <mat-card-header *ngIf="offer">
+          <img matCardAvatar [src]="offer.logo?.url" alt="Logo" class="custom-avatar" style="object-fit: contain;">
+          <mat-card-title>{{ offer.position }}</mat-card-title>
+          <mat-card-subtitle>{{ offer.companyName }} | {{ offer.location }} ({{ offer.workplace_type }})</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content *ngIf="expandedOfferId === offer.id">
+          <p><strong><i class="fa-solid fa-briefcase"></i></strong> {{ offer.workplace_type }} | {{ getJobType(offer.job_type) }} | {{getSectorsName(offer.sector)}}</p>
+          <p><strong>Acerca del Empleo:</strong> <br /> {{ offer.description }}</p>
+          <a [href]="offer.link" target="_blank">
+            <button mat-flat-button color="accent" class="custom-button">Inscribirse</button>
+          </a>
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { isPlatformBrowser } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CompanyService } from '../../../services/company.service';
+import { CompanyService } from '../../../services/information.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -56,25 +56,24 @@ export class FormComponent implements AfterViewInit {
 
 
   ngOnInit(): void {
-     // Si no se proporciona un formulario desde el padre, inicializa el formulario interno
-     if (!this.form) {
+    // Si no se proporciona un formulario desde el padre, inicializa el formulario interno
+    if (!this.form) {
       this.companyForm = this.fb.group({
-        name: ['', [Validators.required, Validators.minLength(3)]],
         description: ['', Validators.required],
         additional_information: [''],
-        email: ['', Validators.email],
         sector: [''],
         additionalButtonTitle: [''], // Campo para título de enlace adicional
         additionalButtonLink: [''],  // Campo para link adicional
-        links: this.fb.array([])     // Arreglo de enlaces adicionales
+        links: this.fb.array([]),     // Arreglo de enlaces adicionales
+        files: this.fb.array([]),     // Arreglo de archivos subidos
       });
     }
   }
 
-    // Getter para acceder al FormGroup activo (ya sea externo o interno)
-    get activeForm(): FormGroup {
-      return this.form || this.companyForm;
-    }
+  // Getter para acceder al FormGroup activo (ya sea externo o interno)
+  get activeForm(): FormGroup {
+    return this.form || this.companyForm;
+  }
   /**
    * Ciclo de vida - ngAfterViewInit. Carga el editor solo en el navegador.
    */
@@ -92,6 +91,14 @@ export class FormComponent implements AfterViewInit {
     this.EditorDescription = ckeditor.default;
     this.EditorAdditionalInfo = ckeditor.default;
     this.editorLoaded = true;
+  }
+
+  /**
+ * Getter para acceder al FormArray de los archivos subidos.
+ * @returns FormArray de archivos subidos en el formulario.
+ */
+  get files(): FormArray {
+    return this.activeForm.get('files') as FormArray;
   }
 
   /** 
@@ -138,19 +145,22 @@ export class FormComponent implements AfterViewInit {
   }
 
   /**
-   * Maneja el cambio de archivos subidos, limitando el tamaño máximo a 5MB.
-   * @param event Evento de cambio del archivo
-   */
-  onFileChange(event: any) {
+  * Maneja el cambio de archivos subidos, limitando el tamaño máximo a 5MB.
+  * @param event Evento de cambio del archivo
+  */
+  onFileChange(event: any): void {
     const files = event.target.files;
     this.fileError = '';
+
     if (files.length > 0) {
       for (let file of files) {
         if (file.size > 5000000) { // Limitar tamaño a 5MB
           this.fileError = 'El tamaño del archivo no puede exceder los 5MB';
           return;
         }
-        this.uploadedFiles.push(file);
+
+        // Agregar el archivo al FormArray como un control
+        this.files.push(this.fb.control(file));
       }
     }
   }
@@ -176,7 +186,7 @@ export class FormComponent implements AfterViewInit {
       if (!formData.additionalButtonLink) delete formData.additionalButtonLink;
 
       this.isSubmitting = true;
-      this.companyService.addCompany(formData).subscribe({
+      this.companyService.addCompanyInformation(formData).subscribe({
         next: () => {
           this.successMessage = 'Información enviada correctamente';
           this.errorMessage = '';
@@ -186,7 +196,7 @@ export class FormComponent implements AfterViewInit {
           this.successMessage = '';
           this.errorMessage = `Error: ${error.error.message}`;
           this.isSubmitting = false;
-  
+
           console.error('Error al enviar la solicitud:', error);
         }
       });

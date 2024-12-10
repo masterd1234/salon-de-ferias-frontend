@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -8,10 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { jwtDecode } from 'jwt-decode';
 import { AuthService } from '../../services/auth.service';
-import {MatCheckboxChange, MatCheckboxModule} from '@angular/material/checkbox';
-import { CompanyService } from '../../services/company.service';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { UserService } from '../../services/users.service';
 
 /**
  * LoginComponent
@@ -51,7 +50,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private companyService: CompanyService
+    private userService: UserService
   ) {
     // Configuración del formulario de inicio de sesión
     this.loginForm = this.fb.group({
@@ -92,29 +91,32 @@ export class LoginComponent {
   login(): void {
     if (this.loginForm.valid && this.privacyAccepted && this.termsAccepted) {
       const { nameOrEmail, password } = this.loginForm.value;
-
+  
       this.authService.login(nameOrEmail, password).subscribe({
         next: (response) => {
-          if (response.token) {
-            this.authService.setToken(response.token);
-            const decodedToken: any = jwtDecode(response.token);
-            const userRole = decodedToken.rol;
-
+          if (response.success) {
             // Redirige según el rol del usuario
-            if (userRole === 'admin') {
-              this.router.navigate(['/admin-dashboard']);
-            } else if (userRole === 'co') {
-              this.router.navigate(['/company-dashboard']);
-            } else {
-              this.router.navigate(['/home']);
+            switch (response.user?.rol) {
+              case 'admin':
+                this.router.navigate(['/admin-dashboard']);
+                break;
+              case 'co':
+                this.router.navigate(['/company-dashboard']);
+                break;
+              default:
+                this.router.navigate(['/home']);
+                break;
             }
           } else {
-            alert('Credenciales inválidas');
+            // Muestra un mensaje si el backend devolvió un error
+            alert('Error en la autenticación: ' + response.message);
           }
         },
         error: (err) => {
-          alert('Error en la autenticación: ' + err.message);
-        }
+          // Manejo adicional de errores inesperados
+          alert('Error inesperado en la autenticación.');
+          console.error(err);
+        },
       });
     } else {
       alert('Por favor, completa el formulario correctamente y acepta los términos.');

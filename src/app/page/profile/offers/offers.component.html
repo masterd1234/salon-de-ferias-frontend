@@ -1,13 +1,13 @@
 <!-- Tarjeta principal que contiene el formulario de oferta -->
 <mat-card>
   <mat-card-title>Añadir Nueva Oferta</mat-card-title>
-  
+
   <!-- Contenedor de contenido con desplazamiento en dispositivos móviles -->
   <div class="dialog-scrollable-content">
-    
+
     <!-- Formulario de creación de oferta -->
     <form [formGroup]="offerForm" (ngSubmit)="addOffer()">
-      
+
       <!-- Campo para la posición del trabajo -->
       <mat-form-field appearance="fill">
         <mat-label>Posición</mat-label>
@@ -16,7 +16,7 @@
           La posición es obligatoria
         </mat-error>
       </mat-form-field>
-      
+
       <!-- Campo para el tipo de lugar de trabajo -->
       <mat-form-field appearance="fill">
         <mat-label>Tipo de Lugar de Trabajo</mat-label>
@@ -26,27 +26,43 @@
           <mat-option value="hibrido">Híbrido</mat-option>
         </mat-select>
       </mat-form-field>
-      
+
       <!-- Campo para la ubicación del trabajo -->
       <mat-form-field appearance="fill">
         <mat-label>Ubicación</mat-label>
-        <input matInput formControlName="location" placeholder="Ubicación" required />
+        <mat-select formControlName="location">
+          <mat-option *ngFor="let province of location" [value]="province">{{ province }}</mat-option>
+        </mat-select>
         <mat-error *ngIf="offerForm.get('location')?.hasError('required')">
           La ubicación es obligatoria
         </mat-error>
       </mat-form-field>
-      
-      <!-- Campo para el tipo de trabajo -->
-      <mat-form-field appearance="fill">
-        <mat-label>Tipo de Trabajo</mat-label>
-        <mat-select formControlName="job_type">
-          <mat-option value="tiempo_completo">Tiempo Completo</mat-option>
-          <mat-option value="medio_tiempo">Medio Tiempo</mat-option>
-          <mat-option value="temporal">Temporal</mat-option>
-          <mat-option value="practicas">Prácticas</mat-option>
-        </mat-select>
-      </mat-form-field>
-      
+
+      <div class="row">
+        <div class="col-md-6">
+          <!-- Campo para el tipo de trabajo -->
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Tipo de Trabajo</mat-label>
+            <mat-select formControlName="job_type">
+              <mat-option *ngFor="let key of jobTypeKeys" [value]="key">
+                {{ JobTypeMap[key] }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <!-- Campo para el sector -->
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Sector</mat-label>
+            <mat-select formControlName="sector">
+              <mat-option *ngFor="let key of sectorKeys" [value]="key">
+                {{ sectorName[key] }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
       <!-- Campo de descripción del trabajo -->
       <mat-form-field appearance="fill">
         <mat-label>Descripción</mat-label>
@@ -55,7 +71,16 @@
           La descripción es obligatoria
         </mat-error>
       </mat-form-field>
-      
+
+      <!-- Campo para el linl de la oferta -->
+      <mat-form-field appearance="fill">
+        <mat-label>Link de la Oferta</mat-label>
+        <input matInput formControlName="link" placeholder="www.example.es/ofers" required />
+        <mat-error *ngIf="offerForm.get('link')?.hasError('required')">
+          El link es obligatorio
+        </mat-error>
+      </mat-form-field>
+
       <!-- Botones de añadir oferta y cancelar -->
       <div class="button-group">
         <button mat-raised-button color="primary" type="submit" [disabled]="offerForm.invalid">Añadir Oferta</button>

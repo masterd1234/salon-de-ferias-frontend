@@ -1,7 +1,7 @@
 import { Component, effect, inject, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { signal } from '@angular/core';
-import { UserService } from '../../../services/admin.service';
+import { UserService } from '../../../services/users.service';
 import { AppComponent } from '../../../app.component';
 import { EditUsersComponent } from '../edit-users/edit-users.component';
 import { CommonModule } from '@angular/common';
@@ -50,7 +50,7 @@ export class UserListComponent implements OnInit {
    * Carga los usuarios y los filtra por rol
    */
   loadUsers(): void {
-    this.userService.getUsers().subscribe(
+    this.userService.getAllUsersByType('all').subscribe(
       (data) => this.users.set(data.filter((user) => user.rol === this.role)),
       (error) => console.error(`Error al cargar los usuarios de rol ${this.role}`, error)
     );

@@ -14,16 +14,17 @@
             </ul>
         </div>
 
+
         <!-- Carrusel de selección de stand -->
         <div class="col-12 col-md-6 image-content">
-            <c-carousel [interval]="0">
+            <c-carousel *ngIf="slides.length > 0" [interval]="0">
                 <c-carousel-inner>
                     <c-carousel-item *ngFor="let slide of slides">
-                        <img [src]="slide" class="d-block w-100" loading="lazy" />
+                        <img [src]="slide.url" class="d-block w-100" loading="lazy" alt="Imagen" />
                     </c-carousel-item>
                 </c-carousel-inner>
-                <c-carousel-control [routerLink] caption="Previous" direction="prev"></c-carousel-control>
-                <c-carousel-control [routerLink] caption="Next" direction="next"></c-carousel-control>
+                <c-carousel-control caption="Previous" direction="prev"></c-carousel-control>
+                <c-carousel-control caption="Next" direction="next"></c-carousel-control>
             </c-carousel>
         </div>
     </div>

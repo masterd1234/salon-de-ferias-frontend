@@ -1,76 +1,144 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
-import { Offer } from '../../models/offers.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { catchError, map, Observable, of } from 'rxjs';
+import { Offer } from '../../models/offers/offers.model';
 
 /**
  * @class OffersService
- * @description Este servicio maneja la lógica para interactuar con la API de ofertas, permitiendo agregar, 
- * obtener y eliminar ofertas. Utiliza autenticación basada en tokens.
+ * @description Servicio para interactuar con la API de ofertas. Proporciona métodos para agregar,
+ * obtener, actualizar, eliminar y buscar ofertas. Utiliza autenticación basada en cookies.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OffersService {
   /**
-   * @property {string} apiUrl - URL base de la API para la gestión de ofertas.
+   * URL base de la API para la gestión de ofertas.
+   * @type {string}
    * @private
    */
   private apiUrl = 'https://backend-node-wpf9.onrender.com/offers';
 
   /**
-   * @constructor
-   * @param {HttpClient} http - Servicio HttpClient para realizar peticiones HTTP.
-   * @param {AuthService} authService - Servicio AuthService para obtener el token de autenticación.
+   * Constructor del servicio OffersService.
+   * @param {HttpClient} http - Servicio Angular para realizar peticiones HTTP.
    */
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient) {}
 
   /**
+   * Maneja errores de la API y devuelve un Observable con un mensaje genérico.
+   * @param {any} error - Objeto de error recibido de la API.
+   * @param {string} defaultMessage - Mensaje predeterminado en caso de error.
+   * @returns {Observable<{ success: boolean; message: string }>} Observable con el estado del éxito y el mensaje del error.
    * @private
-   * @method getHeaders
-   * @description Genera y retorna los encabezados de la petición HTTP con el token de autenticación incluido.
-   * @returns {HttpHeaders} Encabezados con el token de autenticación y el tipo de contenido JSON.
    */
-  private getHeaders(): HttpHeaders {
-    const token = this.authService.getToken();  // Obtiene el token desde AuthService
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
+  private handleError(error: any, defaultMessage: string): Observable<{ success: boolean; message: string }> {
+    const errorMessage = error.error?.message || defaultMessage;
+    return of({ success: false, message: errorMessage });
+  }
+
+  /**
+   * Agrega una nueva oferta a la API.
+   * @param {Offer} offer - Objeto con los datos de la oferta a agregar.
+   * @param {string} [id] - ID opcional de la compañía asociada a la oferta.
+   * @returns {Observable<{ success: boolean; message: string; id?: string }>} Observable con el estado del éxito, mensaje y el ID de la oferta creada.
+   */
+  addOffer(offer: Offer, id?: string): Observable<{ success: boolean; message: string; id?: string }> {
+    const url = id ? `${this.apiUrl}/add/${id}` : `${this.apiUrl}/add`;
+
+    return this.http.post<{ message: string; id: string }>(url, offer, { withCredentials: true }).pipe(
+      map((response) => ({ success: true, message: response.message, id: response.id })),
+      catchError((error) => this.handleError(error, 'Error desconocido al agregar la oferta'))
+    );
+  }
+
+  /**
+   * Obtiene ofertas de la API, ya sea todas las de una compañía o una específica.
+   * @param {string} [id] - ID opcional para filtrar las ofertas por compañía.
+   * @returns {Observable<{ success: boolean; message: string; offers?: Offer[] }>} Observable con el estado del éxito, mensaje y la lista de ofertas.
+   */
+  getOffersById(id?: string): Observable<{ success: boolean; message: string; offers?: Offer[] }> {
+    const url = id ? `${this.apiUrl}/company/${id}` : `${this.apiUrl}/company`;
+
+    return this.http.get<{ message: string; offers: Offer[] }>(url, { withCredentials: true }).pipe(
+      map((response) => ({ success: true, ...response })),
+      catchError((error) => this.handleError(error, 'Error desconocido al obtener las ofertas'))
+    );
+  }
+
+  /**
+   * Elimina una oferta de la API según su ID.
+   * @param {string} id - ID de la oferta a eliminar.
+   * @returns {Observable<{ success: boolean; message: string }>} Observable con el estado del éxito y el mensaje de la operación.
+   */
+  deleteOffer(id: string): Observable<{ success: boolean; message: string }> {
+    const url = `${this.apiUrl}/delete/${id}`;
+
+    return this.http.delete<{ message: string }>(url, { withCredentials: true }).pipe(
+      map((response) => ({ success: true, message: response.message })),
+      catchError((error) => this.handleError(error, 'Error desconocido al eliminar la oferta'))
+    );
+  }
+
+  /**
+   * Actualiza una oferta en la API según su ID.
+   * @param {string} id - ID de la oferta a actualizar.
+   * @param {Offer} offer - Objeto con los datos actualizados de la oferta.
+   * @returns {Observable<{ success: boolean; message: string }>} Observable con el estado del éxito y el mensaje de la operación.
+   */
+  updateOffers(id: string, offer: Offer): Observable<{ success: boolean; message: string }> {
+    const url = `${this.apiUrl}/update/${id}`;
+
+    return this.http.put<{ message: string }>(url, offer, { withCredentials: true }).pipe(
+      map((response) => ({ success: true, message: response.message })),
+      catchError((error) => this.handleError(error, 'Error desconocido al actualizar la oferta'))
+    );
+  }
+
+  /**
+   * Obtiene todas las ofertas disponibles en la API.
+   * @returns {Observable<{ success: boolean; message: string; offers?: Offer[] }>} Observable con el estado del éxito, mensaje y la lista de ofertas.
+   */
+  getAllOffers(): Observable<{ success: boolean; message: string; offers?: Offer[] }> {
+    const url = `${this.apiUrl}/all`;
+
+    return this.http.get<Offer[]>(url, { withCredentials: true }).pipe(
+      map((offers) => ({ success: true, message: 'Ofertas obtenidas con éxito', offers })),
+      catchError((error) => this.handleError(error, 'Error desconocido al recuperar las ofertas'))
+    );
+  }
+
+  /**
+   * Busca ofertas en la API según parámetros opcionales.
+   * @param {Object} params - Parámetros opcionales para filtrar las ofertas.
+   * @param {string} [params.keyword] - Palabra clave para buscar en el título o descripción.
+   * @param {string} [params.location] - Ubicación de la oferta.
+   * @param {string} [params.job_type] - Tipo de trabajo (e.g., "Full-time").
+   * @param {string} [params.workplace_type] - Tipo de lugar de trabajo (e.g., "Remote").
+   * @param {string} [params.company] - Nombre de la compañía.
+   * @param {string} [params.sector] - Sector de la oferta.
+   * @returns {Observable<{ success: boolean; message: string; offers?: Offer[] }>} Observable con el estado del éxito, mensaje y las ofertas encontradas.
+   */
+  searchOffers(params: {
+    keyword?: string;
+    location?: string;
+    job_type?: string;
+    workplace_type?: string;
+    company?: string;
+    sector?: string;
+  }): Observable<{ success: boolean; message: string; offers?: Offer[] }> {
+    const url = `${this.apiUrl}/search`;
+
+    let httpParams = new HttpParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value) {
+        httpParams = httpParams.set(key, value);
+      }
     });
-  }
 
-  /**
-   * @method addOffer
-   * @description Envía una nueva oferta a la API para su almacenamiento.
-   * @param {Offer} offer - La oferta a añadir.
-   * @returns {Observable<any>} Observable con la respuesta de la API.
-   */
-  addOffer(offer: Offer): Observable<any> {
-    const headers = this.getHeaders();
-    return this.http.post(this.apiUrl, offer, { headers });
-  }
-
-  /**
-   * @method getOffersById
-   * @description Recupera las ofertas de la API, filtradas opcionalmente por ID.
-   * @param {string} [id] - ID opcional para filtrar una oferta específica.
-   * @returns {Observable<any>} Observable con la oferta o la lista de ofertas.
-   */
-  getOffersById(id?: string): Observable<any> {
-    const headers = this.getHeaders();
-    const url = id ? `${this.apiUrl}/by-id/${id}` : `${this.apiUrl}/by-id`;
-    return this.http.get(url, { headers });
-  }
-
-  /**
-   * @method deleterOffer
-   * @description Elimina una oferta de la API según su ID.
-   * @param {string} id - El ID de la oferta a eliminar.
-   * @returns {Observable<any>} Observable con la respuesta de la API.
-   */
-  deleterOffer(id: string): Observable<any> {
-    const headers = this.getHeaders();
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers });
+    return this.http.get<Offer[]>(url, { params: httpParams, withCredentials: true }).pipe(
+      map((offers) => ({ success: true, message: 'Ofertas obtenidas con éxito', offers })),
+      catchError((error) => this.handleError(error, 'Error desconocido al buscar ofertas'))
+    );
   }
 }

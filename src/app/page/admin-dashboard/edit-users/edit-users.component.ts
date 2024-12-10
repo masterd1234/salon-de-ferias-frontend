@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { UserService } from '../../../services/admin.service';
+import { UserService } from '../../../services/users.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MatDialogModule, MatDialogActions, MatDialogContent, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -125,7 +125,6 @@ export class EditUsersComponent {
           name: user.name,
           email: user.email,
           rol: user.rol,
-          company: user.company,
           cif: user.cif,
           dni: user.dni,
           studies: user.studies

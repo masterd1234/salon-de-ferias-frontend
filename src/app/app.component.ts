@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
@@ -9,7 +9,10 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { CompanyService } from './services/company.service';
+import { CompanyService } from './services/information.service';
+import { UserService } from './services/users.service';
+import { TokenService } from './services/cookie.service';
+import { Observable } from 'rxjs';
 
 /**
  * @class AppComponent
@@ -42,6 +45,7 @@ export class AppComponent {
    */
   @ViewChild('drawer') drawer!: MatSidenav;
 
+
   /**
    * @property {'side' | 'over'} sidenavMode - Modo de visualización del `sidenav` dependiendo del tamaño de pantalla.
    */
@@ -51,13 +55,15 @@ export class AppComponent {
    * @property {signal<boolean>} userCreatedSignal - Signal para notificar la creación de un usuario.
    */
   userCreatedSignal = signal(false);
+  isLoggedIn = false;
+  user: { name: string; rol: string } | null = null;
 
   // Inyectamos AuthService, Router, MatDialog y Overlay
   private authService = inject(AuthService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private overlay = inject(Overlay);
-  private companyService = inject(CompanyService);
+  private tokenService = inject(TokenService);
 
   /**
    * @constructor
@@ -68,9 +74,12 @@ export class AppComponent {
       this.isSmallScreen = result.matches;
       this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
     });
-
   }
 
+
+  logged():boolean {
+    return this.isLoggedIn = this.authService.isLoggedIn();
+  }
 
   /**
    * @method toggleDrawer
@@ -88,9 +97,7 @@ export class AppComponent {
    * @description Verifica si el usuario está autenticado revisando la presencia de un token en `localStorage`.
    * @returns {boolean} `true` si el usuario está autenticado, `false` si no lo está.
    */
-  isLoggedIn(): boolean {
-    return !!this.authService.getToken();
-  }
+
 
   /**
    * @method isRol
@@ -98,8 +105,11 @@ export class AppComponent {
    * @returns {string} Retorna `'admin'`, `'co'`, o una cadena vacía si no tiene un rol válido.
    */
   isRol(): string {
-    const tokenData = this.authService.decodeToken();
-    return tokenData?.rol === 'admin' ? 'admin' : tokenData?.rol === 'co' ? 'co' : '';
+    this.user = this.authService.getUser();
+    if (this.user) {
+    return this.user.rol;
+    } else
+    return '';
   }
 
   /**

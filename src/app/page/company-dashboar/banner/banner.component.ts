@@ -6,6 +6,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSliderModule } from '@angular/material/slider';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatDialog } from '@angular/material/dialog';
 
 /**
  * Componente `BannerComponent`
@@ -33,7 +34,7 @@ export class BannerComponent implements OnInit {
   /**
    * Evento que emite los archivos subidos (logo, banner, póster).
    */
-  @Output() filesUploaded = new EventEmitter<{ logo: string | null, banner: string | null, poster: string | null }>();
+  @Output() filesUploaded = new EventEmitter<{ banner: File | null, bannerUrl: string |null, poster: File |null }>();
 
   /** Formulario reactivo para gestionar los archivos. */
   formBanner!: FormGroup;
@@ -41,12 +42,9 @@ export class BannerComponent implements OnInit {
   /** URL de previsualización de archivos subidos. */
   bannerUrl: string | null = null;
   posterUrl: string | null = null;
-  logoUrl: string | null = null;
 
-  /** Transformaciones y configuraciones visuales. */
-  logoTransform: string = 'scale(1)';
-  zoom: number = 1;
-  logoPosition = { x: 0, y: 0 };
+  bannerFile: File | null = null; // Archivo cargado para el banner
+  posterFile: File | null = null; // Archivo cargado para el póster
 
   /** Indicador de diseño responsivo. */
   isSmallScreen: boolean = false;
@@ -55,7 +53,6 @@ export class BannerComponent implements OnInit {
   isContentVisible: boolean = false;
 
   /** Nombres de los archivos subidos. */
-  logoFileName: string = '';
   bannerFileName: string = '';
   posterFileName: string = '';
 
@@ -69,6 +66,7 @@ export class BannerComponent implements OnInit {
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
+    public dialog: MatDialog,
     private zone: NgZone
   ) {
     this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).subscribe(result => {
@@ -84,9 +82,8 @@ export class BannerComponent implements OnInit {
   ngOnInit() {
     this.canUploadFiles = this.canUploadFiles ?? false;
     this.canSendFiles = this.canSendFiles ?? false;
-  
+
     this.formBanner = this.fb.group({
-      logo: ['', Validators.required],
       banner: [''],
       poster: ['']
     });
@@ -106,49 +103,77 @@ export class BannerComponent implements OnInit {
    */
   onFileChange(event: Event, type: string) {
     const input = event.target as HTMLInputElement;
+
     if (input.files && input.files[0]) {
       const file = input.files[0];
 
-      if (file.type !== 'image/png') {
-        alert("Por favor sube solo archivos en formato PNG.");
+      // Validar tipo de archivo
+      if (!['image/png'].includes(file.type)) {
+        alert('Por favor, sube solo archivos en formato PNG.');
         return;
       }
 
+      // Validar tamaño de archivo (5 MB como máximo)
       if (file.size > 5 * 1024 * 1024) {
-        alert("El archivo no debe superar los 5 MB.");
+        alert('El archivo no debe superar los 5 MB.');
         return;
       }
 
+      // Leer el archivo como Data URL para previsualización
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
 
-        // Actualiza la URL del archivo correspondiente
-        if (type === 'banner') {
-          this.bannerUrl = result;
-          this.bannerFileName = file.name;
-        } else if (type === 'poster') {
-          this.posterUrl = result;
-          this.posterFileName = file.name;
-        } else if (type === 'logo') {
-          this.logoUrl = result;
-          this.logoFileName = file.name;
+        // Actualizar la URL y el archivo correspondiente
+        switch (type) {
+          case 'banner':
+            this.bannerUrl = result; // URL para previsualización
+            this.bannerFileName = file.name;
+            this.bannerFile = file; // Archivo original
+            break;
+          case 'poster':
+            this.posterUrl = result;
+            this.posterFileName = file.name;
+            this.posterFile = file;
+            break;
+          default:
+            console.warn(`Tipo desconocido: ${type}`);
         }
 
-        // Emitir el estado actual al padre
+        // Emitir estado actual al padre
         this.filesUploaded.emit({
-          logo: this.logoUrl,
-          banner: this.bannerUrl,
-          poster: this.posterUrl,
+          banner: this.bannerFile || null,
+          bannerUrl: this.bannerUrl || '',
+          poster: this.posterFile || null,
         });
 
-        // Solo detecta cambios si es estrictamente necesario
+        // Detectar cambios si es necesario
         if (!this.zone.isStable) {
           this.zone.run(() => this.cdr.detectChanges());
         }
       };
+
       reader.readAsDataURL(file);
     }
+  }
+
+
+  delete(file: string): void {
+    switch (file) {
+      case 'banner':
+        this.bannerFile = null;
+        this.bannerUrl = '';
+        this.bannerFileName = '';
+        this.filesUploaded.emit({  banner: this.bannerFile,bannerUrl: this.bannerUrl, poster: this.posterFile });
+        break;
+      case 'poster':
+        this.posterFile = null;
+        this.posterUrl = '';
+        this.posterFileName = '';
+        this.filesUploaded.emit({  banner: this.bannerFile,bannerUrl: this.bannerUrl, poster: this.posterFile });
+        break;
+    }
+
   }
 
   /**
@@ -161,11 +186,10 @@ export class BannerComponent implements OnInit {
         this.formBanner.reset();
         this.bannerUrl = null;
         this.posterUrl = null;
-        this.logoUrl = null;
-        this.logoFileName = '';
         this.bannerFileName = '';
         this.posterFileName = '';
       }
     }
   }
+
 }

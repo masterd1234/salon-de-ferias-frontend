@@ -13,6 +13,17 @@
   margin-bottom: 10px;
 }
 
+.custom-avatar {
+  width: 80px; /* Ajusta según el tamaño deseado */
+  height: 80px; /* Ajusta según el tamaño deseado */
+  border-radius: 50%; /* Mantiene el contenedor redondeado */
+  overflow: hidden; /* Recorta el contenido excedente */
+  background-color: #e4e4e4; /* Fondo opcional */
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
 /**
  * Estilos de cabecera de cada tarjeta (logo, banner, póster).
  */

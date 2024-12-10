@@ -232,7 +232,7 @@ canvas {
     width: 100%;
   }
 
-.images-container {
+  .images-container {
 
     img {
       flex-shrink: 0;
@@ -252,6 +252,10 @@ canvas {
   margin: 0 auto;
   width: 100%;
   gap: 10px;
+
+  canvas { // Asegúrate de que el canvas ocupe todo el ancho del contenedor
+    height: 200px; // Ajusta la altura según sea necesario
+  }
 
   .stand-image,
   .receptionist-image,
@@ -290,6 +294,9 @@ canvas {
   .preview-combined-container {
     width: 100%;
 
+    canvas { // Asegúrate de que el canvas ocupe todo el ancho del contenedor
+      height: 500px; // Ajusta la altura según sea necesario
+    }
     .stand-image,
     .receptionist-image {
       max-width: 100%;
@@ -309,7 +316,18 @@ canvas {
   .col-md-6 {
     width: 50%;
   }
+  .preview-combined-container {
+    width: 100%;
 
+    canvas { // Asegúrate de que el canvas ocupe todo el ancho del contenedor
+      height: auto; // Ajusta la altura según sea necesario
+    }
+    .stand-image,
+    .receptionist-image {
+      max-width: 100%;
+      height: auto;
+    }
+  }
   .carousel-container {
     .images-container img {
       width: auto; // Mantener el tamaño de imagen original en pantallas grandes

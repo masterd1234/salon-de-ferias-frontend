@@ -5,7 +5,6 @@
 
 // Contenedor principal del formulario de oferta
 mat-card {
-  max-width: 500px;
   padding: 20px;
   margin: auto;
   box-shadow: $box-shadow;
@@ -13,6 +12,9 @@ mat-card {
   background-color: $white;
 }
 
+mat-grid-list{
+  margin: 0;
+}
 mat-card-title {
   font-size: 1.5em;
   font-weight: bold;
@@ -64,6 +66,19 @@ mat-form-field {
   }
 }
 
+.button-group {
+  flex-direction: column;
+  gap: 10px;
+
+  button {
+    width: 100%;
+  }
+}
+
+.dialog-scrollable-content {
+  max-height: 60vh;
+}
+
 // Estilo responsivo para pantallas pequeñas
 @media (max-width: 600px) {
   mat-card {
@@ -81,16 +96,5 @@ mat-form-field {
     margin-bottom: 12px;
   }
 
-  .button-group {
-    flex-direction: column;
-    gap: 10px;
 
-    button {
-      width: 100%;
-    }
-  }
-
-  .dialog-scrollable-content {
-    max-height: 60vh;
-  }
 }

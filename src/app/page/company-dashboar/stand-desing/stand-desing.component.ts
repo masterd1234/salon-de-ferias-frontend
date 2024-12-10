@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImageService } from '../../../services/imagen.service';
-import { CompanyService } from '../../../services/company.service';
+import { ImageService } from '../../../services/design.service';
+import { CompanyService } from '../../../services/information.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +12,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { Stand } from '../../../../models/stand.model';
+import { Models } from '../../../../models/models.model';
+import { catchError, Observable, of, retry, tap } from 'rxjs';
+import { Usuario } from '../../../../models/users.model';
+import { UserService } from '../../../services/users.service';
 
 /**
  * Componente `StandDesingComponent`
@@ -24,7 +29,17 @@ import { MatDividerModule } from '@angular/material/divider';
   styleUrls: ['./stand-desing.component.scss'],
   selector: 'app-desing-root',
   standalone: true,
-  imports: [MatFormFieldModule, MatDividerModule, MatCardModule, MatInputModule, MatSelectModule, CommonModule, ReactiveFormsModule, BannerComponent, MatIconModule, MatGridListModule],
+  imports: [
+    MatFormFieldModule,
+    MatDividerModule,
+    MatCardModule,
+    MatInputModule,
+    MatSelectModule,
+    CommonModule,
+    ReactiveFormsModule,
+    BannerComponent,
+    MatIconModule,
+    MatGridListModule],
 })
 export class StandDesingComponent implements OnInit {
   /** Referencia al elemento canvas utilizado para la vista previa */
@@ -38,7 +53,10 @@ export class StandDesingComponent implements OnInit {
 
   /** Lista de imágenes de recepcionistas disponibles */
   receptionistImages: string[] = [];
-
+  selectedStandId: string | null = null;
+  currentReceptionistId: string | null = null;
+  standConfigs: Stand[] = [];
+  recepConfigs: Models[] = [];
   /** Imagen de stand seleccionada */
   selectedStand = signal<string | null>(null);
 
@@ -55,9 +73,12 @@ export class StandDesingComponent implements OnInit {
   imagenCargada: boolean = false;
 
   /** Imágenes cargadas */
-  bannerImages: string | null = null;
-  posterImages: string | null = null;
-  logoImages: string | null = null;
+  bannerImages: File | null = null;
+  posterImages: File | null = null;
+  logoImages: File | null = null;
+  userCompany: Usuario | null = null;
+  logoUrl: string | null = null;
+  bannerUrl: string | null = null;
 
   /** Estado de arrastre */
   private isDragging = false;
@@ -77,53 +98,98 @@ export class StandDesingComponent implements OnInit {
    * @param companyService Servicio para enviar la selección de stand y recepcionista al backend.
    * @param cdr ChangeDetectorRef para gestionar cambios en la vista.
    */
+
   constructor(
     private imageService: ImageService,
     private companyService: CompanyService,
+    private userService: UserService,
     private cdr: ChangeDetectorRef
-  ) { }
-
-  /** Método del ciclo de vida `OnInit` para inicializar datos */
+  ) {}
+  
   ngOnInit(): void {
-    this.standImages = this.imageService.getStand(); // Obtiene las rutas de imágenes de stands
-    this.receptionistImages = this.imageService.getReceptionist(); // Obtiene las rutas de imágenes de recepcionistas
+    this.loadStands();
+    this.loadModels();
+    this.loadUserCompany();
   }
 
-  /**
-   * Método para seleccionar un stand.
-   * @param stand URL de la imagen del stand seleccionada.
-   */
-  selectStand(stand: string): void {
-    this.selectedStand.set(stand);
-    this.currentStandConfig = this.imageService.getStandConfig(stand) || {};
-    this.drawCanvas();
+  loadStands(): void {
+    this.imageService.getAllStands().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.standImages = response.data.map((stand: any) =>
+            `https://backend-node-wpf9.onrender.com/proxy?url=${stand.url.fileUrl}`
+          );
+          this.standConfigs = response.data;
+        } else {
+          console.error('Error al cargar stands:', response.message);
+        }
+      },
+      error: (err) => console.error('Error inesperado al cargar stands:', err),
+    });
   }
 
-  /**
-   * Método para seleccionar una recepcionista.
-   * @param receptionist URL de la imagen de la recepcionista seleccionada.
-   */
+  loadModels(): void {
+    this.imageService.getAllModels().subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.receptionistImages = response.data.map((model: any) =>
+            `https://backend-node-wpf9.onrender.com/proxy?url=${model.url.fileUrl}`
+          );
+          this.recepConfigs = response.data;
+        } else {
+          console.error('Error al cargar modelos:', response.message);
+        }
+      },
+      error: (err) => console.error('Error inesperado al cargar modelos:', err),
+    });
+  }
+
+  loadUserCompany(): void {
+    this.userService.getUserById().pipe(retry(3)).subscribe({
+      next: (response) => {
+        this.userCompany = response ?? null;
+      },
+      error: (err) => console.error('Error después de 3 reintentos:', err),
+    });
+  }
+
+  selectStand(standUrl: string): void {
+    const originalUrl = standUrl.replace('https://backend-node-wpf9.onrender.com/proxy?url=', '');
+    const selectedStand = this.standConfigs.find((stand: any) => stand.url.fileUrl === originalUrl);
+
+    if (selectedStand) {
+      this.selectedStand.set(standUrl);
+      this.currentStandConfig = selectedStand.standConfig || {};
+      this.drawCanvas();
+    } else {
+      console.error('No se encontró el stand con la URL proporcionada.');
+    }
+  }
+
   selectReceptionist(receptionist: string): void {
-    this.selectedReceptionist.set(receptionist);
-    this.drawCanvas();
+    const originalUrl = receptionist.replace('https://backend-node-wpf9.onrender.com/proxy?url=', '');
+    const selectedReceptionist = this.recepConfigs.find((model: any) => model.url.fileUrl === originalUrl);
+
+    if (selectedReceptionist) {
+      this.selectedReceptionist.set(receptionist);
+      this.drawCanvas();
+    } else {
+      console.error('No se encontró la recepcionista con la URL proporcionada.');
+    }
   }
 
   /**
  * Actualiza los archivos cargados desde el componente hijo.
  * @param files Objeto que contiene los archivos cargados (logo, banner, poster).
  */
-  updateFiles(files: { logo: string | null, banner: string | null, poster: string | null }) {
+  updateFiles(files: { banner: File | null, bannerUrl: string |null, poster: File | null }): void {
     // Puedes manejar los datos recibidos aquí
-    if (files.logo) {
-      this.logoImages = files.logo;
-    }
     if (files.banner) {
       this.bannerImages = files.banner;
+      this.bannerUrl = files.bannerUrl;
 
       const selectedStand = this.selectedStand(); // Obtén el valor actual del signal
       if (selectedStand) {
-        // Asegúrate de que el stand seleccionado no sea null
-        this.currentStandConfig = this.imageService.getStandConfig(selectedStand) || {};
         this.drawCanvas(); // Redibuja el canvas
       }
     }
@@ -166,9 +232,8 @@ export class StandDesingComponent implements OnInit {
         this.drawImageContainStand(ctx, standImage, canvas.clientWidth, canvas.clientHeight);
 
         // Dibuja el logo, banner y póster, en este orden
-        if (this.logoImages) {
           this.drawLogo(ctx);
-        }
+
         if (this.bannerImages) {
           this.drawBanner(ctx);
         }
@@ -196,9 +261,9 @@ export class StandDesingComponent implements OnInit {
  * @param ctx Contexto del canvas para renderizado.
  */
   drawBanner(ctx: CanvasRenderingContext2D) {
-    if (this.bannerImages) {
+    if (this.bannerUrl) {
       const bannerImage = new Image();
-      bannerImage.src = this.bannerImages;
+      bannerImage.src = this.bannerUrl;
 
       bannerImage.onload = () => {
         const canvas = ctx.canvas;
@@ -245,9 +310,10 @@ export class StandDesingComponent implements OnInit {
    * @param ctx Contexto del canvas para renderizado.
    */
   drawLogo(ctx: CanvasRenderingContext2D) {
-    if (this.logoImages) {
+    if (this.userCompany?.logo) {
       const logoImage = new Image();
-      logoImage.src = this.logoImages;
+      logoImage.src = this.userCompany.logo;
+      console.log('Url logo: ', logoImage.src);
 
       logoImage.onload = () => {
         const canvas = ctx.canvas;
@@ -336,7 +402,6 @@ export class StandDesingComponent implements OnInit {
    */
   drawReceptionist(ctx: CanvasRenderingContext2D): void {
     if (!this.selectedReceptionist() || !this.currentStandConfig) return;
-
     const receptionistImage = new Image();
     receptionistImage.src = this.selectedReceptionist()!;
 
@@ -353,23 +418,28 @@ export class StandDesingComponent implements OnInit {
           canvas.clientHeight / standImage.height
         );
 
+        // Tamaño y posición real del stand en el canvas
         const standWidth = standImage.width * scale;
         const standHeight = standImage.height * scale;
-        const standX = (canvas.clientWidth - standWidth) / 2;
-        const standY = (canvas.clientHeight - standHeight) / 2;
+        const standX = (canvas.clientWidth - standWidth) / 2; // Centrado horizontal
+        const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
 
-        const { x, y } = this.currentStandConfig.receptionistPosition || { x: 0, y: 0 };
-        const scaleReceptionist = this.currentStandConfig.receptionistScale || 0.1;
+        // Coordenadas relativas del banner
+        const { x, y, width, height } = this.currentStandConfig.recepcionistPosition || {
+          x: 0.1,
+          y: 0.1,
+          width: 0.8,
+          height: 0.3,
+        };
 
-        const recX = standX + x * standWidth;
-        const recY = standY + y * standHeight;
+        // Coordenadas absolutas del banner dentro del stand
+        const recepcionistX = standX + x * standWidth;
+        const recepcionistY = standY + y * standHeight;
+        const recepcionistWidth = standWidth * width;
+        const recepcionistHeight = standHeight * height;
 
-        const recWidth = standWidth * scaleReceptionist;
-        const recHeight = (receptionistImage.height / receptionistImage.width) * recWidth;
-
-        // Dibuja el recepcionista por encima de todo
-        ctx.globalAlpha = 1; // Asegúrate de que no haya transparencia
-        ctx.drawImage(receptionistImage, recX, recY, recWidth, recHeight);
+        // Dibuja el banner directamente sin clipping
+        this.drawImageContain(ctx, receptionistImage, recepcionistWidth, recepcionistHeight, recepcionistX, recepcionistY);
       };
     };
   }
@@ -398,27 +468,39 @@ export class StandDesingComponent implements OnInit {
    * Envía la selección actual de stand y recepcionista al backend.
    */
   submitSelection(): void {
-    const URLStand = this.selectedStand();
-    const URLRecep = this.selectedReceptionist();
+    const standID = this.selectedStandId;
+    const modelID = this.currentReceptionistId;
 
-    if (!URLStand) {
+    if (!standID) {
       alert('Debes seleccionar un Stand.');
       return;
     }
-    if (!URLRecep) {
+    if (!modelID) {
       alert('Debes seleccionar un Recepcionista.');
       return;
     }
-    this.canSendFiles = true;
-    const selection = { URLStand, URLRecep };
-    this.companyService.addStanAndRecep(selection).subscribe(
+
+    const formData = new FormData();
+    formData.append('standID', standID);
+    formData.append('modelID', modelID);
+
+    if (this.bannerImages) {
+      formData.append('banner', this.bannerImages);
+    }
+    if (this.posterImages) {
+      formData.append('poster', this.posterImages);
+    }
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
+    this.imageService.addDesign(formData).subscribe(
       (response) => {
-        console.log('Datos enviados exitosamente:', response);
-        alert('Selección enviada correctamente');
+        console.log(response);
+        alert('Selección y archivos enviados correctamente');
       },
       (error) => {
-        console.error('Error al enviar la selección:', error);
-        alert('Hubo un error al enviar la selección');
+        console.error('Error al enviar la selección y archivos:', error);
+        alert('Hubo un error al enviar la selección y archivos');
       }
     );
   }

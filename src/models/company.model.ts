@@ -3,10 +3,6 @@
  * @description Interfaz que representa la información de una empresa, incluyendo descripción, sector, información de contacto y documentos opcionales.
  */
 export interface Company {
-  /**
-   * @property {string} name - Nombre de la empresa.
-   */
-  name: string;
 
   /**
    * @property {string} description - Descripción general de la empresa.
@@ -24,24 +20,14 @@ export interface Company {
   sector?: string;
 
   /**
-   * @property {string} [correo] - Correo de contacto de la empresa (opcional).
-   */
-  correo?: string;
-
-  /**
-   * @property {string} [email] - Dirección de correo electrónico de la empresa (opcional).
-   */
-  email?: string;
-
-  /**
    * @property {string[]} [documents] - Array de URLs de documentos relacionados con la empresa (opcional).
    */
-  documents?: string[];
+  documents?: File[];
 
   /**
    * @property {Array<{additionalButtonTitle: string, additionalButtonLink: string}>} [link] - Array de objetos que contiene título y enlace URL adicionales relacionados con la empresa (opcional).
    */
-  link?: Array<{
+  links?: Array<{
     additionalButtonTitle: string,
     additionalButtonLink: string
   }>;
@@ -55,15 +41,10 @@ export interface selection {
   /**
    * @property {string} URLStand - URL de la imagen o recurso para el stand de la empresa.
    */
-  URLStand: string;
+  standID: string;
 
   /**
    * @property {string} URLRecep - URL de la imagen o recurso para la recepción de la empresa.
    */
-  URLRecep: string;
-
-  /**
-   * @property {string} [StandID] - ID único asignado al stand de la empresa (opcional).
-   */
-  StandID?: string;
+  recepID: string;
 }

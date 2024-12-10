@@ -6,14 +6,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { UserService } from '../../../services/admin.service';
-import { AuthService } from '../../../services/auth.service';
+import { UserService } from '../../../services/users.service';
 import { CommonModule } from '@angular/common';
 
 /**
- * CreateUserComponent
- * 
- * Este componente permite crear un nuevo usuario mediante un formulario en un modal de diálogo.
+ * @class CreateUserComponent
+ * @description Este componente permite crear un nuevo usuario mediante un formulario reactivo dentro de un modal.
  */
 @Component({
   selector: 'app-create-user',
@@ -30,11 +28,10 @@ import { CommonModule } from '@angular/common';
     MatDialogActions,
     MatDialogContent,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
   ]
 })
 export class CreateUserComponent {
-
   /** Formulario reactivo para crear usuario */
   createUserForm: FormGroup;
 
@@ -44,7 +41,6 @@ export class CreateUserComponent {
   /** Dependencias inyectadas */
   private dialogRef = inject(MatDialogRef<CreateUserComponent>);
   private userService = inject(UserService);
-  private authService = inject(AuthService);
   private fb = inject(FormBuilder);
 
   /**
@@ -58,10 +54,10 @@ export class CreateUserComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       rol: ['', Validators.required],
-      company: [''],  // Campo adicional para rol "co"
-      cif: [''],
-      dni: [''],  // Campo adicional para rol "visitor"
-      studies: ['']
+      company: [''], // Campo adicional para rol "co"
+      cif: [''], // Campo adicional para rol "co"
+      dni: [''], // Campo adicional para rol "visitor"
+      studies: [''], // Campo adicional para rol "visitor"
     });
 
     // Actualizar validaciones en base al rol seleccionado
@@ -76,11 +72,11 @@ export class CreateUserComponent {
    * @param rol - El rol seleccionado, puede ser "co" o "visitor".
    */
   private updateFieldValidations(rol: string) {
-    this.createUserForm.get('company')?.clearValidators();
-    this.createUserForm.get('cif')?.clearValidators();
-    this.createUserForm.get('dni')?.clearValidators();
-    this.createUserForm.get('studies')?.clearValidators();
+    // Limpiar validaciones anteriores
+    const fields = ['company', 'cif', 'dni', 'studies'];
+    fields.forEach((field) => this.createUserForm.get(field)?.clearValidators());
 
+    // Aplicar validaciones específicas para cada rol
     if (rol === 'co') {
       this.createUserForm.get('company')?.setValidators([Validators.required]);
       this.createUserForm.get('cif')?.setValidators([Validators.required]);
@@ -89,37 +85,29 @@ export class CreateUserComponent {
       this.createUserForm.get('studies')?.setValidators([Validators.required]);
     }
 
-    this.createUserForm.get('company')?.updateValueAndValidity();
-    this.createUserForm.get('cif')?.updateValueAndValidity();
-    this.createUserForm.get('dni')?.updateValueAndValidity();
-    this.createUserForm.get('studies')?.updateValueAndValidity();
+    // Actualizar el estado de los campos
+    fields.forEach((field) => this.createUserForm.get(field)?.updateValueAndValidity());
   }
 
   /**
    * Maneja el envío del formulario.
-   * Si es válido, envía los datos del nuevo usuario al servicio y cierra el modal.
+   * Envía los datos del nuevo usuario al servicio y cierra el modal si es exitoso.
    */
   onSubmit(): void {
     if (this.createUserForm.valid) {
       const newUser = this.createUserForm.value;
       this.cleanFieldsBasedOnRole(newUser);
 
-      const token = this.authService.getToken();
-      if (!token) {
-        console.error('No token available');
-        return;
-      }
-
       this.isSubmitting.set(true);
-
       this.userService.createUser(newUser).subscribe({
         next: (response) => {
-          console.log('Usuario creado exitosamente', response);
+          console.log('Usuario creado exitosamente:', response);
           this.dialogRef.close(response);
           this.isSubmitting.set(false);
         },
         error: (err) => {
-          console.error('Error al crear el usuario', err);
+          console.error('Error al crear el usuario:', err);
+          alert('Ocurrió un error al crear el usuario.');
           this.isSubmitting.set(false);
         }
       });
