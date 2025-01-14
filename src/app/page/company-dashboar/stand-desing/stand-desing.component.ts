@@ -173,6 +173,7 @@ export class StandDesingComponent implements OnInit {
 
     if (selectedReceptionist) {
       this.selectedReceptionist.set(receptionist);
+      this.currentReceptionistId = selectedReceptionist.id;
       this.drawCanvas();
     } else {
       console.error('No se encontró la recepcionista con la URL proporcionada.');
