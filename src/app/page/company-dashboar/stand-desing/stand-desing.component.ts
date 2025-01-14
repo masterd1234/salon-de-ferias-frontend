@@ -159,6 +159,7 @@ export class StandDesingComponent implements OnInit {
 
     if (selectedStand) {
       this.selectedStand.set(standUrl);
+      this.selectedStandId = selectedStand.id;
       this.currentStandConfig = selectedStand.standConfig || {};
       this.drawCanvas();
     } else {
