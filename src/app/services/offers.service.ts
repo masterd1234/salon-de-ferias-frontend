@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
 import { Offer } from '../../models/offers/offers.model';
 
+import { environment } from '../../environments/environment';
+
 /**
  * @class OffersService
  * @description Servicio para interactuar con la API de ofertas. Proporciona métodos para agregar,
@@ -17,7 +19,8 @@ export class OffersService {
    * @type {string}
    * @private
    */
-  private apiUrl = 'https://backend-node-wpf9.onrender.com/offers';
+  // private apiUrl = 'https://backend-node-wpf9.onrender.com/offers';
+  private apiUrl = `${environment.url}/offers`;
 
   /**
    * Constructor del servicio OffersService.
@@ -32,7 +35,10 @@ export class OffersService {
    * @returns {Observable<{ success: boolean; message: string }>} Observable con el estado del éxito y el mensaje del error.
    * @private
    */
-  private handleError(error: any, defaultMessage: string): Observable<{ success: boolean; message: string }> {
+  private handleError(
+    error: any,
+    defaultMessage: string
+  ): Observable<{ success: boolean; message: string }> {
     const errorMessage = error.error?.message || defaultMessage;
     return of({ success: false, message: errorMessage });
   }
@@ -43,13 +49,26 @@ export class OffersService {
    * @param {string} [id] - ID opcional de la compañía asociada a la oferta.
    * @returns {Observable<{ success: boolean; message: string; id?: string }>} Observable con el estado del éxito, mensaje y el ID de la oferta creada.
    */
-  addOffer(offer: Offer, id?: string): Observable<{ success: boolean; message: string; id?: string }> {
+  addOffer(
+    offer: Offer,
+    id?: string
+  ): Observable<{ success: boolean; message: string; id?: string }> {
     const url = id ? `${this.apiUrl}/add/${id}` : `${this.apiUrl}/add`;
 
-    return this.http.post<{ message: string; id: string }>(url, offer, { withCredentials: true }).pipe(
-      map((response) => ({ success: true, message: response.message, id: response.id })),
-      catchError((error) => this.handleError(error, 'Error desconocido al agregar la oferta'))
-    );
+    return this.http
+      .post<{ message: string; id: string }>(url, offer, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response) => ({
+          success: true,
+          message: response.message,
+          id: response.id,
+        })),
+        catchError((error) =>
+          this.handleError(error, 'Error desconocido al agregar la oferta')
+        )
+      );
   }
 
   /**
@@ -57,13 +76,19 @@ export class OffersService {
    * @param {string} [id] - ID opcional para filtrar las ofertas por compañía.
    * @returns {Observable<{ success: boolean; message: string; offers?: Offer[] }>} Observable con el estado del éxito, mensaje y la lista de ofertas.
    */
-  getOffersById(id?: string): Observable<{ success: boolean; message: string; offers?: Offer[] }> {
+  getOffersById(
+    id?: string
+  ): Observable<{ success: boolean; message: string; offers?: Offer[] }> {
     const url = id ? `${this.apiUrl}/company/${id}` : `${this.apiUrl}/company`;
 
-    return this.http.get<{ message: string; offers: Offer[] }>(url, { withCredentials: true }).pipe(
-      map((response) => ({ success: true, ...response })),
-      catchError((error) => this.handleError(error, 'Error desconocido al obtener las ofertas'))
-    );
+    return this.http
+      .get<{ message: string; offers: Offer[] }>(url, { withCredentials: true })
+      .pipe(
+        map((response) => ({ success: true, ...response })),
+        catchError((error) =>
+          this.handleError(error, 'Error desconocido al obtener las ofertas')
+        )
+      );
   }
 
   /**
@@ -74,10 +99,14 @@ export class OffersService {
   deleteOffer(id: string): Observable<{ success: boolean; message: string }> {
     const url = `${this.apiUrl}/delete/${id}`;
 
-    return this.http.delete<{ message: string }>(url, { withCredentials: true }).pipe(
-      map((response) => ({ success: true, message: response.message })),
-      catchError((error) => this.handleError(error, 'Error desconocido al eliminar la oferta'))
-    );
+    return this.http
+      .delete<{ message: string }>(url, { withCredentials: true })
+      .pipe(
+        map((response) => ({ success: true, message: response.message })),
+        catchError((error) =>
+          this.handleError(error, 'Error desconocido al eliminar la oferta')
+        )
+      );
   }
 
   /**
@@ -86,25 +115,42 @@ export class OffersService {
    * @param {Offer} offer - Objeto con los datos actualizados de la oferta.
    * @returns {Observable<{ success: boolean; message: string }>} Observable con el estado del éxito y el mensaje de la operación.
    */
-  updateOffers(id: string, offer: Offer): Observable<{ success: boolean; message: string }> {
+  updateOffers(
+    id: string,
+    offer: Offer
+  ): Observable<{ success: boolean; message: string }> {
     const url = `${this.apiUrl}/update/${id}`;
 
-    return this.http.put<{ message: string }>(url, offer, { withCredentials: true }).pipe(
-      map((response) => ({ success: true, message: response.message })),
-      catchError((error) => this.handleError(error, 'Error desconocido al actualizar la oferta'))
-    );
+    return this.http
+      .put<{ message: string }>(url, offer, { withCredentials: true })
+      .pipe(
+        map((response) => ({ success: true, message: response.message })),
+        catchError((error) =>
+          this.handleError(error, 'Error desconocido al actualizar la oferta')
+        )
+      );
   }
 
   /**
    * Obtiene todas las ofertas disponibles en la API.
    * @returns {Observable<{ success: boolean; message: string; offers?: Offer[] }>} Observable con el estado del éxito, mensaje y la lista de ofertas.
    */
-  getAllOffers(): Observable<{ success: boolean; message: string; offers?: Offer[] }> {
+  getAllOffers(): Observable<{
+    success: boolean;
+    message: string;
+    offers?: Offer[];
+  }> {
     const url = `${this.apiUrl}/all`;
 
     return this.http.get<Offer[]>(url, { withCredentials: true }).pipe(
-      map((offers) => ({ success: true, message: 'Ofertas obtenidas con éxito', offers })),
-      catchError((error) => this.handleError(error, 'Error desconocido al recuperar las ofertas'))
+      map((offers) => ({
+        success: true,
+        message: 'Ofertas obtenidas con éxito',
+        offers,
+      })),
+      catchError((error) =>
+        this.handleError(error, 'Error desconocido al recuperar las ofertas')
+      )
     );
   }
 
@@ -136,9 +182,17 @@ export class OffersService {
       }
     });
 
-    return this.http.get<Offer[]>(url, { params: httpParams, withCredentials: true }).pipe(
-      map((offers) => ({ success: true, message: 'Ofertas obtenidas con éxito', offers })),
-      catchError((error) => this.handleError(error, 'Error desconocido al buscar ofertas'))
-    );
+    return this.http
+      .get<Offer[]>(url, { params: httpParams, withCredentials: true })
+      .pipe(
+        map((offers) => ({
+          success: true,
+          message: 'Ofertas obtenidas con éxito',
+          offers,
+        })),
+        catchError((error) =>
+          this.handleError(error, 'Error desconocido al buscar ofertas')
+        )
+      );
   }
 }
