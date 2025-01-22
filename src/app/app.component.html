@@ -1,47 +1,61 @@
 <!-- Barra superior -->
-<mat-toolbar class="navbar-custom" style="display: flex; justify-content: space-between;">
+<mat-toolbar
+  class="navbar-custom"
+  style="display: flex; justify-content: space-between"
+>
   <!-- Logo -->
-  @if(!logged()){
+
   <div>
     <a class="navbar-brand" routerLink="/home" aria-label="Home">
-      <img src="assets/logo.png" alt="Logo" style="width: 100px">
+      <img src="assets/logo.png" alt="Logo" style="width: 100px" />
     </a>
   </div>
-  }@else {
-  <a class="navbar-brand" [routerLink]="(isRol() === 'admin' ? '/admin-dashboard' : '/company-dashboard')"
-    aria-label="Dashboard">
-    <img src="assets/logo.png" alt="Logo" style="width: 100px">
-  </a>
-  }
+
   <!-- Menú para pantallas grandes -->
   @if(logged() && !isSmallScreen) {
   <mat-nav-list>
     <div class="acction-button">
       @if(isRol() === 'admin') {
-      <button class="btn-icon-text" (click)="createUser()" aria-label="Crear Usuario">
+      <button
+        class="btn-icon-text"
+        (click)="createUser()"
+        aria-label="Crear Usuario"
+      >
         <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
       </button>
       }
-      <button class="btn-icon-text" (click)="logout()" aria-label="Cerrar Sesión">
-        <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Cerrar Sesión</span>
+      <button
+        class="btn-icon-text"
+        (click)="logout()"
+        aria-label="Cerrar Sesión"
+      >
+        <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i
+        ><span>Cerrar Sesión</span>
       </button>
     </div>
   </mat-nav-list>
   }@else if (!logged() && !isSmallScreen) {
   <mat-nav-list class="button-nav mx-3">
     <div class="acction-button">
-      <button class="btn-icon-text" routerLink="/login" aria-label="Iniciar Sesión">
+      <button
+        class="btn-icon-text"
+        routerLink="/login"
+        aria-label="Iniciar Sesión"
+      >
         <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i>
         <span>Iniciar Sesión</span>
       </button>
-      <button class="btn-icon-text" routerLink="/register" aria-label="Registro">
+      <button
+        class="btn-icon-text"
+        routerLink="/register"
+        aria-label="Registro"
+      >
         <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i>
         <span>Registrar</span>
       </button>
     </div>
   </mat-nav-list>
   }
-
 
   <!-- Botón de menú para pantallas pequeñas -->
   @if(isSmallScreen) {
@@ -54,60 +68,140 @@
 <mat-sidenav-container>
   <!-- Barra Lateral -->
   @if(logged()){
-  <mat-sidenav #drawer [mode]="sidenavMode" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav"
-    aria-label="Barra lateral">
+  <mat-sidenav
+    #drawer
+    [mode]="sidenavMode"
+    [opened]="!isSmallScreen"
+    clasS="sidenav"
+    id="navbarNav"
+    aria-label="Barra lateral"
+  >
     <mat-nav-list class="nav-list">
-
       @if(isRol()==='co'){
-      <mat-list-item class="mt-2"><a class="nav-link active" routerLink="/home" aria-label="Home"><i
-            class="fa-solid fa-house" style="color: #002e4c;"></i><span>Home</span></a></mat-list-item>
+      <mat-list-item class="mt-2"
+        ><a
+          class="nav-link active"
+          routerLink="/company-dashboard"
+          aria-label="Home"
+          ><i class="fa-solid fa-bars" style="color: #002e4c"></i
+          ><span>Menu</span></a
+        ></mat-list-item
+      >
 
-      <mat-list-item> <a class="nav-link active" routerLink="/profile" style="color: #002e4c;" aria-label="Perfil"> <i
-            class="fa-solid fa-user" style="color: #002e4c;"></i><span>Perfil</span></a></mat-list-item>
+      <mat-list-item>
+        <a
+          class="nav-link active"
+          routerLink="/profile"
+          style="color: #002e4c"
+          aria-label="Perfil"
+        >
+          <i class="fa-solid fa-user" style="color: #002e4c"></i
+          ><span>Perfil</span></a
+        ></mat-list-item
+      >
 
-      <mat-list-item class="mt-2"><a class="nav-link active" routerLink="/offers" aria-label="Ofertas"><i
-            class="fa-solid fa-briefcase" style="color: #002e4c;"></i><span>Ofertas</span></a></mat-list-item>
-      <mat-list-item class="mt-2"><a class="nav-link active" routerLink="/map" aria-label="Empresas"><i
-            class="fa-solid fa-building" style="color: #002e4c;"></i><span>Empresas</span></a></mat-list-item>
+      <mat-list-item class="mt-2"
+        ><a class="nav-link active" routerLink="/offers" aria-label="Ofertas"
+          ><i class="fa-solid fa-briefcase" style="color: #002e4c"></i
+          ><span>Ofertas</span></a
+        ></mat-list-item
+      >
+      <mat-list-item class="mt-2"
+        ><a class="nav-link active" routerLink="/map" aria-label="Empresas"
+          ><i class="fa-solid fa-building" style="color: #002e4c"></i
+          ><span>Empresas</span></a
+        ></mat-list-item
+      >
 
       @if(isSmallScreen){
       <mat-divider></mat-divider>
       <mat-list-item>
         @if(isRol() === 'admin'){
-        <a class="nav-link link" (click)="createUser()" aria-label="Cear Usuario">
+        <a
+          class="nav-link link"
+          (click)="createUser()"
+          aria-label="Cear Usuario"
+        >
           <i class="fa-solid fa-plus"></i><span>Crear Usuario</span>
         </a>
         }
       </mat-list-item>
       <mat-list-item>
         <a class="nav-link link" (click)="logout()" aria-label="Cerrar Sesión">
-          <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i><span>Salir</span>
+          <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i
+          ><span>Salir</span>
         </a>
       </mat-list-item>
-      }
-      }
+      } } @if(isRol()==='visitor'){
+
+      <mat-list-item>
+        <a
+          class="nav-link active"
+          routerLink="/profile"
+          style="color: #002e4c"
+          aria-label="Perfil"
+        >
+          <i class="fa-solid fa-user" style="color: #002e4c"></i
+          ><span>Perfil</span></a
+        ></mat-list-item
+      >
+
+      <mat-list-item class="mt-2"
+        ><a class="nav-link active" routerLink="/offers" aria-label="Ofertas"
+          ><i class="fa-solid fa-briefcase" style="color: #002e4c"></i
+          ><span>Ofertas</span></a
+        ></mat-list-item
+      >
+      <mat-list-item class="mt-2"
+        ><a class="nav-link active" routerLink="/map" aria-label="Empresas"
+          ><i class="fa-solid fa-building" style="color: #002e4c"></i
+          ><span>Empresas</span></a
+        ></mat-list-item
+      >
+
+      @if(isSmallScreen){
+      <mat-divider></mat-divider>
+
+      <mat-list-item>
+        <a class="nav-link link" (click)="logout()" aria-label="Cerrar Sesión">
+          <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i
+          ><span>Salir</span>
+        </a>
+      </mat-list-item>
+      } }
     </mat-nav-list>
   </mat-sidenav>
-  }@else {
-  @if(isSmallScreen){
-  <mat-sidenav #drawer [mode]="sidenavMode" [opened]="!isSmallScreen" clasS="sidenav" id="navbarNav"
-    aria-label="Barra lateral">
+  }@else { @if(isSmallScreen){
+  <mat-sidenav
+    #drawer
+    [mode]="sidenavMode"
+    [opened]="!isSmallScreen"
+    clasS="sidenav"
+    id="navbarNav"
+    aria-label="Barra lateral"
+  >
     <mat-nav-list class="button-nav mx-3">
       <div class="acction-button">
-        <button class="btn-icon-text" routerLink="/login" aria-label="Iniciar Sesión">
+        <button
+          class="btn-icon-text"
+          routerLink="/login"
+          aria-label="Iniciar Sesión"
+        >
           <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i>
           <span>Iniciar Sesión</span>
         </button>
-        <button class="btn-icon-text" routerLink="/register" aria-label="Registro">
+        <button
+          class="btn-icon-text"
+          routerLink="/register"
+          aria-label="Registro"
+        >
           <i class="fa-solid fa-right-from-bracket fa-flip-vertical"></i>
           <span>Registrar</span>
         </button>
       </div>
     </mat-nav-list>
   </mat-sidenav>
-  }
-
-  }
+  } }
 
   <!-- Contenido principal -->
   <mat-sidenav-content>
