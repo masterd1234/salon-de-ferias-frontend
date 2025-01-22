@@ -1,92 +1,214 @@
 <!-- Contenedor principal para el formulario de login -->
-<div class="container-fluid d-flex justify-content-center align-items-center my-5" style="min-height: 100vh;">
-    <div class="row justify-content-center">
+<div
+  class="container-fluid d-flex justify-content-center align-items-center my-5"
+  style="min-height: 100vh"
+>
+  <div class="row justify-content-center">
+    <!-- Columna para el encabezado del formulario de login -->
+    <div
+      class="col-12 col-md-6 col-lg-4 bg-custom1 d-flex flex-column rounded-start shadow-lg"
+    >
+      <!-- Encabezado del formulario -->
+      <div class="mt-4 text-center w-100" style="margin-top: auto">
+        <h1>Conéctate ahora y gestiona tu Stand Virtual.</h1>
+      </div>
 
-        <!-- Columna para el encabezado del formulario de login -->
-        <div class="col-12 col-md-6 col-lg-4 bg-custom1 d-flex flex-column rounded-start shadow-lg">
-
-            <!-- Encabezado del formulario -->
-            <div class="mt-4 text-center w-100" style="margin-top: auto;">
-                <h1>Conéctate ahora y gestiona tu Stand Virtual.</h1>
-            </div>
-
-            <!-- Logos de la empresa asociados al formulario -->
-            <div class="logos d-flex justify-content-center align-items-center mb-4" style="flex-wrap: wrap;">
-                <img src="assets/logo_FM.png" alt="Logo Fundacion" class="img-fluid">
-                <img src="assets/logo_MD.png" alt="Logo Master" class="img-fluid" style="max-width: 60%;">
-            </div>
-        </div>
-
-        <!-- Columna para el formulario de autenticación -->
-        <div class="col-12 col-md-6 col-lg-4 bg-custom2 rounded-end shadow-lg d-flex align-items-center"
-            style="flex-direction: column;">
-            <mat-tab-group>
-                <mat-tab label="Empresa">
-                    <form [formGroup]="companyRegister" (ngSubmit)="registerCompany()">
-                        <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
-                            <mat-label>Nombre de la empresa</mat-label>
-                            <input matInput placeHolder="Nombre de la Empresa" formControlName="name">
-                            @if(companyRegister.get('name')?.invalid && companyRegister.get('name')?.touched){
-                            <mat-error>El nombre de la empresa es requerido.</mat-error>
-                            }
-                        </mat-form-field>
-                        <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
-                            <mat-label>Email de la empresa</mat-label>
-                            <input matInput placeHolder="example@empresa.com" formControlName="email">
-                            @if(companyRegister.get('email')?.invalid && companyRegister.get('email')?.touched){
-                            <mat-error>El email de la empresa es requerido.</mat-error>
-                            }
-                        </mat-form-field>
-                        <mat-form-field appearance="fill" class="w-100 mb-3">
-                            <mat-label>Contraseña</mat-label>
-                            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password"
-                                placeholder="Contraseña">
-                            <!-- Botón para alternar la visibilidad de la contraseña -->
-                            <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()">
-                                <i class="fa-solid" [ngClass]="hide ? 'fa-eye-slash' : 'fa-eye'"></i>
-                            </button>
-                            @if(companyRegister.get('password')?.invalid && companyRegister.get('password')?.touched){
-                            <mat-error>La contraseña es obligatoria y debe tener al menos 6 caracteres.</mat-error>
-                            }
-                        </mat-form-field>
-                        <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
-                            <mat-label>CIF de la empresa</mat-label>
-                            <input matInput placeHolder="B123456789" formControlName="cif">
-                            @if(companyRegister.get('cif')?.invalid && companyRegister.get('cif')?.touched){
-                            <mat-error>El CIF de la empresa es requerido.</mat-error>
-                            }
-                        </mat-form-field>
-                        <!-- Botón para añadir el logo -->
-                        <div class="action-button ml-auto d-flex">
-                            <button type="button" class="button button--primary" (click)="logoInput.click()"
-                                mat-flat-button>
-                                <i class="fa-solid fa-upload"></i>
-                            </button>
-                            <!-- Input de archivo oculto para subir el logo -->
-                            <input type="file" #logoInput (change)="onFileChange($event, 'logo')" class="file-input" />
-                            <div *ngIf="logoUrl">
-                                <p>Archivo seleccionado: {{ logoFileName }}</p>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <button class="button button--primary mx-2" type="submit" [disabled]="!companyRegister.valid" mat-flat-button> Registrar</button>
-                        </div>
-                    </form>
-                </mat-tab>
-                <mat-tab label="Visitante">
-                    <form [formGroup]="companyRegister" (ngSubmit)="registerCompany()">
-                        <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
-                            <mat-label>Nombre de la empresa</mat-label>
-                            <input matInput placeHolder="Nombre de la Empresa" formControlName="name">
-                            @if(companyRegister.get('name')?.invalid && companyRegister.get('name')?.touched){
-                            <mat-error>El nombre de la empresa es requerido.</mat-error>
-                            }
-                        </mat-form-field>
-                    </form>
-                </mat-tab>
-            </mat-tab-group>
-
-        </div>
-
+      <!-- Logos de la empresa asociados al formulario -->
+      <div
+        class="logos d-flex justify-content-center align-items-center mb-4"
+        style="flex-wrap: wrap"
+      >
+        <img src="assets/logo_FM.png" alt="Logo Fundacion" class="img-fluid" />
+        <img
+          src="assets/logo_MD.png"
+          alt="Logo Master"
+          class="img-fluid"
+          style="max-width: 60%"
+        />
+      </div>
     </div>
+
+    <!-- Columna para el formulario de autenticación -->
+    <div
+      class="col-12 col-md-6 col-lg-4 bg-custom2 rounded-end shadow-lg d-flex align-items-center"
+      style="flex-direction: column"
+    >
+      <mat-tab-group>
+        <mat-tab label="Empresa">
+          <form [formGroup]="companyRegister" (ngSubmit)="registerCompany()">
+            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+              <mat-label>Nombre de la empresa</mat-label>
+              <input
+                matInput
+                placeHolder="Nombre de la Empresa"
+                formControlName="name"
+              />
+              @if(companyRegister.get('name')?.invalid &&
+              companyRegister.get('name')?.touched){
+              <mat-error>El nombre de la empresa es requerido.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+              <mat-label>Email de la empresa</mat-label>
+              <input
+                matInput
+                placeHolder="example@empresa.com"
+                formControlName="email"
+              />
+              @if(companyRegister.get('email')?.invalid &&
+              companyRegister.get('email')?.touched){
+              <mat-error>El email de la empresa es requerido.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100 mb-3">
+              <mat-label>Contraseña</mat-label>
+              <input
+                matInput
+                [type]="hide ? 'password' : 'text'"
+                formControlName="password"
+                placeholder="Contraseña"
+              />
+              <!-- Botón para alternar la visibilidad de la contraseña -->
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="togglePasswordVisibility()"
+              >
+                <i
+                  class="fa-solid"
+                  [ngClass]="hide ? 'fa-eye-slash' : 'fa-eye'"
+                ></i>
+              </button>
+              @if(companyRegister.get('password')?.invalid &&
+              companyRegister.get('password')?.touched){
+              <mat-error
+                >La contraseña es obligatoria y debe tener al menos 6
+                caracteres.</mat-error
+              >
+              }
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+              <mat-label>CIF de la empresa</mat-label>
+              <input matInput placeHolder="B123456789" formControlName="cif" />
+              @if(companyRegister.get('cif')?.invalid &&
+              companyRegister.get('cif')?.touched){
+              <mat-error>El CIF de la empresa es requerido.</mat-error>
+              }
+            </mat-form-field>
+            <!-- Botón para añadir el logo -->
+            <div class="action-button ml-auto d-flex">
+              <button
+                type="button"
+                class="button button--primary"
+                (click)="logoInput.click()"
+                mat-flat-button
+              >
+                <i class="fa-solid fa-upload"></i>
+              </button>
+              <!-- Input de archivo oculto para subir el logo -->
+              <input
+                type="file"
+                #logoInput
+                (change)="onFileChange($event, 'logo')"
+                class="file-input"
+              />
+              <div *ngIf="logoUrl">
+                <p>Archivo seleccionado: {{ logoFileName }}</p>
+              </div>
+            </div>
+            <div class="mt-3">
+              <button
+                class="button button--primary mx-2"
+                type="submit"
+                [disabled]="!companyRegister.valid"
+                mat-flat-button
+              >
+                Registrar
+              </button>
+            </div>
+          </form>
+        </mat-tab>
+        <mat-tab label="Visitante">
+          <form [formGroup]="visitorRegister" (ngSubmit)="registerVisitor()">
+            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+              <mat-label>Nombre del visitante</mat-label>
+              <input
+                matInput
+                placeHolder="Nombre del visitante"
+                formControlName="name"
+              />
+              @if(visitorRegister.get('name')?.invalid &&
+              visitorRegister.get('name')?.touched){
+              <mat-error>El nombre del visitante es requerido.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+              <mat-label>DNI/NIE del visitante</mat-label>
+              <input
+                matInput
+                placeHolder="DNI del visitante"
+                formControlName="dni"
+              />
+              @if(visitorRegister.get('dni')?.invalid &&
+              visitorRegister.get('dni')?.touched){
+              <mat-error>El DNI del visitante es requerido.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+              <mat-label>Email del visitante</mat-label>
+              <input
+                matInput
+                placeHolder="example@visitante.com"
+                formControlName="email"
+              />
+              @if(visitorRegister.get('email')?.invalid &&
+              visitorRegister.get('email')?.touched){
+              <mat-error>El email es requerido.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100 mb-3">
+              <mat-label>Contraseña</mat-label>
+              <input
+                matInput
+                [type]="hide ? 'password' : 'text'"
+                formControlName="password"
+                placeholder="Contraseña"
+              />
+              <!-- Botón para alternar la visibilidad de la contraseña -->
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="togglePasswordVisibility()"
+              >
+                <i
+                  class="fa-solid"
+                  [ngClass]="hide ? 'fa-eye-slash' : 'fa-eye'"
+                ></i>
+              </button>
+              @if(visitorRegister.get('password')?.invalid &&
+              visitorRegister.get('password')?.touched){
+              <mat-error
+                >La contraseña es obligatoria y debe tener al menos 6
+                caracteres.</mat-error
+              >
+              }
+            </mat-form-field>
+
+            <div class="mt-3">
+              <button
+                class="button button--primary mx-2"
+                type="submit"
+                [disabled]="!visitorRegister.valid"
+                mat-flat-button
+              >
+                Registrar
+              </button>
+            </div>
+          </form>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
 </div>

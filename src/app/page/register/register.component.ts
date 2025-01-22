@@ -5,11 +5,19 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
-import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import {
+  MatCheckboxChange,
+  MatCheckboxModule,
+} from '@angular/material/checkbox';
 import { UserService } from '../../services/users.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LoginComponent } from '../login/login.component';
@@ -17,12 +25,23 @@ import { LoginComponent } from '../login/login.component';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [MatCheckboxModule, HttpClientModule, MatTabsModule, CommonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    MatCheckboxModule,
+    HttpClientModule,
+    MatTabsModule,
+    CommonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    RouterModule,
+  ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.scss',
 })
 export class RegisterComponent {
-
   // Control de visibilidad de la contraseña
   hide = true;
 
@@ -33,7 +52,7 @@ export class RegisterComponent {
 
   profileImageFile: File | null = null; // Archivo cargado para el banner
   cvFile: File | null = null; // Archivo cargado para el póster
-  logoFile: File | null = null;   // Archivo cargado para el logo
+  logoFile: File | null = null; // Archivo cargado para el logo
 
   /** Nombres de los archivos subidos. */
   logoFileName: string = '';
@@ -46,9 +65,11 @@ export class RegisterComponent {
 
   // Formulario reactivo para capturar las credenciales de inicio de sesión
   companyRegister: FormGroup;
+  visitorRegister: FormGroup;
 
   constructor(
     private fb: FormBuilder,
+    private fb1: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private userService: UserService
@@ -60,7 +81,19 @@ export class RegisterComponent {
       email: ['', [Validators.required, Validators.email]], // Campo requerido para correo electrónico
       rol: ['co'],
       logo: [''],
-      cif: ['', Validators.required]
+      cif: ['', Validators.required],
+    });
+
+    // Configuración del formulario de inicio de sesión
+    this.visitorRegister = this.fb1.group({
+      name: ['', [Validators.required]], // Campo requerido para nombre o correo
+      subname: [''], // Campo requerido para nombre o correo
+      phone: [''], // Campo requerido para nombre o correo
+      studies: [''], // Campo requerido para nombre o correo
+      dni: [''], // Campo requerido para nombre o correo
+      password: ['', [Validators.required, Validators.minLength(6)]], // Campo requerido para contraseña
+      email: ['', [Validators.required, Validators.email]], // Campo requerido para correo electrónico
+      rol: ['visitor'],
     });
   }
 
@@ -73,7 +106,7 @@ export class RegisterComponent {
 
   /**
    * Maneja el cambio en el checkbox de política de privacidad.
-   * 
+   *
    * @param event - El cambio del checkbox
    */
   onPrivacyChange(event: MatCheckboxChange): void {
@@ -82,7 +115,7 @@ export class RegisterComponent {
 
   /**
    * Maneja el cambio en el checkbox de términos y condiciones.
-   * 
+   *
    * @param event - El cambio del checkbox
    */
   onTermsChange(event: MatCheckboxChange): void {
@@ -94,22 +127,22 @@ export class RegisterComponent {
       alert('Por favor, completa todos los campos obligatorios.');
       return;
     }
-  
+
     const formData = new FormData();
-  
+
     formData.append('name', this.companyRegister.get('name')?.value);
     formData.append('password', this.companyRegister.get('password')?.value);
     formData.append('email', this.companyRegister.get('email')?.value);
     formData.append('rol', this.companyRegister.get('rol')?.value);
     formData.append('cif', this.companyRegister.get('cif')?.value);
-  
+
     if (this.logoFile) formData.append('logo', this.logoFile);
-  
+
     this.userService.createUser(formData).subscribe({
       next: (response) => {
         const username = this.companyRegister.get('name')?.value;
         const password = this.companyRegister.get('password')?.value;
-  
+
         if (username && password) {
           this.authService.login(username, password).subscribe({
             next: (loginResponse) => {
@@ -130,7 +163,10 @@ export class RegisterComponent {
               }
             },
             error: (err) => {
-              alert('Error inesperado en la autenticación: ' + err.error?.message || 'Error desconocido.');
+              alert(
+                'Error inesperado en la autenticación: ' + err.error?.message ||
+                  'Error desconocido.'
+              );
               console.error(err);
             },
           });
@@ -139,7 +175,62 @@ export class RegisterComponent {
         }
       },
       error: (err) => {
-        const errorMessage = err.error?.message || 'Error desconocido al crear el usuario.';
+        const errorMessage =
+          err.error?.message || 'Error desconocido al crear el usuario.';
+        alert('Error al crear usuario: ' + errorMessage);
+        console.error('Error al crear el usuario', err);
+      },
+    });
+  }
+
+  registerVisitor(): void {
+    if (this.visitorRegister.invalid) {
+      alert('Por favor, completa todos los campos obligatorios.');
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append('name', this.visitorRegister.get('name')?.value);
+    formData.append('subname', this.visitorRegister.get('subname')?.value);
+    formData.append('phone', this.visitorRegister.get('phone')?.value);
+    formData.append('studies', this.visitorRegister.get('studies')?.value);
+    formData.append('dni', this.visitorRegister.get('dni')?.value);
+    formData.append('password', this.visitorRegister.get('password')?.value);
+    formData.append('email', this.visitorRegister.get('email')?.value);
+    formData.append('rol', this.visitorRegister.get('rol')?.value);
+
+    if (this.logoFile) formData.append('logo', this.logoFile);
+
+    this.userService.createUser(formData).subscribe({
+      next: (response) => {
+        const username = this.visitorRegister.get('name')?.value;
+        const password = this.visitorRegister.get('password')?.value;
+
+        if (username && password) {
+          this.authService.login(username, password).subscribe({
+            next: (loginResponse) => {
+              if (loginResponse.success) {
+                this.router.navigate(['/home']);
+              } else {
+                alert('Error en la autenticación: ' + loginResponse.message);
+              }
+            },
+            error: (err) => {
+              alert(
+                'Error inesperado en la autenticación: ' + err.error?.message ||
+                  'Error desconocido.'
+              );
+              console.error(err);
+            },
+          });
+        } else {
+          alert('Faltan datos para iniciar sesión.');
+        }
+      },
+      error: (err) => {
+        const errorMessage =
+          err.error?.message || 'Error desconocido al crear el usuario.';
         alert('Error al crear usuario: ' + errorMessage);
         console.error('Error al crear el usuario', err);
       },
@@ -177,14 +268,14 @@ export class RegisterComponent {
             this.logoFile = file;
             break;
           case 'profileImage':
-            this.profileImageFileName = file.name
-            this.profileImageFile = file
-            this.profileImageUrl = result
+            this.profileImageFileName = file.name;
+            this.profileImageFile = file;
+            this.profileImageUrl = result;
             break;
           case 'cv':
-            this.cvFileName = file.name
-            this.cvFile = file
-            this.cvUrl = result
+            this.cvFileName = file.name;
+            this.cvFile = file;
+            this.cvUrl = result;
             break;
           default:
             console.warn(`Tipo desconocido: ${type}`);
