@@ -1,25 +1,30 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Router } from '@angular/router';
-import { CountdownTimerComponent } from "./countdown-timer/countdown-timer.component";
+import { CountdownTimerComponent } from './countdown-timer/countdown-timer.component';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-landing-page',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CountdownTimerComponent],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  templateUrl: './landing-page.component.html',
+  styleUrls: ['./landing-page.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class LandingPageComponent implements OnInit {
   // Contadores existentes
   companiesCount = 0;
   usersCount = 0;
   visitsCount = 0;
 
   private companiesTarget = 50; // Objetivo de empresas
-  private usersTarget = 100;    // Objetivo de usuarios
-  private visitsTarget = 7;     // Objetivo de visitas
+  private usersTarget = 100; // Objetivo de usuarios
+  private visitsTarget = 7; // Objetivo de visitas
 
   countdownTime: number = 10; // Duración en segundos (ej. 5 minutos)
   countdownDisplay: string = '';
@@ -28,7 +33,11 @@ export class HomeComponent implements OnInit {
   // Formulario reactivo
   contactForm!: FormGroup;
 
-  constructor(private router: Router, private fb: FormBuilder, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     setTimeout(() => this.startCounting(), 500); // Inicia después de 500 ms
@@ -40,7 +49,7 @@ export class HomeComponent implements OnInit {
     this.contactForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      message: ['', Validators.required]
+      message: ['', Validators.required],
     });
   }
 
@@ -61,9 +70,12 @@ export class HomeComponent implements OnInit {
     this.incrementCounterWithAnimation('visitsCount', this.visitsTarget);
   }
 
-  incrementCounterWithAnimation(counter: 'companiesCount' | 'usersCount' | 'visitsCount', target: number) {
+  incrementCounterWithAnimation(
+    counter: 'companiesCount' | 'usersCount' | 'visitsCount',
+    target: number
+  ) {
     const increment = Math.ceil(target / 100);
-  
+
     const updateCounter = () => {
       if (typeof window !== 'undefined' && window.requestAnimationFrame) {
         if (this[counter] < target) {
@@ -75,7 +87,7 @@ export class HomeComponent implements OnInit {
         }
       }
     };
-  
+
     if (typeof window !== 'undefined' && window.requestAnimationFrame) {
       window.requestAnimationFrame(updateCounter);
     }

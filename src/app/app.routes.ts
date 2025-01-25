@@ -14,19 +14,21 @@ export const routes: Routes = [
    */
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'landing-page',
     pathMatch: 'full',
   },
 
   /**
    * Ruta de la página de inicio.
-   * @path /home
-   * @component HomeComponent (cargado de forma diferida)
+   * @path /landing-page
+   * @component LandingPageComponent (cargado de forma diferida)
    */
   {
-    path: 'home',
+    path: 'landing-page',
     loadComponent: () =>
-      import('./page/home/home.component').then((m) => m.HomeComponent),
+      import('./page/landing-page/landing-page.component').then(
+        (m) => m.LandingPageComponent
+      ),
   },
 
   {
@@ -35,12 +37,6 @@ export const routes: Routes = [
       import('./page/register/register.component').then(
         (m) => m.RegisterComponent
       ),
-  },
-
-  {
-    path: 'map',
-    loadComponent: () =>
-      import('./page/map/map.component').then((m) => m.MapComponent),
   },
 
   /**
@@ -52,6 +48,37 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () =>
       import('./page/login/login.component').then((m) => m.LoginComponent),
+  },
+
+  /**
+   * Ruta para la página de inicio de sesión.
+   * @path /home-company
+   * @component HomeCompanyComponent (cargado de forma diferida)
+   */
+  {
+    path: 'home-company',
+    loadComponent: () =>
+      import('./page/home-company/home-company.component').then(
+        (m) => m.HomeCompanyComponent
+      ),
+  },
+
+  /**
+   * Ruta para la página de inicio de sesión.
+   * @path /home-visitor
+   * @component HomeVisitorComponent (cargado de forma diferida)
+   */
+  {
+    path: 'home-visitor',
+    loadComponent: () =>
+      import('./page/home-visitor/home-visitor.component').then(
+        (m) => m.HomeVisitorComponent
+      ),
+  },
+  {
+    path: 'map',
+    loadComponent: () =>
+      import('./page/map/map.component').then((m) => m.MapComponent),
   },
 
   /**

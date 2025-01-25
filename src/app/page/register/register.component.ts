@@ -123,6 +123,7 @@ export class RegisterComponent {
   }
 
   registerCompany(): void {
+    // && this.privacyAccepted && this.termsAccepted
     if (this.companyRegister.invalid) {
       alert('Por favor, completa todos los campos obligatorios.');
       return;
@@ -152,10 +153,13 @@ export class RegisterComponent {
                     this.router.navigate(['/admin-dashboard']);
                     break;
                   case 'co':
-                    this.router.navigate(['/company-dashboard']);
+                    this.router.navigate(['/home-company']);
+                    break;
+                  case 'visitor':
+                    this.router.navigate(['/home-visitor']);
                     break;
                   default:
-                    this.router.navigate(['/home']);
+                    this.router.navigate(['/landing-page']);
                     break;
                 }
               } else {

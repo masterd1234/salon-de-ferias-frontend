@@ -5,37 +5,55 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
-import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import {
+  MatCheckboxChange,
+  MatCheckboxModule,
+} from '@angular/material/checkbox';
 import { UserService } from '../../services/users.service';
 
 /**
  * LoginComponent
- * 
+ *
  * Este componente gestiona el formulario de inicio de sesión de usuarios
  * para la aplicación. Incluye campos para el usuario o correo electrónico,
  * la contraseña y dos casillas de verificación para aceptar la política
  * de privacidad y los términos y condiciones.
- * 
+ *
  * Funcionalidades principales:
  * - Validación de formulario con campos obligatorios.
  * - Ocultación/muestreo de la contraseña.
- * - Envío de credenciales al servicio de autenticación y redirección 
+ * - Envío de credenciales al servicio de autenticación y redirección
  *   según el rol del usuario.
  */
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatCheckboxModule, HttpClientModule, CommonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, ReactiveFormsModule, RouterModule],
+  imports: [
+    MatCheckboxModule,
+    HttpClientModule,
+    CommonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    RouterModule,
+  ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-
   // Control de visibilidad de la contraseña
   hide = true;
 
@@ -55,7 +73,7 @@ export class LoginComponent {
     // Configuración del formulario de inicio de sesión
     this.loginForm = this.fb.group({
       nameOrEmail: ['', [Validators.required]], // Campo requerido para nombre o correo
-      password: ['', [Validators.required, Validators.minLength(6)]] // Campo requerido para contraseña
+      password: ['', [Validators.required, Validators.minLength(6)]], // Campo requerido para contraseña
     });
   }
 
@@ -68,7 +86,7 @@ export class LoginComponent {
 
   /**
    * Maneja el cambio en el checkbox de política de privacidad.
-   * 
+   *
    * @param event - El cambio del checkbox
    */
   onPrivacyChange(event: MatCheckboxChange): void {
@@ -77,7 +95,7 @@ export class LoginComponent {
 
   /**
    * Maneja el cambio en el checkbox de términos y condiciones.
-   * 
+   *
    * @param event - El cambio del checkbox
    */
   onTermsChange(event: MatCheckboxChange): void {
@@ -85,13 +103,13 @@ export class LoginComponent {
   }
 
   /**
-   * Envía el formulario de inicio de sesión si es válido y 
+   * Envía el formulario de inicio de sesión si es válido y
    * las condiciones son aceptadas.
    */
   login(): void {
-    if (this.loginForm.valid && this.privacyAccepted && this.termsAccepted) {
+    if (this.loginForm.valid) {
       const { nameOrEmail, password } = this.loginForm.value;
-  
+
       this.authService.login(nameOrEmail, password).subscribe({
         next: (response) => {
           if (response.success) {
@@ -101,10 +119,13 @@ export class LoginComponent {
                 this.router.navigate(['/admin-dashboard']);
                 break;
               case 'co':
-                this.router.navigate(['/company-dashboard']);
+                this.router.navigate(['/home-company']);
+                break;
+              case 'visitor':
+                this.router.navigate(['/home-visitor']);
                 break;
               default:
-                this.router.navigate(['/home']);
+                this.router.navigate(['/landing-page']);
                 break;
             }
           } else {
@@ -119,7 +140,9 @@ export class LoginComponent {
         },
       });
     } else {
-      alert('Por favor, completa el formulario correctamente y acepta los términos.');
+      alert(
+        'Por favor, completa el formulario correctamente y acepta los términos.'
+      );
     }
   }
 }

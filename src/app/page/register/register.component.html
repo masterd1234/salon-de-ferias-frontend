@@ -36,7 +36,7 @@
       <mat-tab-group>
         <mat-tab label="Empresa">
           <form [formGroup]="companyRegister" (ngSubmit)="registerCompany()">
-            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>Nombre de la empresa</mat-label>
               <input
                 matInput
@@ -48,7 +48,7 @@
               <mat-error>El nombre de la empresa es requerido.</mat-error>
               }
             </mat-form-field>
-            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>Email de la empresa</mat-label>
               <input
                 matInput
@@ -60,7 +60,7 @@
               <mat-error>El email de la empresa es requerido.</mat-error>
               }
             </mat-form-field>
-            <mat-form-field appearance="fill" class="w-100 mb-3">
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>Contraseña</mat-label>
               <input
                 matInput
@@ -88,7 +88,7 @@
               >
               }
             </mat-form-field>
-            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>CIF de la empresa</mat-label>
               <input matInput placeHolder="B123456789" formControlName="cif" />
               @if(companyRegister.get('cif')?.invalid &&
@@ -117,11 +117,34 @@
                 <p>Archivo seleccionado: {{ logoFileName }}</p>
               </div>
             </div>
-            <div class="mt-3">
+
+            <!-- Checkbox para aceptar la política de privacidad -->
+            <mat-checkbox class="w-100 mt-3" (change)="onPrivacyChange($event)">
+              <p class="text-justify">
+                Acepto que acorde a la
+                <a href="#" class="text-primary">política de privacidad</a>, los
+                datos recogidos se utilizarán para los fines del evento.
+              </p>
+            </mat-checkbox>
+
+            <!-- Checkbox para aceptar los términos y condiciones -->
+            <mat-checkbox class="w-100" (change)="onTermsChange($event)">
+              <p class="text-justify">
+                Al inscribirme declaro haber leído y aceptado los
+                <a href="#" class="text-primary">términos y condiciones</a> y el
+                <a href="#" class="text-primary"
+                  >apéndice del tratamiento Manager.</a
+                >.
+              </p>
+            </mat-checkbox>
+
+            <div class="">
               <button
                 class="button button--primary mx-2"
                 type="submit"
-                [disabled]="!companyRegister.valid"
+                [disabled]="
+                  !companyRegister.valid || !privacyAccepted || !termsAccepted
+                "
                 mat-flat-button
               >
                 Registrar
@@ -131,7 +154,7 @@
         </mat-tab>
         <mat-tab label="Visitante">
           <form [formGroup]="visitorRegister" (ngSubmit)="registerVisitor()">
-            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>Nombre del visitante</mat-label>
               <input
                 matInput
@@ -143,7 +166,7 @@
               <mat-error>El nombre del visitante es requerido.</mat-error>
               }
             </mat-form-field>
-            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>DNI/NIE del visitante</mat-label>
               <input
                 matInput
@@ -155,7 +178,7 @@
               <mat-error>El DNI del visitante es requerido.</mat-error>
               }
             </mat-form-field>
-            <mat-form-field appearance="fill" class="w-100 mb-3 mt-3">
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>Email del visitante</mat-label>
               <input
                 matInput
@@ -167,7 +190,7 @@
               <mat-error>El email es requerido.</mat-error>
               }
             </mat-form-field>
-            <mat-form-field appearance="fill" class="w-100 mb-3">
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>Contraseña</mat-label>
               <input
                 matInput
@@ -196,11 +219,33 @@
               }
             </mat-form-field>
 
+            <!-- Checkbox para aceptar la política de privacidad -->
+            <mat-checkbox class="w-100 mt-1" (change)="onPrivacyChange($event)">
+              <p class="text-justify">
+                Acepto que acorde a la
+                <a href="#" class="text-primary">política de privacidad</a>, los
+                datos recogidos se utilizarán para los fines del evento.
+              </p>
+            </mat-checkbox>
+
+            <!-- Checkbox para aceptar los términos y condiciones -->
+            <mat-checkbox class="w-100 mt-3" (change)="onTermsChange($event)">
+              <p class="text-justify">
+                Al inscribirme declaro haber leído y aceptado los
+                <a href="#" class="text-primary">términos y condiciones</a> y el
+                <a href="#" class="text-primary"
+                  >apéndice del tratamiento Manager.</a
+                >.
+              </p>
+            </mat-checkbox>
+
             <div class="mt-3">
               <button
                 class="button button--primary mx-2"
                 type="submit"
-                [disabled]="!visitorRegister.valid"
+                [disabled]="
+                  !visitorRegister.valid || !privacyAccepted || !termsAccepted
+                "
                 mat-flat-button
               >
                 Registrar

@@ -1,65 +1,95 @@
 <!-- Contenedor principal para el formulario de login -->
-<div class="container-fluid d-flex justify-content-center align-items-center my-5" style="min-height: 100vh;">
-    <div class="row justify-content-center">
+<div
+  class="container-fluid d-flex justify-content-center align-items-center my-5"
+  style="min-height: 100vh"
+>
+  <div class="row justify-content-center">
+    <!-- Columna para el encabezado del formulario de login -->
+    <div
+      class="col-12 col-md-6 col-lg-4 bg-custom1 d-flex flex-column rounded-start shadow-lg"
+    >
+      <!-- Encabezado del formulario -->
+      <div class="mt-4 text-center w-100" style="margin-top: auto">
+        <h1>Conéctate ahora y gestiona tu Stand Virtual.</h1>
+      </div>
 
-        <!-- Columna para el encabezado del formulario de login -->
-        <div class="col-12 col-md-6 col-lg-4 bg-custom1 d-flex flex-column rounded-start shadow-lg">
-
-            <!-- Encabezado del formulario -->
-            <div class="mt-4 text-center w-100" style="margin-top: auto;">
-                <h1>Conéctate ahora y gestiona tu Stand Virtual.</h1>
-            </div>
-
-            <!-- Logos de la empresa asociados al formulario -->
-            <div class="logos d-flex justify-content-center align-items-center mb-4" style="flex-wrap: wrap;">
-                <img src="assets/logo_FM.png" alt="Logo Fundacion" class="img-fluid">
-                <img src="assets/logo_MD.png" alt="Logo Master" class="img-fluid" style="max-width: 60%;">
-            </div>
-        </div>
-
-        <!-- Columna para el formulario de autenticación -->
-        <div class="col-12 col-md-6 col-lg-4 bg-custom2 rounded-end shadow-lg d-flex align-items-center"
-            style="flex-direction: column;">
-            <form [formGroup]="loginForm" (ngSubmit)="login()" class="w-100 p-4">
-
-                <!-- Campo de texto para usuario o correo electrónico -->
-                <mat-form-field appearance="fill" class="w-100 mb-3">
-                    <mat-label>Usuario o correo electrónico</mat-label>
-                    <input matInput placeHolder="Usuario o Correo Electronico" formControlName="nameOrEmail">
-                    @if(loginForm.get('nameOrEmail')?.invalid && loginForm.get('nameOrEmail')?.touched){
-                    <mat-error>El usuario o correo electrónico es requerido.</mat-error>
-                    }
-                </mat-form-field>
-
-                <!-- Campo de texto para la contraseña -->
-                <mat-form-field appearance="fill" class="w-100 mb-3">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" placeholder="Contraseña">
-                    <!-- Botón para alternar la visibilidad de la contraseña -->
-                    <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()">
-                        <i class="fa-solid" [ngClass]="hide ? 'fa-eye-slash' : 'fa-eye'"></i>
-                    </button>
-                    @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched){
-                    <mat-error>La contraseña es obligatoria y debe tener al menos 6 caracteres.</mat-error>
-                    }
-                </mat-form-field>
-
-                <!-- Checkbox para aceptar la política de privacidad -->
-                <mat-checkbox class="w-100 mt-3" (change)="onPrivacyChange($event)">
-                    <p class="text-justify">Acepto que acorde a la <a href="#" class="text-primary">política de privacidad</a>, los datos recogidos se utilizarán para los fines del evento.</p>
-                </mat-checkbox>
-
-                <!-- Checkbox para aceptar los términos y condiciones -->
-                <mat-checkbox class="w-100 mt-3" (change)="onTermsChange($event)">
-                   <p class="text-justify">Al inscribirme declaro haber leído y aceptado los <a href="#" class="text-primary">términos y condiciones</a> y el <a href="#" class="text-primary">apéndice del tratamiento Manager.</a>.</p>
-                </mat-checkbox>
-
-                <!-- Botón para enviar el formulario de autenticación -->
-                <div class="mt-3">
-                    <button class="button button--primary mx-2" type="submit" [disabled]="!loginForm.valid || !privacyAccepted || !termsAccepted" mat-flat-button> Entrar</button>
-                </div>
-            </form>
-        </div>
-
+      <!-- Logos de la empresa asociados al formulario -->
+      <div
+        class="logos d-flex justify-content-center align-items-center mb-4"
+        style="flex-wrap: wrap"
+      >
+        <img src="assets/logo_FM.png" alt="Logo Fundacion" class="img-fluid" />
+        <img
+          src="assets/logo_MD.png"
+          alt="Logo Master"
+          class="img-fluid"
+          style="max-width: 60%"
+        />
+      </div>
     </div>
+
+    <!-- Columna para el formulario de autenticación -->
+    <div
+      class="col-12 col-md-6 col-lg-4 bg-custom2 rounded-end shadow-lg d-flex align-items-center"
+      style="flex-direction: column"
+    >
+      <form [formGroup]="loginForm" (ngSubmit)="login()" class="w-100 p-4">
+        <!-- Campo de texto para usuario o correo electrónico -->
+        <mat-form-field appearance="fill" class="w-100 mb-3">
+          <mat-label>Usuario o correo electrónico</mat-label>
+          <input
+            matInput
+            placeHolder="Usuario o Correo Electronico"
+            formControlName="nameOrEmail"
+          />
+          @if(loginForm.get('nameOrEmail')?.invalid &&
+          loginForm.get('nameOrEmail')?.touched){
+          <mat-error>El usuario o correo electrónico es requerido.</mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Campo de texto para la contraseña -->
+        <mat-form-field appearance="fill" class="w-100 mb-3">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Contraseña"
+          />
+          <!-- Botón para alternar la visibilidad de la contraseña -->
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="togglePasswordVisibility()"
+          >
+            <i
+              class="fa-solid"
+              [ngClass]="hide ? 'fa-eye-slash' : 'fa-eye'"
+            ></i>
+          </button>
+          @if(loginForm.get('password')?.invalid &&
+          loginForm.get('password')?.touched){
+          <mat-error
+            >La contraseña es obligatoria y debe tener al menos 6
+            caracteres.</mat-error
+          >
+          }
+        </mat-form-field>
+
+        <!-- Botón para enviar el formulario de autenticación -->
+        <div class="mt-3">
+          <button
+            class="button button--primary mx-2"
+            type="submit"
+            [disabled]="!loginForm.valid"
+            mat-flat-button
+          >
+            Entrar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>

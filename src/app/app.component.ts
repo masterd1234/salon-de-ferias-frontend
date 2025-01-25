@@ -22,9 +22,16 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, CommonModule, MatSidenavModule, MatToolbarModule, MatListModule],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    CommonModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+  ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   /**
@@ -44,7 +51,6 @@ export class AppComponent {
    * @ViewChild
    */
   @ViewChild('drawer') drawer!: MatSidenav;
-
 
   /**
    * @property {'side' | 'over'} sidenavMode - Modo de visualización del `sidenav` dependiendo del tamaño de pantalla.
@@ -70,15 +76,16 @@ export class AppComponent {
    * @param {BreakpointObserver} breakpointObserver - Observador de puntos de quiebre de pantalla para manejar tamaños responsivos.
    */
   constructor(private breakpointObserver: BreakpointObserver) {
-    this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall]).subscribe(result => {
-      this.isSmallScreen = result.matches;
-      this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
-    });
+    this.breakpointObserver
+      .observe([Breakpoints.Small, Breakpoints.XSmall])
+      .subscribe((result) => {
+        this.isSmallScreen = result.matches;
+        this.sidenavMode = this.isSmallScreen ? 'over' : 'side';
+      });
   }
 
-
-  logged():boolean {
-    return this.isLoggedIn = this.authService.isLoggedIn();
+  logged(): boolean {
+    return (this.isLoggedIn = this.authService.isLoggedIn());
   }
 
   /**
@@ -98,7 +105,6 @@ export class AppComponent {
    * @returns {boolean} `true` si el usuario está autenticado, `false` si no lo está.
    */
 
-
   /**
    * @method isRol
    * @description Verifica el rol del usuario (admin o co) decodificando el token de autenticación.
@@ -107,9 +113,8 @@ export class AppComponent {
   isRol(): string {
     this.user = this.authService.getUser();
     if (this.user) {
-    return this.user.rol;
-    } else
-    return '';
+      return this.user.rol;
+    } else return '';
   }
 
   /**
@@ -119,7 +124,7 @@ export class AppComponent {
    */
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/home']);
+    this.router.navigate(['/landing-page']);
   }
 
   /**
@@ -133,10 +138,10 @@ export class AppComponent {
       height: 'auto',
       hasBackdrop: true,
       autoFocus: false,
-      scrollStrategy: this.overlay.scrollStrategies.reposition()
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log('Nuevo usuario creado:', result);
         this.userCreatedSignal.set(true);
