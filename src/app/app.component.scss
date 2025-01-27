@@ -1,20 +1,20 @@
-@import '../scss/var';
+@import "../scss/var";
 
 /* Asegúrate de que el estilo se aplique a todo el cuerpo de la aplicación */
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Noto Sans', sans-serif !important;
+  font-family: "Noto Sans", sans-serif !important;
 }
 
 /* Sobrescribe las variables globales de fuente si es necesario */
 :root {
-  --bs-body-font-family: 'Noto Sans', sans-serif;
+  --bs-body-font-family: "Noto Sans", sans-serif;
 }
 
 /* Asegura que el estilo se aplique incluso en componentes con encapsulación */
 ::ng-deep * {
-  font-family: 'Noto Sans', sans-serif;
+  font-family: "Noto Sans", sans-serif;
 }
 
 .app-background {
@@ -52,7 +52,7 @@ body {
   align-items: center; /* Centra verticalmente los botones */
 }
 
-.button-nav{
+.button-nav {
   display: flex;
   align-items: center;
   justify-content: flex-end; /* Alinea todo al final si es necesario */
@@ -74,7 +74,9 @@ mat-sidenav {
   top: 64px; /* Justo debajo de la barra superior */
   left: 0;
   width: 100px; /* Ancho de la barra lateral */
-  height: calc(100vh - 64px); /* Altura completa de la ventana menos la barra superior */
+  height: calc(
+    100vh - 64px
+  ); /* Altura completa de la ventana menos la barra superior */
   overflow-y: auto; /* Permite scroll si el contenido de la barra lateral es largo */
   z-index: 1000;
   background-color: white; /* Fondo de la barra lateral */

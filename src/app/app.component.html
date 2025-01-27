@@ -76,7 +76,7 @@
     #drawer
     [mode]="sidenavMode"
     [opened]="!isSmallScreen"
-    clasS="sidenav"
+    class="sidenav"
     id="navbarNav"
     aria-label="Barra lateral"
   >
@@ -185,9 +185,10 @@
           class="nav-link active"
           routerLink="/employability-fair-hall"
           aria-label="fair-hall"
+          style="height: 64px"
           ><i class="fa-solid fa-building" style="color: #002e4c"></i
-          ><span>Pabellón</span></a
-        ></mat-list-item
+          ><span>Salones</span> <span>de ferías</span>
+        </a></mat-list-item
       >
 
       @if(isSmallScreen){

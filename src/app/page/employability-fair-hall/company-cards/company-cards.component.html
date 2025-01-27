@@ -2,7 +2,14 @@
   <div class="card" *ngFor="let company of companies">
     <div class="card-content">
       <!-- Imagen -->
-      <img class="card-image" [src]="company.image" [alt]="company.name" />
+      <div class="card-image">
+        <img
+          class="card-image-container"
+          [src]="company.image"
+          [alt]="company.name"
+        />
+        <div class="card-logo-container">Logo</div>
+      </div>
 
       <!-- Información de la empresa -->
       <div class="card-text">

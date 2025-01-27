@@ -158,21 +158,21 @@ export class CompanyDataService {
       },
       {
         id: 26,
-        name: 'Empresa 3',
-        description: 'Descripción detallada de Empresa 3.',
-        image: 'https://via.placeholder.com/150',
+        name: 'Empresa 1',
+        description: 'Descripción detallada de Empresa 1.',
+        image: 'https://picsum.photos/100/150',
       },
       {
         id: 27,
-        name: 'Empresa 1',
-        description: 'Descripción detallada de Empresa 1.',
-        image: 'https://via.placeholder.com/150',
+        name: 'Empresa 2',
+        description: 'Descripción detallada de Empresa 2.',
+        image: 'https://picsum.photos/100/151',
       },
       {
         id: 28,
-        name: 'Empresa 2',
-        description: 'Descripción detallada de Empresa 2.',
-        image: 'https://via.placeholder.com/150',
+        name: 'Empresa 3',
+        description: 'Descripción detallada de Empresa 3.',
+        image: 'https://picsum.photos/100/152',
       },
     ];
   }
