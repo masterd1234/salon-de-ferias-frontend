@@ -1,4 +1,27 @@
+.fair-hall-container {
+  margin: 0 auto;
+  height: 2100px;
+}
+
+.header-hall {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centra verticalmente */
+  background-color: cornflowerblue;
+  width: 100%; // Mantén el ancho al 100% del contenedor
+  height: 100%; // Asegúrate de mantener la relación de aspecto
+  max-height: 300px; // Establece una altura máxima para que no sea demasiado alta
+  object-fit: cover; // Ajusta cómo se escala la imagen para llenar el espacio disponible
+  @media (min-width: 1200px) {
+    max-height: 600px; // 3 columnas en pantallas extra grandes
+  }
+}
+
 .company-cards-conatiner {
-  width: 1100px;
-  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centra verticalmente */
+  background-color: wheat;
+  width: 1300px;
+  height: 100%;
 }

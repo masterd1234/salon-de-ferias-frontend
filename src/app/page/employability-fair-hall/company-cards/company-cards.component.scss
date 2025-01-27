@@ -1,14 +1,23 @@
+// .card-container {
+//   display: flex;
+//   gap: 20px;
+//   flex-wrap: wrap;
+//   justify-content: center;
+// }
+
+// .custom-grid {
 .card-container {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
+  padding: 50px;
+  background-color: blue;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 20px 20px;
 }
 
 .card {
-  position: relative;
-  width: 150px;
-  height: 100px;
+  // position: relative;
+  width: 100px;
+  height: 80px;
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
