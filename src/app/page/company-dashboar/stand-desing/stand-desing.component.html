@@ -1,12 +1,13 @@
 <div class="main-container">
-
   <!-- Contenedor para los carruseles y la vista previa -->
   <div class="content-container pt-3 px-3">
-
     <div class="row">
       <!-- Incluye el componente BannerComponent dentro de StandDesingComponent -->
-      <app-banner-root [canUploadFiles]="canUploadFiles()" (filesUploaded)="updateFiles($event)"
-        [canSendFiles]="canSendFiles"></app-banner-root>
+      <app-banner-root
+        [canUploadFiles]="canUploadFiles()"
+        (filesUploaded)="updateFiles($event)"
+        [canSendFiles]="canSendFiles"
+      ></app-banner-root>
       <!-- Carrusel del stand -->
       <div class="col-12">
         <div class="row">
@@ -18,13 +19,31 @@
             </mat-card-header>
             <mat-divider class="mb-3 w-100"></mat-divider>
             <mat-card-content class="carousel-container pt-3">
-              <button class="nav-button left" (click)="scroll('stand', 'left')">&lt;</button>
-              <div class="images-container stand-carousel" (touchstart)="enableDrag($event)" (mousemove)="drag($event)"
-                (mouseup)="disableDrag()" (touchend)="disableDrag()" (mouseleave)="disableDrag()">
-                <img *ngFor="let stand of standImages" [src]="stand" alt="Stand"
-                  [class.selected]="stand === selectedStand()" (click)="selectStand(stand)" />
+              <button class="nav-button left" (click)="scroll('stand', 'left')">
+                &lt;
+              </button>
+              <div
+                class="images-container stand-carousel"
+                (touchstart)="enableDrag($event)"
+                (mousemove)="drag($event)"
+                (mouseup)="disableDrag()"
+                (touchend)="disableDrag()"
+                (mouseleave)="disableDrag()"
+              >
+                <img
+                  *ngFor="let stand of standImages"
+                  [src]="stand"
+                  alt="Stand"
+                  [class.selected]="stand === selectedStand()"
+                  (click)="selectStand(stand)"
+                />
               </div>
-              <button class="nav-button right" (click)="scroll('stand', 'right')">&gt;</button>
+              <button
+                class="nav-button right"
+                (click)="scroll('stand', 'right')"
+              >
+                &gt;
+              </button>
             </mat-card-content>
           </mat-card>
           <mat-card class="col-md-6">
@@ -34,20 +53,39 @@
             </mat-card-header>
             <mat-divider class="mb-3 w-100"></mat-divider>
             <mat-card-content class="carousel-container pt-3">
-              <button class="nav-button left" (click)="scroll('receptionist', 'left')">&lt;</button>
-              <div class="images-container receptionist-carousel" (mousedown)="enableDrag($event)"
-                (touchstart)="enableDrag($event)" (mousemove)="drag($event)" (mouseup)="disableDrag()"
-                (touchend)="disableDrag()" (mouseleave)="disableDrag()">
-                <img *ngFor="let receptionist of receptionistImages" [src]="receptionist" alt="Recepcionista"
+              <button
+                class="nav-button left"
+                (click)="scroll('receptionist', 'left')"
+              >
+                &lt;
+              </button>
+              <div
+                class="images-container receptionist-carousel"
+                (mousedown)="enableDrag($event)"
+                (touchstart)="enableDrag($event)"
+                (mousemove)="drag($event)"
+                (mouseup)="disableDrag()"
+                (touchend)="disableDrag()"
+                (mouseleave)="disableDrag()"
+              >
+                <img
+                  *ngFor="let receptionist of receptionistImages"
+                  [src]="receptionist"
+                  alt="Recepcionista"
                   [class.selected]="receptionist === selectedReceptionist()"
-                  (click)="selectReceptionist(receptionist)" />
+                  (click)="selectReceptionist(receptionist)"
+                />
               </div>
-              <button class="nav-button right" (click)="scroll('receptionist', 'right')">&gt;</button>
+              <button
+                class="nav-button right"
+                (click)="scroll('receptionist', 'right')"
+              >
+                &gt;
+              </button>
             </mat-card-content>
           </mat-card>
         </div>
       </div>
-
     </div>
 
     <!-- Vista previa a la derecha -->
@@ -70,12 +108,14 @@
 
     <!-- Botones abajo en el centro -->
     <div class="button-container">
-      <button class="button button--primary" (click)="submitSelection()"><i class="fa-solid fa-share"></i> <span
-          class="text-button">Enviar
-          Selección</span></button>
-      <button class="button button--secundary " (click)="clearSelection()"><i class="fa-solid fa-eraser"></i><span
-          class="text-button"> Borrar
-          Selección</span></button>
+      <button class="button button--primary" (click)="submitSelection()">
+        <i class="fa-solid fa-share"></i>
+        <span class="text-button">Enviar Selección</span>
+      </button>
+      <button class="button button--secundary" (click)="clearSelection()">
+        <i class="fa-solid fa-eraser"></i
+        ><span class="text-button"> Borrar Selección</span>
+      </button>
     </div>
   </div>
 </div>

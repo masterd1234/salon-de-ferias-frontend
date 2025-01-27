@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, computed, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  computed,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImageService } from '../../../services/design.service';
 import { CompanyService } from '../../../services/information.service';
@@ -17,6 +24,8 @@ import { Models } from '../../../../models/models.model';
 import { catchError, Observable, of, retry, tap } from 'rxjs';
 import { Usuario } from '../../../../models/users.model';
 import { UserService } from '../../../services/users.service';
+
+import { environment } from '../../../../environments/environment';
 
 /**
  * Componente `StandDesingComponent`
@@ -39,11 +48,14 @@ import { UserService } from '../../../services/users.service';
     ReactiveFormsModule,
     BannerComponent,
     MatIconModule,
-    MatGridListModule],
+    MatGridListModule,
+  ],
 })
 export class StandDesingComponent implements OnInit {
+  private apiUrl = `${environment.url}`;
   /** Referencia al elemento canvas utilizado para la vista previa */
-  @ViewChild('previewCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('previewCanvas', { static: true })
+  canvasRef!: ElementRef<HTMLCanvasElement>;
 
   /** Bandera para habilitar el envío de archivos */
   canSendFiles: boolean = false;
@@ -90,7 +102,9 @@ export class StandDesingComponent implements OnInit {
    * en función de la selección de stand y recepcionista.
    * @returns {boolean} `true` si ambas selecciones están hechas, `false` de lo contrario.
    */
-  canUploadFiles = computed(() => !!this.selectedStand() && !!this.selectedReceptionist());
+  canUploadFiles = computed(
+    () => !!this.selectedStand() && !!this.selectedReceptionist()
+  );
 
   /**
    * Constructor de StandDesingComponent
@@ -105,7 +119,7 @@ export class StandDesingComponent implements OnInit {
     private userService: UserService,
     private cdr: ChangeDetectorRef
   ) {}
-  
+
   ngOnInit(): void {
     this.loadStands();
     this.loadModels();
@@ -116,8 +130,10 @@ export class StandDesingComponent implements OnInit {
     this.imageService.getAllStands().subscribe({
       next: (response) => {
         if (response.success && response.data) {
-          this.standImages = response.data.map((stand: any) =>
-            `https://backend-node-wpf9.onrender.com/proxy?url=${stand.url.fileUrl}`
+          this.standImages = response.data.map(
+            (stand: any) =>
+              // `https://backend-node-wpf9.onrender.com/proxy?url=${stand.url.fileUrl}`
+              `${this.apiUrl}/proxy?url=${stand.url.fileUrl}`
           );
           this.standConfigs = response.data;
         } else {
@@ -132,8 +148,8 @@ export class StandDesingComponent implements OnInit {
     this.imageService.getAllModels().subscribe({
       next: (response) => {
         if (response.success && response.data) {
-          this.receptionistImages = response.data.map((model: any) =>
-            `https://backend-node-wpf9.onrender.com/proxy?url=${model.url.fileUrl}`
+          this.receptionistImages = response.data.map(
+            (model: any) => `${this.apiUrl}/proxy?url=${model.url.fileUrl}`
           );
           this.recepConfigs = response.data;
         } else {
@@ -145,17 +161,22 @@ export class StandDesingComponent implements OnInit {
   }
 
   loadUserCompany(): void {
-    this.userService.getUserById().pipe(retry(3)).subscribe({
-      next: (response) => {
-        this.userCompany = response ?? null;
-      },
-      error: (err) => console.error('Error después de 3 reintentos:', err),
-    });
+    this.userService
+      .getUserById()
+      .pipe(retry(3))
+      .subscribe({
+        next: (response) => {
+          this.userCompany = response ?? null;
+        },
+        error: (err) => console.error('Error después de 3 reintentos:', err),
+      });
   }
 
   selectStand(standUrl: string): void {
-    const originalUrl = standUrl.replace('https://backend-node-wpf9.onrender.com/proxy?url=', '');
-    const selectedStand = this.standConfigs.find((stand: any) => stand.url.fileUrl === originalUrl);
+    const originalUrl = standUrl.replace(`${this.apiUrl}/proxy?url=`, '');
+    const selectedStand = this.standConfigs.find(
+      (stand: any) => stand.url.fileUrl === originalUrl
+    );
 
     if (selectedStand) {
       this.selectedStand.set(standUrl);
@@ -168,23 +189,31 @@ export class StandDesingComponent implements OnInit {
   }
 
   selectReceptionist(receptionist: string): void {
-    const originalUrl = receptionist.replace('https://backend-node-wpf9.onrender.com/proxy?url=', '');
-    const selectedReceptionist = this.recepConfigs.find((model: any) => model.url.fileUrl === originalUrl);
+    const originalUrl = receptionist.replace(`${this.apiUrl}/proxy?url=`, '');
+    const selectedReceptionist = this.recepConfigs.find(
+      (model: any) => model.url.fileUrl === originalUrl
+    );
 
     if (selectedReceptionist) {
       this.selectedReceptionist.set(receptionist);
       this.currentReceptionistId = selectedReceptionist.id;
       this.drawCanvas();
     } else {
-      console.error('No se encontró la recepcionista con la URL proporcionada.');
+      console.error(
+        'No se encontró la recepcionista con la URL proporcionada.'
+      );
     }
   }
 
   /**
- * Actualiza los archivos cargados desde el componente hijo.
- * @param files Objeto que contiene los archivos cargados (logo, banner, poster).
- */
-  updateFiles(files: { banner: File | null, bannerUrl: string |null, poster: File | null }): void {
+   * Actualiza los archivos cargados desde el componente hijo.
+   * @param files Objeto que contiene los archivos cargados (logo, banner, poster).
+   */
+  updateFiles(files: {
+    banner: File | null;
+    bannerUrl: string | null;
+    poster: File | null;
+  }): void {
     // Puedes manejar los datos recibidos aquí
     if (files.banner) {
       this.bannerImages = files.banner;
@@ -231,10 +260,15 @@ export class StandDesingComponent implements OnInit {
       standImage.src = this.selectedStand()!;
       standImage.onload = () => {
         // Dibuja el stand como fondo
-        this.drawImageContainStand(ctx, standImage, canvas.clientWidth, canvas.clientHeight);
+        this.drawImageContainStand(
+          ctx,
+          standImage,
+          canvas.clientWidth,
+          canvas.clientHeight
+        );
 
         // Dibuja el logo, banner y póster, en este orden
-          this.drawLogo(ctx);
+        this.drawLogo(ctx);
 
         if (this.bannerImages) {
           this.drawBanner(ctx);
@@ -249,7 +283,6 @@ export class StandDesingComponent implements OnInit {
     }
   }
 
-
   /**
    * Dibuja el poster en el canvas.
    * @param ctx Contexto del canvas para renderizado.
@@ -259,9 +292,9 @@ export class StandDesingComponent implements OnInit {
   }
 
   /**
- * Dibuja el banner en el canvas.
- * @param ctx Contexto del canvas para renderizado.
- */
+   * Dibuja el banner en el canvas.
+   * @param ctx Contexto del canvas para renderizado.
+   */
   drawBanner(ctx: CanvasRenderingContext2D) {
     if (this.bannerUrl) {
       const bannerImage = new Image();
@@ -287,7 +320,8 @@ export class StandDesingComponent implements OnInit {
           const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
 
           // Coordenadas relativas del banner
-          const { x, y, width, height } = this.currentStandConfig.bannerPosition || {
+          const { x, y, width, height } = this.currentStandConfig
+            .bannerPosition || {
             x: 0.1,
             y: 0.1,
             width: 0.8,
@@ -301,7 +335,14 @@ export class StandDesingComponent implements OnInit {
           const bannerHeight = standHeight * height;
 
           // Dibuja el banner directamente sin clipping
-          this.drawImageContain(ctx, bannerImage, bannerWidth, bannerHeight, bannerX, bannerY);
+          this.drawImageContain(
+            ctx,
+            bannerImage,
+            bannerWidth,
+            bannerHeight,
+            bannerX,
+            bannerY
+          );
         };
       };
     }
@@ -337,7 +378,8 @@ export class StandDesingComponent implements OnInit {
           const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
 
           // Coordenadas relativas del logo
-          const { x, y, width, height } = this.currentStandConfig.logoPosition || {
+          const { x, y, width, height } = this.currentStandConfig
+            .logoPosition || {
             x: 0.1,
             y: 0.1,
             width: 0.8,
@@ -351,7 +393,14 @@ export class StandDesingComponent implements OnInit {
           const logoHeight = standHeight * height;
 
           // Dibuja el logo directamente sin clipping
-          this.drawImageContain(ctx, logoImage, logoWidth, logoHeight, logoX, logoY);
+          this.drawImageContain(
+            ctx,
+            logoImage,
+            logoWidth,
+            logoHeight,
+            logoX,
+            logoY
+          );
         };
       };
     }
@@ -372,7 +421,10 @@ export class StandDesingComponent implements OnInit {
     targetX: number,
     targetY: number
   ): void {
-    const scale = Math.min(targetWidth / image.width, targetHeight / image.height);
+    const scale = Math.min(
+      targetWidth / image.width,
+      targetHeight / image.height
+    );
     const width = image.width * scale;
     const height = image.height * scale;
     const x = targetX + (targetWidth - width) / 2;
@@ -382,14 +434,22 @@ export class StandDesingComponent implements OnInit {
   }
 
   /**
-  * Dibuja la imagen del stand ajustada al canvas.
-  * @param ctx Contexto del canvas.
-  * @param image Imagen del stand.
-  * @param targetWidth Ancho del canvas.
-  * @param targetHeight Alto del canvas.
-  */
-  drawImageContainStand(ctx: CanvasRenderingContext2D, image: HTMLImageElement, targetWidth: number, targetHeight: number): void {
-    const scale = Math.min(targetWidth / image.width, targetHeight / image.height);
+   * Dibuja la imagen del stand ajustada al canvas.
+   * @param ctx Contexto del canvas.
+   * @param image Imagen del stand.
+   * @param targetWidth Ancho del canvas.
+   * @param targetHeight Alto del canvas.
+   */
+  drawImageContainStand(
+    ctx: CanvasRenderingContext2D,
+    image: HTMLImageElement,
+    targetWidth: number,
+    targetHeight: number
+  ): void {
+    const scale = Math.min(
+      targetWidth / image.width,
+      targetHeight / image.height
+    );
     const width = image.width * scale;
     const height = image.height * scale;
     const x = (targetWidth - width) / 2;
@@ -427,7 +487,8 @@ export class StandDesingComponent implements OnInit {
         const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
 
         // Coordenadas relativas del banner
-        const { x, y, width, height } = this.currentStandConfig.recepcionistPosition || {
+        const { x, y, width, height } = this.currentStandConfig
+          .recepcionistPosition || {
           x: 0.1,
           y: 0.1,
           width: 0.8,
@@ -441,11 +502,17 @@ export class StandDesingComponent implements OnInit {
         const recepcionistHeight = standHeight * height;
 
         // Dibuja el banner directamente sin clipping
-        this.drawImageContain(ctx, receptionistImage, recepcionistWidth, recepcionistHeight, recepcionistX, recepcionistY);
+        this.drawImageContain(
+          ctx,
+          receptionistImage,
+          recepcionistWidth,
+          recepcionistHeight,
+          recepcionistX,
+          recepcionistY
+        );
       };
     };
   }
-
 
   /**
    * Maneja el desplazamiento del carrusel de imágenes.
@@ -528,15 +595,19 @@ export class StandDesingComponent implements OnInit {
   }
 
   /**
- * Habilita el arrastre en el carrusel.
- * @param event Evento de ratón o toque.
- */
+   * Habilita el arrastre en el carrusel.
+   * @param event Evento de ratón o toque.
+   */
   enableDrag(event: MouseEvent | TouchEvent): void {
-    const container = (event.target as HTMLElement).closest('.images-container') as HTMLElement;
+    const container = (event.target as HTMLElement).closest(
+      '.images-container'
+    ) as HTMLElement;
     if (!container) return;
 
     this.isDragging = true;
-    this.startX = (event instanceof MouseEvent ? event.pageX : event.touches[0].pageX) - container.offsetLeft;
+    this.startX =
+      (event instanceof MouseEvent ? event.pageX : event.touches[0].pageX) -
+      container.offsetLeft;
     this.scrollLeft = container.scrollLeft;
   }
 
@@ -546,11 +617,15 @@ export class StandDesingComponent implements OnInit {
    */
   drag(event: MouseEvent | TouchEvent): void {
     if (!this.isDragging) return;
-    const container = (event.target as HTMLElement).closest('.images-container') as HTMLElement;
+    const container = (event.target as HTMLElement).closest(
+      '.images-container'
+    ) as HTMLElement;
     if (!container) return;
 
     event.preventDefault();
-    const x = (event instanceof MouseEvent ? event.pageX : event.touches[0].pageX) - container.offsetLeft;
+    const x =
+      (event instanceof MouseEvent ? event.pageX : event.touches[0].pageX) -
+      container.offsetLeft;
     const walk = (x - this.startX) * 2; // Multiplica por 2 para mayor sensibilidad
     container.scrollLeft = this.scrollLeft - walk;
   }
