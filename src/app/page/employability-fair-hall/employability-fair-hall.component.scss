@@ -15,19 +15,21 @@
   max-height: 300px; // Establece una altura máxima para que no sea demasiado alta
   object-fit: cover; // Ajusta cómo se escala la imagen para llenar el espacio disponible
   @media (min-width: 1050px) {
-    max-height: 720px; // 3 columnas en pantallas extra grandes
+    max-height: 810px; // 3 columnas en pantallas extra grandes
   }
 }
 
 .company-cards-conatiner {
-  display: flex;
-  justify-content: center;
-  align-items: center; /* Centra verticalmente */
-  background-image: url("../../../assets/background_salon_feria.webp");
+  // display: flex;
+  // justify-content: center;
+  // align-items: center; /* Centra verticalmente */
+  position: relative;
+  padding-left: 390px;
+  background-image: url("../../../assets/render.webp");
   background-size: cover;
   background-repeat: no-repeat;
-  width: 1300px;
-  height: 100%;
+  width: 1387px;
+  height: 780px;
 }
 
 .offers-filter,

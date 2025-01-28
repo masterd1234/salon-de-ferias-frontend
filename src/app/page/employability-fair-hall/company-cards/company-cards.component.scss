@@ -7,11 +7,15 @@
 
 // .custom-grid {
 .card-container {
-  padding: 50px;
+  perspective: 1000px; /* Define la profundidad de la perspectiva */
+  perspective-origin: center; /* Punto de fuga centrado */
+  position: absolute;
+  bottom: 0;
+  padding: 28px;
   background-color: #32597a;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 32px 32px;
+  gap: 24px 24px;
   // transform-style: preserve-3d;
   // perspective-origin: 50% 50%;
   // perspective: 1000px;
@@ -20,8 +24,10 @@
 
 .card {
   // position: relative;
-  width: 80px;
-  height: 80px;
+  transform-style: preserve-3d; /* Habilita transformaciones 3D */
+  transform: rotateX(15deg) rotateY(15deg);
+  width: 60px;
+  height: 60px;
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
