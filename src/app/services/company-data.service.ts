@@ -1,4 +1,9 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Company, ApiResponse } from '../../models/companies.model';
+
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -175,5 +180,14 @@ export class CompanyDataService {
         image: 'https://picsum.photos/100/152',
       },
     ];
+  }
+  private apiUrl = `${environment.url}/users`;
+
+  constructor(private http: HttpClient) {}
+
+  getAllCompanies(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/companies`, {
+      withCredentials: true,
+    });
   }
 }

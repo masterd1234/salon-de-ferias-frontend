@@ -1,0 +1,17 @@
+<div class="card-container">
+  <div class="card" *ngFor="let company of companies">
+    <div class="card-content">
+      <!-- Imagen -->
+      <div class="card-image">
+        <img
+          class="card-image-container"
+          src="{{ company.logo }}"
+          [alt]="company.name"
+        />
+        <div class="card-text-container">
+          <p>{{ company.name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+@import "../../../scss/responsive";
+@import "../../../scss/var";
+@import "../../../scss/buttons";
+
+.home-container {
+  .home-header {
+    img {
+      width: 100%; // Mantén el ancho al 100% del contenedor
+      height: auto; // Asegúrate de mantener la relación de aspecto
+      max-height: 300px; // Establece una altura máxima para que no sea demasiado alta
+      object-fit: cover; // Ajusta cómo se escala la imagen para llenar el espacio disponible
+      @media (min-width: 1200px) {
+        max-height: 400px; // 3 columnas en pantallas extra grandes
+      }
+    }
+  }
+}
+
+.home-main,
+.card {
+  background-color: $white;
+  color: $text-color;
+  padding: 20px;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  position: relative;
+  top: -20px;
+  margin: 0px 200px 20px 50px;
+  @media (min-width: 1200px) {
+    top: -10px; // 3 columnas en pantallas extra grandes
+  }
+}
