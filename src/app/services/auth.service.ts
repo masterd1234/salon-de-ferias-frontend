@@ -23,10 +23,13 @@ export class AuthService {
   ): Observable<{
     success: boolean;
     message: string;
-    user?: { name: string; rol: string };
+    user?: { name: string; rol: string; id: string };
   }> {
     return this.http
-      .post<{ message: string; user: { name: string; rol: string } }>(
+      .post<{
+        message: string;
+        user: { name: string; rol: string; id: string };
+      }>(
         `${this.apiUrl}/login`,
         { nameOrEmail, password },
         { withCredentials: true }
