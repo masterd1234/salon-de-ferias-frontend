@@ -118,6 +118,18 @@ export const routes: Routes = [
   },
 
   /**
+   * Ruta para el perfil del usuario, protegida por `authGuard` y cargada de forma diferida.
+   * @path /profile
+   */
+  {
+    path: 'profile-visitor',
+    loadComponent: () =>
+      import('./page/profile-visitor/profile-visitor.component').then(
+        (m) => m.ProfileVisitorComponent
+      ),
+  },
+
+  /**
    * Ruta para ver todas las ofertas, protegida por `authGuard` y cargada de forma diferida.
    * @path /offers
    */
