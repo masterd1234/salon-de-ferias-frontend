@@ -3,11 +3,21 @@
     <div class="card-content">
       <!-- Imagen -->
       <div class="card-image">
+        @if(company.logo){
         <img
           class="card-image-container"
           src="{{ company.logo }}"
           [alt]="company.name"
         />
+        } @else{
+        <div>
+          <img
+            style="width: 160px; height: 90px"
+            src="../../../../assets/davante_logo.png"
+            [alt]="company.name"
+          />
+        </div>
+        }
         <div class="card-text-container">
           <p>{{ company.name }}</p>
         </div>
