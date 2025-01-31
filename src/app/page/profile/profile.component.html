@@ -1,6 +1,12 @@
+@if (isRol()==='co') {
 <div class="profile-header">
   <canvas #previewCanvas></canvas>
 </div>
+} @else {
+<div class="profile-header-visitor">
+  <img src="../../../assets/background-offers.png" alt="Encabezado Ofertas" />
+</div>
+}
 
 <div class="personal-info d-flex align-items-center">
   <div class="row w-100">
@@ -29,11 +35,19 @@
 
     <div class="d-flex justify-content-between w-100 pt-2">
       <div class="info-text">
+        @if(isRol()==='co'){
         <button mat-button (click)="scrollToSection('personal-info-card')">
           Perfil de Empresa
         </button>
         <button mat-button (click)="scrollToSection('video')">Videos</button>
         <button mat-button (click)="scrollToSection('offer')">Ofertas</button>
+        }@else {
+        <button mat-button (click)="scrollToSection('personal-info-card')">
+          Perfil de visitante
+        </button>
+
+        <button mat-button (click)="scrollToSection('offer')">Ofertas</button>
+        }
       </div>
     </div>
   </div>
@@ -140,6 +154,30 @@
           </div>
         </div>
       </div>
+      } @else {
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mt-2">
+            <i class="fa-regular fa-newspaper"></i>
+            <strong class="ps-2">DNI: </strong>
+            <span>{{ userCompany?.dni }}</span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mt-2">
+            <i class="fa-solid fa-at"></i>
+            <strong class="ps-2">Correo:</strong> {{ userCompany?.email }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mt-2">
+            <i class="fa-solid fa-at"></i>
+            <strong class="ps-2">Teléfono:</strong> {{ userCompany?.phone }}
+          </div>
+        </div>
+      </div>
       }
     </mat-card-content>
   </mat-card>
@@ -214,6 +252,7 @@
       <mat-card-title>
         <h3 id="offer">Ofertas</h3>
       </mat-card-title>
+      @if (isRol()==='co') {
       <div class="action-button ml-auto d-flex">
         <button
           class="button button--primary custom-button"
@@ -222,10 +261,12 @@
           Añadir Oferta
         </button>
       </div>
+      }
     </mat-card-header>
 
     <mat-divider class="mt-2 w-100"></mat-divider>
 
+    @if(isRol()=== 'co'){
     <mat-card-content>
       <mat-card
         *ngFor="let offer of offers"
@@ -276,5 +317,6 @@
         </mat-card-content>
       </mat-card>
     </mat-card-content>
+    }
   </mat-card>
 </div>

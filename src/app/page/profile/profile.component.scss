@@ -1,7 +1,6 @@
-@import '../../../scss/responsive';
-@import '../../../scss/var';
-@import '../../../scss/buttons';
-
+@import "../../../scss/responsive";
+@import "../../../scss/var";
+@import "../../../scss/buttons";
 
 :host {
   background-color: $background-color;
@@ -18,7 +17,7 @@
   border-radius: 20%; /* Mantiene el contenedor redondeado */
   overflow: hidden; /* Recorta el contenido excedente */
   background-color: #e4e4e421; /* Fondo opcional */
-  object-fit: 'contain',
+  object-fit: "contain";
 }
 
 .container {
@@ -27,6 +26,18 @@
   margin: 0;
   padding: 0;
   position: relative;
+}
+
+.profile-header-visitor {
+  img {
+    width: 100%; // Mantén el ancho al 100% del contenedor
+    height: auto; // Asegúrate de mantener la relación de aspecto
+    max-height: 300px; // Establece una altura máxima para que no sea demasiado alta
+    object-fit: cover; // Ajusta cómo se escala la imagen para llenar el espacio disponible
+    @media (min-width: 1200px) {
+      max-height: 600px; // 3 columnas en pantallas extra grandes
+    }
+  }
 }
 
 .profile-header {
@@ -60,7 +71,6 @@
 }
 
 canvas {
-
   width: 100%;
   /* Canvas ocupará la mitad del contenedor */
   height: auto;
@@ -82,8 +92,6 @@ canvas {
 }
 
 .profile-header {
-
-
   .back-button {
     margin: 0 0 100px 20px;
     @extend .button--secondary;
@@ -151,7 +159,7 @@ canvas {
   padding: 20px;
   border-radius: $border-radius;
   box-shadow: $box-shadow;
-  top:-20px;
+  top: -20px;
   position: relative;
   margin: 0px 200px 20px 50px;
   @media (max-width: 498px) {

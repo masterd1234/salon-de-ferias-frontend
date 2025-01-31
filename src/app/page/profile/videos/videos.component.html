@@ -1,10 +1,28 @@
 <div class="video-dialog-container" [formGroup]="videoForm">
   <h2>Agregar Video</h2>
   <div class="input-group">
-    <input matInput formControlName="videoUrl" placeholder="Añadir URL de YouTube" class="custom-input" />
-    <button mat-flat-button color="primary" class="custom-button" (click)="addVideo()" [disabled]="videoForm.invalid">Añadir Video</button>
+    <input
+      matInput
+      formControlName="videoUrl"
+      placeholder="Añadir URL de YouTube"
+      class="custom-input"
+    />
+    <button
+      mat-flat-button
+      color="primary"
+      class="custom-button"
+      (click)="addVideo()"
+      [disabled]="videoForm.invalid"
+    >
+      Añadir Video
+    </button>
   </div>
-  <div *ngIf="videoForm.get('videoUrl')?.invalid && videoForm.get('videoUrl')?.touched" class="error">
+  <div
+    *ngIf="
+      videoForm.get('videoUrl')?.invalid && videoForm.get('videoUrl')?.touched
+    "
+    class="error"
+  >
     <small>Introduce una URL de YouTube válida.</small>
   </div>
 </div>
