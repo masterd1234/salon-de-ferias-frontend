@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal, HostListener, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  HostListener,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { UserService } from '../../services/users.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,9 +14,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CompanyService } from '../../services/information.service';
 import { Company } from '../../../models/company.model';
-import { VideosComponent } from "./videos/videos.component";
+import { VideosComponent } from './videos/videos.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { VideoService } from '../../services/videos.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Offer } from '../../../models/offers/offers.model';
@@ -34,12 +46,19 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, MatButtonModule, MatCardModule, MatGridListModule, ReactiveFormsModule, MatIconModule],
+  imports: [
+    CommonModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatCardModule,
+    MatGridListModule,
+    ReactiveFormsModule,
+    MatIconModule,
+  ],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.scss'
+  styleUrl: './profile.component.scss',
 })
 export class ProfileComponent {
-
   JobTypeMap = JobTypeMap;
   getJobType = getJobType;
 
@@ -77,7 +96,6 @@ export class ProfileComponent {
   // Formulario reactivo para la URL del video
   videoForm: FormGroup;
 
-
   user: { name: string; rol: string } | null = null;
 
   userCompany: Usuario | null = null;
@@ -90,8 +108,8 @@ export class ProfileComponent {
   drawModel = signal<boolean>(false);
 
   /** Referencia al elemento canvas utilizado para la vista previa */
-  @ViewChild('previewCanvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
-
+  @ViewChild('previewCanvas', { static: true })
+  canvasRef!: ElementRef<HTMLCanvasElement>;
 
   /** Servicios inyectados necesarios para las operaciones de autenticación, empresa, videos y ofertas */
   private userService = inject(UserService);
@@ -103,7 +121,6 @@ export class ProfileComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-
   /**
    * @constructor
    * Constructor de la clase `ProfileComponent`.
@@ -113,7 +130,15 @@ export class ProfileComponent {
    */
   constructor(public dialog: MatDialog, private fb: FormBuilder) {
     this.videoForm = this.fb.group({
-      newVideo: ['', [Validators.required, Validators.pattern(/^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/)]]
+      newVideo: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            /^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+          ),
+        ],
+      ],
     });
     this.profileImageUrl = '';
   }
@@ -137,7 +162,7 @@ export class ProfileComponent {
         lastValueFrom(this.loadVideos()),
         lastValueFrom(this.getUserCompany()),
         lastValueFrom(this.getCompanyData()),
-        lastValueFrom(this.getDesignData())
+        lastValueFrom(this.getDesignData()),
       ]);
     } catch (error) {
       console.error('Error al cargar los datos del perfil:', error);
@@ -149,7 +174,7 @@ export class ProfileComponent {
 
   getDesignData(): Observable<any> {
     return this.imagenService.getDesign().pipe(
-      tap(response => {
+      tap((response) => {
         this.designData = response ?? null;
 
         if (this.designData) {
@@ -157,7 +182,7 @@ export class ProfileComponent {
           this.drawCanvas();
         }
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Error al obtener datos de diseño:', error);
         this.loadingError.set(true);
         return of(null);
@@ -166,8 +191,8 @@ export class ProfileComponent {
   }
 
   /**
-  * Dibuja el canvas de vista previa con las selecciones actuales.
-  */
+   * Dibuja el canvas de vista previa con las selecciones actuales.
+   */
   drawCanvas(): void {
     const canvas = this.canvasRef.nativeElement;
     const ctx = canvas.getContext('2d');
@@ -199,7 +224,12 @@ export class ProfileComponent {
       standImage.src = this.designData.data.stand.url;
       standImage.onload = () => {
         // Dibuja el stand como fondo
-        this.drawImageContainStand(ctx, standImage, canvas.clientWidth, canvas.clientHeight);
+        this.drawImageContainStand(
+          ctx,
+          standImage,
+          canvas.clientWidth,
+          canvas.clientHeight
+        );
 
         // Dibuja el logo, banner y póster, en este orden
         if (this.designData.data.design.logo.url) {
@@ -207,8 +237,8 @@ export class ProfileComponent {
         }
         if (this.designData.data.files.banner) {
           this.drawBanner(ctx)
-          .then(() => this.drawReceptionist(ctx)) // Dibuja recepcionista solo después del banner
-          .catch(error => console.error('Error al dibujar:', error));
+            .then(() => this.drawReceptionist(ctx)) // Dibuja recepcionista solo después del banner
+            .catch((error) => console.error('Error al dibujar:', error));
         }
         if (this.designData.data.files.poster) {
           this.drawPoster(ctx);
@@ -217,64 +247,74 @@ export class ProfileComponent {
     }
   }
   /**
-    * Dibuja el poster en el canvas.
-    * @param ctx Contexto del canvas para renderizado.
-    */
+   * Dibuja el poster en el canvas.
+   * @param ctx Contexto del canvas para renderizado.
+   */
   drawPoster(ctx: CanvasRenderingContext2D) {
     throw new Error('Method not implemented.');
   }
   /**
-  * Dibuja el banner en el canvas.
-  * @param ctx Contexto del canvas para renderizado.
-  */
+   * Dibuja el banner en el canvas.
+   * @param ctx Contexto del canvas para renderizado.
+   */
   drawBanner(ctx: CanvasRenderingContext2D): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.designData.data.files.banner) {
         const bannerImage = new Image();
         bannerImage.src = this.designData.data.files.banner;
-  
+
         bannerImage.onload = () => {
           const canvas = ctx.canvas;
-  
+
           // Escalar stand y obtener dimensiones reales en el canvas
           const standImage = new Image();
           standImage.src = this.designData.data.stand.url;
-  
+
           standImage.onload = () => {
             const scale = Math.min(
               canvas.clientWidth / standImage.width,
               canvas.clientHeight / standImage.height
             );
-  
+
             // Tamaño y posición real del stand en el canvas
             const standWidth = standImage.width * scale;
             const standHeight = standImage.height * scale;
             const standX = (canvas.clientWidth - standWidth) / 2; // Centrado horizontal
             const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
-  
+
             // Coordenadas relativas del banner
-            const { x, y, width, height } = this.designData.data.stand.standConfig.bannerPosition || {
+            const { x, y, width, height } = this.designData.data.stand
+              .standConfig.bannerPosition || {
               x: 0.1,
               y: 0.1,
               width: 0.8,
               height: 0.3,
             };
-  
+
             // Coordenadas absolutas del banner dentro del stand
             const bannerX = standX + x * standWidth;
             const bannerY = standY + y * standHeight;
             const bannerWidth = standWidth * width;
             const bannerHeight = standHeight * height;
-  
+
             // Dibuja el banner
-            this.drawImageContain(ctx, bannerImage, bannerWidth, bannerHeight, bannerX, bannerY);
+            this.drawImageContain(
+              ctx,
+              bannerImage,
+              bannerWidth,
+              bannerHeight,
+              bannerX,
+              bannerY
+            );
             resolve();
           };
-  
-          standImage.onerror = () => reject('Error al cargar la imagen del stand');
+
+          standImage.onerror = () =>
+            reject('Error al cargar la imagen del stand');
         };
-  
-        bannerImage.onerror = () => reject('Error al cargar la imagen del banner');
+
+        bannerImage.onerror = () =>
+          reject('Error al cargar la imagen del banner');
       } else {
         resolve(); // Si no hay banner, simplemente pasa
       }
@@ -282,9 +322,9 @@ export class ProfileComponent {
   }
 
   /**
-     * Dibuja el logo en el canvas.
-     * @param ctx Contexto del canvas para renderizado.
-     */
+   * Dibuja el logo en el canvas.
+   * @param ctx Contexto del canvas para renderizado.
+   */
   drawLogo(ctx: CanvasRenderingContext2D) {
     if (this.designData.data.design.logo.url) {
       const logoImage = new Image();
@@ -310,7 +350,8 @@ export class ProfileComponent {
           const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
 
           // Coordenadas relativas del logo
-          const { x, y, width, height } = this.designData.data.stand.standConfig.logoPosition || {
+          const { x, y, width, height } = this.designData.data.stand.standConfig
+            .logoPosition || {
             x: 0.1,
             y: 0.1,
             width: 0.8,
@@ -324,7 +365,14 @@ export class ProfileComponent {
           const logoHeight = standHeight * height;
 
           // Dibuja el logo directamente sin clipping
-          this.drawImageContain(ctx, logoImage, logoWidth, logoHeight, logoX, logoY);
+          this.drawImageContain(
+            ctx,
+            logoImage,
+            logoWidth,
+            logoHeight,
+            logoX,
+            logoY
+          );
         };
       };
     }
@@ -345,7 +393,10 @@ export class ProfileComponent {
     targetX: number,
     targetY: number
   ): void {
-    const scale = Math.min(targetWidth / image.width, targetHeight / image.height);
+    const scale = Math.min(
+      targetWidth / image.width,
+      targetHeight / image.height
+    );
     const width = image.width * scale;
     const height = image.height * scale;
     const x = targetX + (targetWidth - width) / 2;
@@ -355,14 +406,22 @@ export class ProfileComponent {
   }
 
   /**
-  * Dibuja la imagen del stand ajustada al canvas.
-  * @param ctx Contexto del canvas.
-  * @param image Imagen del stand.
-  * @param targetWidth Ancho del canvas.
-  * @param targetHeight Alto del canvas.
-  */
-  drawImageContainStand(ctx: CanvasRenderingContext2D, image: HTMLImageElement, targetWidth: number, targetHeight: number): void {
-    const scale = Math.min(targetWidth / image.width, targetHeight / image.height);
+   * Dibuja la imagen del stand ajustada al canvas.
+   * @param ctx Contexto del canvas.
+   * @param image Imagen del stand.
+   * @param targetWidth Ancho del canvas.
+   * @param targetHeight Alto del canvas.
+   */
+  drawImageContainStand(
+    ctx: CanvasRenderingContext2D,
+    image: HTMLImageElement,
+    targetWidth: number,
+    targetHeight: number
+  ): void {
+    const scale = Math.min(
+      targetWidth / image.width,
+      targetHeight / image.height
+    );
     const width = image.width * scale;
     const height = image.height * scale;
     const x = (targetWidth - width) / 2;
@@ -372,64 +431,76 @@ export class ProfileComponent {
   }
 
   /**
-  * Dibuja la imagen de la recepcionista en el canvas.
-  * @param ctx Contexto de renderizado del canvas.
-  */
+   * Dibuja la imagen de la recepcionista en el canvas.
+   * @param ctx Contexto de renderizado del canvas.
+   */
   drawReceptionist(ctx: CanvasRenderingContext2D): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (!this.designData.data.model.url || !this.designData.data.stand.standConfig) {
+      if (
+        !this.designData.data.model.url ||
+        !this.designData.data.stand.standConfig
+      ) {
         resolve();
         return;
       }
-  
+
       const receptionistImage = new Image();
       receptionistImage.src = this.designData.data.model.url;
-  
+
       receptionistImage.onload = () => {
         const canvas = ctx.canvas;
-  
+
         // Escalar stand y obtener dimensiones reales en el canvas
         const standImage = new Image();
         standImage.src = this.designData.data.stand.url;
-  
+
         standImage.onload = () => {
           const scale = Math.min(
             canvas.clientWidth / standImage.width,
             canvas.clientHeight / standImage.height
           );
-  
+
           // Tamaño y posición real del stand en el canvas
           const standWidth = standImage.width * scale;
           const standHeight = standImage.height * scale;
           const standX = (canvas.clientWidth - standWidth) / 2; // Centrado horizontal
           const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
-  
+
           // Coordenadas relativas del recepcionista
-          const { x, y, width, height } = this.designData.data.stand.standConfig.recepcionistPosition || {
+          const { x, y, width, height } = this.designData.data.stand.standConfig
+            .recepcionistPosition || {
             x: 0.1,
             y: 0.1,
             width: 0.8,
             height: 0.3,
           };
-  
+
           // Coordenadas absolutas del recepcionista dentro del stand
           const recepcionistX = standX + x * standWidth;
           const recepcionistY = standY + y * standHeight;
           const recepcionistWidth = standWidth * width;
           const recepcionistHeight = standHeight * height;
-  
+
           // Dibuja el recepcionista
-          this.drawImageContain(ctx, receptionistImage, recepcionistWidth, recepcionistHeight, recepcionistX, recepcionistY);
+          this.drawImageContain(
+            ctx,
+            receptionistImage,
+            recepcionistWidth,
+            recepcionistHeight,
+            recepcionistX,
+            recepcionistY
+          );
           resolve();
         };
-  
-        standImage.onerror = () => reject('Error al cargar la imagen del stand');
+
+        standImage.onerror = () =>
+          reject('Error al cargar la imagen del stand');
       };
-  
-      receptionistImage.onerror = () => reject('Error al cargar la imagen del recepcionista');
+
+      receptionistImage.onerror = () =>
+        reject('Error al cargar la imagen del recepcionista');
     });
   }
-
 
   getUserCompany(): Observable<Usuario | null> {
     return this.userService.getUserById().pipe(
@@ -467,15 +538,27 @@ export class ProfileComponent {
         if (response.success && response.data) {
           this.company.set(response.data);
           this.fullDescription = response.data.description || '';
-          this.truncatedDescription = this.truncateHTML(this.fullDescription, 100);
+          this.truncatedDescription = this.truncateHTML(
+            this.fullDescription,
+            100
+          );
           this.fullAdditionalInfo = response.data.additional_information || '';
-          this.truncatedAdditionalInfo = this.truncateHTML(this.fullAdditionalInfo, 100);
+          this.truncatedAdditionalInfo = this.truncateHTML(
+            this.fullAdditionalInfo,
+            100
+          );
         } else {
-          console.error('Error al obtener la información de la empresa:', response.message);
+          console.error(
+            'Error al obtener la información de la empresa:',
+            response.message
+          );
         }
       }),
       catchError((error) => {
-        console.error('Error inesperado al obtener la información de la empresa:', error);
+        console.error(
+          'Error inesperado al obtener la información de la empresa:',
+          error
+        );
         return of(null); // Devuelve un observable nulo en caso de error
       })
     );
@@ -521,19 +604,19 @@ export class ProfileComponent {
    * @returns Cadena truncada en HTML manteniendo etiquetas válidas.
    */
   truncateHTML(html: string, limit: number): string {
-    const div = document.createElement("div");
+    const div = document.createElement('div');
     div.innerHTML = html;
 
-    let truncated = "";
+    let truncated = '';
     let charCount = 0;
 
     function traverse(node: Node) {
       if (charCount >= limit) return;
 
       if (node.nodeType === Node.TEXT_NODE) {
-        const text = node.textContent || "";
+        const text = node.textContent || '';
         if (charCount + text.length > limit) {
-          truncated += text.substring(0, limit - charCount) + "...";
+          truncated += text.substring(0, limit - charCount) + '...';
           charCount = limit;
         } else {
           truncated += text;
@@ -541,7 +624,9 @@ export class ProfileComponent {
         }
       } else if (node.nodeType === Node.ELEMENT_NODE) {
         const element = node as HTMLElement;
-        truncated += `<${element.tagName.toLowerCase()}${getAttributes(element)}>`;
+        truncated += `<${element.tagName.toLowerCase()}${getAttributes(
+          element
+        )}>`;
         for (let i = 0; i < element.childNodes.length; i++) {
           traverse(element.childNodes[i]);
           if (charCount >= limit) break;
@@ -552,8 +637,8 @@ export class ProfileComponent {
 
     function getAttributes(element: HTMLElement): string {
       return Array.from(element.attributes)
-        .map(attr => ` ${attr.name}="${attr.value}"`)
-        .join("");
+        .map((attr) => ` ${attr.name}="${attr.value}"`)
+        .join('');
     }
 
     traverse(div);
@@ -569,8 +654,7 @@ export class ProfileComponent {
     this.user = this.authService.getUser();
     if (this.user) {
       return this.user.rol;
-    } else
-      return '';
+    } else return '';
   }
 
   /**
@@ -596,8 +680,10 @@ export class ProfileComponent {
             .flatMap((video) =>
               video.urls
                 ? video.urls.map((url) =>
-                  this.sanitazer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${url}`)
-                )
+                    this.sanitazer.bypassSecurityTrustResourceUrl(
+                      `https://www.youtube.com/embed/${url}`
+                    )
+                  )
                 : []
             )
             .filter((video): video is SafeResourceUrl => video !== null);
@@ -617,7 +703,8 @@ export class ProfileComponent {
    * @returns ID del video o `null` si no es válido.
    */
   getYouTubeVideoId(url: string): string | null {
-    const regExp = /^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const regExp =
+      /^.*(youtu.be\/|v\/|\/u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
     return match && match[2].length === 11 ? match[2] : null;
   }
@@ -629,12 +716,17 @@ export class ProfileComponent {
     if (this.videoForm.valid) {
       const videoId = this.getYouTubeVideoId(this.videoForm.value.newVideo);
       if (videoId) {
-        this.videoService.addVideo(videoId).subscribe(() => {
-          this.videos.push(this.sanitizeUrl(`https://www.youtube.com/embed/${videoId}`));
-          this.videoForm.reset();
-        }, error => {
-          alert('Error al agregar el video.');
-        });
+        this.videoService.addVideo(videoId).subscribe(
+          () => {
+            this.videos.push(
+              this.sanitizeUrl(`https://www.youtube.com/embed/${videoId}`)
+            );
+            this.videoForm.reset();
+          },
+          (error) => {
+            alert('Error al agregar el video.');
+          }
+        );
       } else {
         alert('URL de YouTube no válida');
       }
@@ -654,7 +746,7 @@ export class ProfileComponent {
    */
   openVideoDialog(): void {
     const dialogRef = this.dialog.open(VideosComponent, { width: '300px' });
-    dialogRef.afterClosed().subscribe(videoUrl => {
+    dialogRef.afterClosed().subscribe((videoUrl) => {
       if (videoUrl) this.addVideo();
     });
   }
@@ -668,7 +760,8 @@ export class ProfileComponent {
 
   /** Configura el tamaño de pantalla como "pequeña" si el ancho es menor o igual a 768px. */
   checkScreenSize(): void {
-    if (typeof window !== 'undefined') { // Validamos si window está disponible
+    if (typeof window !== 'undefined') {
+      // Validamos si window está disponible
       this.isSmallScreen = window.innerWidth <= 768;
     } else {
       console.warn('El objeto `window` no está disponible.');
@@ -678,7 +771,8 @@ export class ProfileComponent {
 
   /** Establece el número de columnas de la cuadrícula según el ancho de la ventana. */
   setGridCols() {
-    if (typeof window !== 'undefined') { // Validamos si window está disponible
+    if (typeof window !== 'undefined') {
+      // Validamos si window está disponible
       const width = window.innerWidth;
       this.cols = width <= 480 ? 1 : width <= 768 ? 2 : 3;
     } else {
@@ -759,7 +853,7 @@ export class ProfileComponent {
    */
   openOfferDialog(): void {
     const dialogRef = this.dialog.open(OffersComponent, { width: 'auto' });
-    dialogRef.afterClosed().subscribe(offerData => {
+    dialogRef.afterClosed().subscribe((offerData) => {
       if (offerData) this.addOffer(offerData);
     });
   }

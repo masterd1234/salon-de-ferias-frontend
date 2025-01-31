@@ -1,1 +1,40 @@
-<p>home-company works!</p>
+<!-- <app-stand-company-profile></app-stand-company-profile> -->
+<div class="profile-header">
+  <canvas #previewCanvas></canvas>
+</div>
+<div class="personal-info d-flex align-items-center">
+  <div class="row w-100">
+    <div class="profile-picture cd-md-6">
+      <!-- Mostrar la imagen si existe, de lo contrario, mostrar el ícono -->
+      <img
+        *ngIf="userCompany?.logo; else showIcon"
+        [src]="userCompany?.logo"
+        alt="Profile Picture"
+        class="rounded-circle"
+      />
+
+      <!-- Mostrar el ícono si no hay imagen -->
+      <ng-template #showIcon>
+        <i class="fa-regular fa-circle-user user-icon"></i>
+      </ng-template>
+
+      <button class="plus-icon button button--primary">
+        <i class="fa-solid fa-plus fa-flip-horizontal"></i>
+      </button>
+    </div>
+
+    <h2 class="profile-name">{{ userCompany?.name }}</h2>
+
+    <!-- <mat-divider class="mt-3 w-100"></mat-divider> -->
+
+    <div class="d-flex justify-content-between w-100 pt-2">
+      <div class="info-text">
+        <button mat-button (click)="scrollToSection('personal-info-card')">
+          Perfil de Empresa
+        </button>
+        <button mat-button (click)="scrollToSection('video')">Videos</button>
+        <button mat-button (click)="scrollToSection('offer')">Ofertas</button>
+      </div>
+    </div>
+  </div>
+</div>
