@@ -1,13 +1,27 @@
 import { Component, signal, inject } from '@angular/core';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
 import { UserDataService } from '../../services/user-data.service';
 import { UserService } from '../../services/users.service';
 import { Usuario } from '../../../models/users.model';
 import { catchError, lastValueFrom, Observable, of, retry, tap } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-visitor',
   standalone: true,
-  imports: [],
+  imports: [
+    CommonModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatCardModule,
+    MatGridListModule,
+    MatIconModule,
+  ],
   templateUrl: './profile-visitor.component.html',
   styleUrl: './profile-visitor.component.scss',
 })
@@ -17,8 +31,9 @@ export class ProfileVisitorComponent {
 
   userVisitor: Usuario | null = null;
 
-  private userDataService = inject(UserDataService);
-  // private userService = inject(UserService);
+  // private userDataService = inject(UserDataService);
+  private userService = inject(UserService);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadProfileData();
@@ -39,7 +54,7 @@ export class ProfileVisitorComponent {
   }
 
   getUserVisitor(): Observable<Usuario | null> {
-    return this.userDataService.getUserById().pipe(
+    return this.userService.getUserById().pipe(
       retry(3), // Reintenta la solicitud hasta 3 veces
       tap((response) => {
         this.userVisitor = response ?? null;
@@ -50,4 +65,18 @@ export class ProfileVisitorComponent {
       })
     );
   }
+
+  /**
+   * Desplaza la vista hacia la sección de información del perfil.
+   */
+  scrollToSection(sectionId: string) {
+    this.router.navigate([], { fragment: sectionId }).then(() => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  openEditDialog(): void {}
 }

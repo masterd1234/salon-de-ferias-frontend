@@ -191,6 +191,18 @@
               }
             </mat-form-field>
             <mat-form-field appearance="fill" class="w-100">
+              <mat-label>Teléfono del visitante</mat-label>
+              <input
+                matInput
+                placeHolder="example@visitante.com"
+                formControlName="phone"
+              />
+              @if(visitorRegister.get('phone')?.invalid &&
+              visitorRegister.get('phone')?.touched){
+              <mat-error>El teléfono es requerido.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100">
               <mat-label>Contraseña</mat-label>
               <input
                 matInput
@@ -218,6 +230,28 @@
               >
               }
             </mat-form-field>
+
+            <!-- Botón para añadir el logo -->
+            <div class="action-button ml-auto d-flex">
+              <button
+                type="button"
+                class="button button--primary"
+                (click)="logoInput.click()"
+                mat-flat-button
+              >
+                <i class="fa-solid fa-upload"></i>
+              </button>
+              <!-- Input de archivo oculto para subir el logo -->
+              <input
+                type="file"
+                #logoInput
+                (change)="onFileChange($event, 'logo')"
+                class="file-input"
+              />
+              <div *ngIf="logoUrl">
+                <p>Archivo seleccionado: {{ logoFileName }}</p>
+              </div>
+            </div>
 
             <!-- Checkbox para aceptar la política de privacidad -->
             <mat-checkbox class="w-100 mt-1" (change)="onPrivacyChange($event)">

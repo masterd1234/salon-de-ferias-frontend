@@ -1,3 +1,102 @@
-<h1>Nombre {{ userVisitor?.name }}</h1>
-<p>Email {{ userVisitor?.email }}</p>
-<p>DNI: {{ userVisitor?.dni }}</p>
+<div class="profile-header-visitor">
+  <img src="../../../assets/background-offers.png" alt="Encabezado Ofertas" />
+</div>
+
+<div class="personal-info d-flex align-items-center">
+  <div class="row w-100">
+    <div class="profile-picture cd-md-6">
+      <!-- Mostrar la imagen si existe, de lo contrario, mostrar el ícono -->
+      <img
+        *ngIf="userVisitor?.logo; else showIcon"
+        [src]="userVisitor?.logo"
+        alt="Profile Picture"
+        class="rounded-circle"
+      />
+
+      <!-- Mostrar el ícono si no hay imagen -->
+      <ng-template #showIcon>
+        <i class="fa-regular fa-circle-user user-icon"></i>
+      </ng-template>
+
+      <button class="plus-icon button button--primary">
+        <i class="fa-solid fa-plus fa-flip-horizontal"></i>
+      </button>
+    </div>
+
+    <h2 class="profile-name">{{ userVisitor?.name }}</h2>
+
+    <mat-divider class="mt-3 w-100"></mat-divider>
+
+    <div class="d-flex justify-content-between w-100 pt-2">
+      <div class="info-text">
+        <button mat-button (click)="scrollToSection('personal-info-card')">
+          Perfil de visitante
+        </button>
+
+        <button mat-button (click)="scrollToSection('offer')">Ofertas</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>
+        <h3 id="personal-info-card">Información</h3>
+      </mat-card-title>
+      <div class="action-header">
+        <div class="action-button">
+          <button class="button button--primary mx-2" mat-flat-button>
+            <i class="fas fa-download"></i>
+          </button>
+          <button
+            class="button button--primary mx-2"
+            (click)="openEditDialog()"
+            mat-flat-button
+          >
+            <i class="fas fa-edit"></i>
+          </button>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-divider class="mt-2 w-100"></mat-divider>
+
+    <mat-card-content>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mt-2">
+            <i class="fa-regular fa-id-card"></i>
+            <strong class="ps-2">DNI: </strong>
+            <span>{{ userVisitor?.dni }}</span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mt-2">
+            <i class="fa-solid fa-envelope"></i>
+            <strong class="ps-2">Correo:</strong> {{ userVisitor?.email }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mt-2">
+            <i class="fa-solid fa-phone"></i>
+            <strong class="ps-2">Teléfono:</strong> {{ userVisitor?.phone }}
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>
+        <h3 id="offer">Ofertas</h3>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-divider class="mt-2 w-100"></mat-divider>
+  </mat-card>
+</div>

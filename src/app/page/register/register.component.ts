@@ -94,6 +94,7 @@ export class RegisterComponent {
       password: ['', [Validators.required, Validators.minLength(6)]], // Campo requerido para contraseña
       email: ['', [Validators.required, Validators.email]], // Campo requerido para correo electrónico
       rol: ['visitor'],
+      logo: [''],
     });
   }
 
@@ -215,7 +216,7 @@ export class RegisterComponent {
           this.authService.login(username, password).subscribe({
             next: (loginResponse) => {
               if (loginResponse.success) {
-                this.router.navigate(['/home']);
+                this.router.navigate(['/home-visitor']);
               } else {
                 alert('Error en la autenticación: ' + loginResponse.message);
               }
