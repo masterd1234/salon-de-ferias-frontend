@@ -151,4 +151,16 @@ export const routes: Routes = [
         './page/employability-fair-hall/employability-fair-hall.component'
       ).then((m) => m.EmployabilityFairHallComponent),
   },
+
+  // { path: 'companies', component: CompanyCardsComponent },
+  // { path: 'company/:id', component: CompanyProfileComponent }, // Ruta dinámica con parámetro ID
+  // { path: '', redirectTo: '/companies', pathMatch: 'full' },
+
+  {
+    path: 'company/:id',
+    loadComponent: () =>
+      import('./page/stand-company/stand-company.component').then(
+        (m) => m.StandCompanyComponent
+      ),
+  }, // Ruta dinámica con parámetro ID
 ];

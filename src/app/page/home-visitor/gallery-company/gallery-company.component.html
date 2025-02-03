@@ -1,5 +1,9 @@
 <div class="card-container">
-  <div class="card" *ngFor="let company of companies">
+  <div
+    class="card"
+    *ngFor="let company of companies"
+    (click)="goToCompanyProfile(company.id)"
+  >
     <div class="card-content">
       <!-- Imagen -->
       <div class="card-image">

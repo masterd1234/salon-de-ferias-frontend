@@ -1,0 +1,24 @@
+<div class="company-profile-container" *ngIf="company; else loading">
+  <div class="profile-header">
+    <img
+      *ngIf="company.logo; else defaultImage"
+      [src]="company.logo"
+      [alt]="company.name"
+    />
+    <ng-template #defaultImage>
+      <img src="assets/default-logo.png" alt="Sin logo" />
+    </ng-template>
+    <h1>{{ company.name }}</h1>
+  </div>
+  <div class="profile-details">
+    <p><strong>Email:</strong> {{ company.email }}</p>
+    <p><strong>CIF:</strong> {{ company.cif }}</p>
+    <p><strong>Diseño:</strong> {{ company.design ? "Sí" : "No" }}</p>
+    <p><strong>Información:</strong> {{ company.information ? "Sí" : "No" }}</p>
+  </div>
+  <button (click)="goBack()" class="back-button">🔙 Volver</button>
+</div>
+
+<ng-template #loading>
+  <p>Cargando datos de la empresa...</p>
+</ng-template>

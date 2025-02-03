@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { CompanyDataService } from '../../../services/company-data.service';
 
@@ -13,7 +14,10 @@ import { CompanyDataService } from '../../../services/company-data.service';
 export class GalleryCompanyComponent implements OnInit {
   companies: any[] = [];
 
-  constructor(private companyService: CompanyDataService) {}
+  constructor(
+    private companyService: CompanyDataService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.companyService.getAllCompanies().subscribe({
@@ -24,5 +28,9 @@ export class GalleryCompanyComponent implements OnInit {
         console.error('Error al obtener las empresas:', err);
       },
     });
+  }
+
+  goToCompanyProfile(companyId: string) {
+    this.router.navigate(['/company', companyId]); // Redirige usando el ID de la empresa
   }
 }
