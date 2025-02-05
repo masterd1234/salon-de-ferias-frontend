@@ -1,24 +1,253 @@
-<div class="company-profile-container" *ngIf="company; else loading">
-  <div class="profile-header">
-    <img
-      *ngIf="company.logo; else defaultImage"
-      [src]="company.logo"
-      [alt]="company.name"
-    />
-    <ng-template #defaultImage>
-      <img src="assets/davante_logo.png" alt="Sin logo" />
-    </ng-template>
-    <h1>{{ company.name }}</h1>
-  </div>
-  <div class="profile-details">
-    <p><strong>Email:</strong> {{ company.email }}</p>
-    <p><strong>CIF:</strong> {{ company.cif }}</p>
-    <p><strong>Diseño:</strong> {{ company.design ? "Sí" : "No" }}</p>
-    <p><strong>Información:</strong> {{ company.information ? "Sí" : "No" }}</p>
-  </div>
-  <button (click)="goBack()" class="back-button">🔙 Volver</button>
+<div class="profile-header">
+  <canvas #previewCanvas></canvas>
 </div>
 
+<div class="personal-info d-flex align-items-center">
+  <div class="row w-100">
+    <div class="profile-picture cd-md-6">
+      <!-- Mostrar la imagen si existe, de lo contrario, mostrar el ícono -->
+      <img
+        *ngIf="company?.logo; else showIcon"
+        [src]="company?.logo"
+        alt="Profile Picture"
+        class="rounded-circle"
+      />
+
+      <!-- Mostrar el ícono si no hay imagen -->
+      <ng-template #showIcon>
+        <i class="fa-regular fa-circle-user user-icon"></i>
+      </ng-template>
+
+      <button class="plus-icon button button--primary">
+        <i class="fa-solid fa-plus fa-flip-horizontal"></i>
+      </button>
+    </div>
+
+    <h2 class="profile-name">{{ company?.name }}</h2>
+
+    <mat-divider class="mt-3 w-100"></mat-divider>
+
+    <div class="d-flex justify-content-between w-100 pt-2">
+      <div class="info-text">
+        <button mat-button (click)="scrollToSection('personal-info-card')">
+          Perfil de Empresa
+        </button>
+        <button mat-button (click)="scrollToSection('video')">Videos</button>
+        <button mat-button (click)="scrollToSection('offer')">Ofertas</button>
+
+        <button mat-button (click)="scrollToSection('offer')">Ofertas</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>
+        <h3 id="personal-info-card">Información</h3>
+      </mat-card-title>
+      <div class="action-header">
+        <div class="action-button">
+          <button class="button button--primary mx-2" mat-flat-button>
+            <i class="fas fa-download"></i>
+          </button>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-divider class="mt-2 w-100"></mat-divider>
+
+    <mat-card-content>
+      <div class="row">
+        <div class="mt-2">
+          <i class="fa-regular fa-newspaper"></i>
+          <strong class="ps-2">Descripción:</strong>
+          <div
+            class="editor-content"
+            [innerHTML]="showFullText ? fullDescription : truncatedDescription"
+          ></div>
+          <div class="leer-mas-container">
+            <button
+              mat-button
+              (click)="toggleText()"
+              class="button button--primary leer-mas"
+            >
+              {{ showFullText ? "Leer menos" : "Leer más" }}
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-2">
+          <i class="fa-solid fa-circle-info"></i>
+          <strong class="ps-2">Información Adicional:</strong>
+          <div
+            class="editor-content"
+            [innerHTML]="
+              showFullAdditionalInfo
+                ? fullAdditionalInfo
+                : truncatedAdditionalInfo
+            "
+          ></div>
+          <div class="leer-mas-container">
+            <button
+              mat-button
+              (click)="toggleAdditionalInfo()"
+              class="button button--primary leer-mas"
+            >
+              {{ showFullAdditionalInfo ? "Leer menos" : "Leer más" }}
+            </button>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mt-2">
+            <i class="fa-solid fa-briefcase"></i>
+            <strong class="ps-2">Sector:</strong>
+            {{ getSectorName(company()?.sector) }}
+          </div>
+          <div class="mt-2">
+            <i class="fa-solid fa-link"></i>
+            <strong class="ps-2">Enlaces:</strong>
+            @if(!(company()?.links?.length === 0)) {
+            <ul>
+              <li *ngFor="let link of company()?.links">
+                <a [href]="link.additionalButtonLink" target="_blank">{{
+                  link.additionalButtonTitle
+                }}</a>
+              </li>
+            </ul>
+            } @else {
+            <p>No hay enlaces disponibles.</p>
+            }
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="mt-2">
+            <i class="fa-solid fa-at"></i>
+            <strong class="ps-2">Correo:</strong> {{ company?.email }}
+          </div>
+          <div class="mt-2">
+            <i class="fa-regular fa-file"></i>
+            <strong class="ps-2">Documentos:</strong>{{ company()?.documents }}
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>
+        <h3 id="video">Videos</h3>
+      </mat-card-title>
+
+      <div class="action-button ml-auto d-flex">
+        <button
+          class="button button--primary custom-button mx-2"
+          mat-flat-button
+        >
+          <i class="fa-solid fa-circle-plus" style="font-size: 20px"></i>
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-divider class="mt-2 w-100"></mat-divider>
+
+    <mat-grid-list [cols]="cols" gutterSize="16px" rowHeight="1:1" class="mt-3">
+      <mat-grid-tile *ngFor="let video of videos">
+        <mat-card class="video">
+          <mat-card-content>
+            <iframe
+              width="300"
+              height="300"
+              [src]="video"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </mat-card-content>
+          <mat-card-footer>
+            <div class="video-info">
+              <h3 mat-card-title></h3>
+              <p mat-card-subtitle></p>
+            </div>
+          </mat-card-footer>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>
+        <h3 id="offer">Ofertas</h3>
+      </mat-card-title>
+
+      <div class="action-button ml-auto d-flex">
+        <button class="button button--primary custom-button">
+          Añadir Oferta
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-divider class="mt-2 w-100"></mat-divider>
+
+    <mat-card-content>
+      <mat-card
+        *ngFor="let offer of offers"
+        class="offer-card mt-3"
+        (click)="toggleOfferDetails(offer.id!)"
+      >
+        <mat-card-header>
+          <img
+            matCardAvatar
+            [src]="offer.logo?.url"
+            alt="Logo"
+            class="custom-avatar"
+            style="object-fit: contain"
+          />
+          <mat-card-title>{{ offer.position }}</mat-card-title>
+          <mat-card-subtitle
+            >{{ offer.companyName }} | {{ offer.location }} ({{
+              offer.workplace_type
+            }})</mat-card-subtitle
+          >
+          <div class="action-button ml-auto d-flex">
+            <button
+              class="button button--secondary delete-button"
+              color="warn"
+              mat-flat-button
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </mat-card-header>
+
+        <mat-card-content *ngIf="expandedOfferId === offer.id">
+          <p>
+            <strong><i class="fa-solid fa-briefcase"></i></strong>
+            {{ offer.workplace_type }} | {{ getJobType(offer.job_type) }} |
+            {{ getSectorName(offer.sector) }}
+          </p>
+          <p>
+            <strong>Acerca del Empleo:</strong> <br />
+            {{ offer.description }}
+          </p>
+          <a [href]="offer.link" target="_blank">
+            <button mat-flat-button color="accent" class="custom-button">
+              Inscribirse
+            </button>
+          </a>
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- <button (click)="goBack()" class="back-button">🔙 Volver</button>
 <ng-template #loading>
   <p>Cargando datos de la empresa...</p>
-</ng-template>
+</ng-template> -->
