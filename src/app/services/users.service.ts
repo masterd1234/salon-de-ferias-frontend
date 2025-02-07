@@ -136,4 +136,52 @@ export class UserService {
         })
       );
   }
+
+  updateCompany(
+    companyData: Usuario,
+    id?: string
+  ): Observable<{ success: boolean; data?: Usuario; message?: string }> {
+    const url = id ? `${this.apiUrl}/${id}` : `${this.apiUrl}`;
+    console.log(id);
+    return this.http
+      .put<{ message: string; updatedData: Usuario }>(url, companyData, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response) => ({
+          success: true,
+          data: response.updatedData, // Información actualizada de la empresa
+        })),
+        catchError((error) => {
+          const errorMessage =
+            error.error?.message ||
+            'Error desconocido al actualizar la información';
+          return of({
+            success: false,
+            message: errorMessage,
+          });
+        })
+      );
+  }
+
+  addUserInformation(userData: Usuario, id?: string): Observable<any> {
+    const url = id ? `${this.apiUrl}/users/${id}` : `${this.apiUrl}/users`;
+    return this.http
+      .post<{ message: string; id: string }>(url, userData, {
+        withCredentials: true,
+      })
+      .pipe(
+        map((response) => ({
+          success: true,
+          message: response.message,
+          id: response.id,
+        })),
+        catchError((error) => {
+          const errorMessage =
+            error.error?.message ||
+            'Error desconocido al agregar la información';
+          return of({ success: false, message: errorMessage });
+        })
+      );
+  }
 }

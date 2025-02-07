@@ -1,0 +1,64 @@
+<div class="formulario">
+  <form [formGroup]="activeForm" (ngSubmit)="submitForm()">
+    <!-- Campo Descripción -->
+    <div class="form-group mt-3 mx-3">
+      <label>Nombre del visitante</label>
+      <!-- <small>Por favor introduzca una descripción de su entidad</small> -->
+      <ckeditor
+        [editor]="EditorName"
+        *ngIf="editorLoaded"
+        formControlName="name"
+      ></ckeditor>
+      <small
+        *ngIf="
+          activeForm.get('name')?.invalid && activeForm.get('name')?.touched
+        "
+      >
+        La descripción es obligatoria.
+      </small>
+    </div>
+
+    <!-- Campo Más información -->
+    <div class="form-group mt-3 mx-3">
+      <label>Teléfono</label>
+      <!-- <small
+        >Aquí puede añadir información sobre los perfiles buscados, principales
+        clientes...</small
+      > -->
+      <ckeditor
+        [editor]="EditorPhone"
+        *ngIf="editorLoaded"
+        formControlName="edit_phone"
+      >
+      </ckeditor>
+    </div>
+
+    <!-- Campo Más información -->
+    <div class="form-group mt-3 mx-3">
+      <label>Email</label>
+      <small
+        >Aquí puede añadir información sobre los perfiles buscados, principales
+        clientes...</small
+      >
+      <ckeditor
+        [editor]="EditorEmail"
+        *ngIf="editorLoaded"
+        formControlName="edit_email"
+      >
+      </ckeditor>
+    </div>
+
+    <!-- Botón enviar -->
+    @if(!form){
+    <div class="form-group mt-3 pb-3 text-end mx-3">
+      <button
+        type="submit"
+        class="button-primary-custom"
+        [disabled]="activeForm.invalid || isSubmitting"
+      >
+        {{ isSubmitting ? "Enviando..." : "Enviar" }}
+      </button>
+    </div>
+    }
+  </form>
+</div>

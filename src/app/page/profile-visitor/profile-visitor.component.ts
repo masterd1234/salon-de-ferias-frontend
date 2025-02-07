@@ -4,12 +4,22 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog } from '@angular/material/dialog';
+import { EditFormComponent } from './edit-form/edit-form.component';
 import { UserDataService } from '../../services/user-data.service';
 import { UserService } from '../../services/users.service';
 import { Usuario } from '../../../models/users.model';
+import { Company } from '../../../models/company.model';
 import { catchError, lastValueFrom, Observable, of, retry, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-profile-visitor',
@@ -20,6 +30,7 @@ import { Router } from '@angular/router';
     MatButtonModule,
     MatCardModule,
     MatGridListModule,
+    ReactiveFormsModule,
     MatIconModule,
   ],
   templateUrl: './profile-visitor.component.html',
@@ -30,10 +41,14 @@ export class ProfileVisitorComponent {
   loadingError = signal<boolean>(false); // Para manejar errores de carga
 
   userVisitor: Usuario | null = null;
+  // userVisitor = signal<Usuario | null>(null);
+  user = signal<Company | null>(null);
 
   // private userDataService = inject(UserDataService);
   private userService = inject(UserService);
   private router = inject(Router);
+
+  constructor(public dialog: MatDialog, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.loadProfileData();
@@ -57,7 +72,7 @@ export class ProfileVisitorComponent {
     return this.userService.getUserById().pipe(
       retry(3), // Reintenta la solicitud hasta 3 veces
       tap((response) => {
-        this.userVisitor = response ?? null;
+        this.userVisitor = response;
       }),
       catchError((err) => {
         console.error('Error después de 3 reintentos:', err);
@@ -78,5 +93,39 @@ export class ProfileVisitorComponent {
     });
   }
 
-  openEditDialog(): void {}
+  openEditDialog(): void {
+    const userData = this.userVisitor;
+    if (!userData) {
+      console.error('No se pudieron cargar los datos del visitante');
+      return;
+    } // Datos actuales de la empresa
+    const formGroup = this.fb.group({
+      name: [userData?.name || '', Validators.required],
+      dni: [userData?.dni || ''],
+      email: [userData?.email || ''],
+      phone: [userData?.phone || ''],
+    });
+
+    const dialogRef = this.dialog.open(EditFormComponent, {
+      width: '500px',
+      height: '90vh',
+      data: { form: formGroup },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.saveUserData(result); // Guardar datos actualizados
+      }
+    });
+  }
+
+  saveUserData(userData: Usuario): void {
+    // this.companyService.updateCompany(companyData).subscribe(() => {
+    //   this.getUserVisitor(); // Refrescar los datos
+    // });
+    this.userService.updateCompany(userData).subscribe(() => {
+      console.log('userdata', userData);
+      this.getUserVisitor(); // Refrescar los datos
+    });
+  }
 }
