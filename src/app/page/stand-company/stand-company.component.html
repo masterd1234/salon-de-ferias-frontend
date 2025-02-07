@@ -34,8 +34,6 @@
         </button>
         <button mat-button (click)="scrollToSection('video')">Videos</button>
         <button mat-button (click)="scrollToSection('offer')">Ofertas</button>
-
-        <button mat-button (click)="scrollToSection('offer')">Ofertas</button>
       </div>
     </div>
   </div>
@@ -45,15 +43,9 @@
   <mat-card class="card">
     <mat-card-header>
       <mat-card-title>
-        <h3 id="personal-info-card">Información</h3>
+        <h3 id="personal-info-card">Perfil de empresa</h3>
       </mat-card-title>
-      <div class="action-header">
-        <div class="action-button">
-          <button class="button button--primary mx-2" mat-flat-button>
-            <i class="fas fa-download"></i>
-          </button>
-        </div>
-      </div>
+      <button (click)="goBack()" class="back-button">Volver</button>
     </mat-card-header>
 
     <mat-divider class="mt-2 w-100"></mat-divider>
@@ -62,7 +54,8 @@
       <div class="row">
         <div class="mt-2">
           <i class="fa-regular fa-newspaper"></i>
-          <strong class="ps-2">Descripción:</strong>
+          <strong class="ps-2">Descripción: </strong>
+          <div>{{ companyInfo.description }}</div>
           <div
             class="editor-content"
             [innerHTML]="showFullText ? fullDescription : truncatedDescription"
@@ -81,6 +74,7 @@
         <div class="mt-2">
           <i class="fa-solid fa-circle-info"></i>
           <strong class="ps-2">Información Adicional:</strong>
+          <div>{{ companyInfo.additional_information }}</div>
           <div
             class="editor-content"
             [innerHTML]="
@@ -104,12 +98,11 @@
           <div class="mt-2">
             <i class="fa-solid fa-briefcase"></i>
             <strong class="ps-2">Sector:</strong>
-            {{ getSectorName(company()?.sector) }}
           </div>
           <div class="mt-2">
             <i class="fa-solid fa-link"></i>
             <strong class="ps-2">Enlaces:</strong>
-            @if(!(company()?.links?.length === 0)) {
+            <!-- @if(!(company()?.links?.length === 0)) {
             <ul>
               <li *ngFor="let link of company()?.links">
                 <a [href]="link.additionalButtonLink" target="_blank">{{
@@ -119,18 +112,19 @@
             </ul>
             } @else {
             <p>No hay enlaces disponibles.</p>
-            }
+            } -->
           </div>
         </div>
 
         <div class="col-md-6">
           <div class="mt-2">
             <i class="fa-solid fa-at"></i>
-            <strong class="ps-2">Correo:</strong> {{ company?.email }}
+            <strong class="ps-2">Correo: </strong>
+            <span> {{ company?.email }}</span>
           </div>
           <div class="mt-2">
             <i class="fa-regular fa-file"></i>
-            <strong class="ps-2">Documentos:</strong>{{ company()?.documents }}
+            <strong class="ps-2">Documentos:</strong>
           </div>
         </div>
       </div>
@@ -142,15 +136,6 @@
       <mat-card-title>
         <h3 id="video">Videos</h3>
       </mat-card-title>
-
-      <div class="action-button ml-auto d-flex">
-        <button
-          class="button button--primary custom-button mx-2"
-          mat-flat-button
-        >
-          <i class="fa-solid fa-circle-plus" style="font-size: 20px"></i>
-        </button>
-      </div>
     </mat-card-header>
 
     <mat-divider class="mt-2 w-100"></mat-divider>
@@ -185,12 +170,6 @@
       <mat-card-title>
         <h3 id="offer">Ofertas</h3>
       </mat-card-title>
-
-      <div class="action-button ml-auto d-flex">
-        <button class="button button--primary custom-button">
-          Añadir Oferta
-        </button>
-      </div>
     </mat-card-header>
 
     <mat-divider class="mt-2 w-100"></mat-divider>
@@ -247,7 +226,6 @@
   </mat-card>
 </div>
 
-<!-- <button (click)="goBack()" class="back-button">🔙 Volver</button>
-<ng-template #loading>
+<!-- <ng-template #loading>
   <p>Cargando datos de la empresa...</p>
 </ng-template> -->
