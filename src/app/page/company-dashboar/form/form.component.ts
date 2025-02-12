@@ -1,9 +1,20 @@
-
-import { Component, AfterViewInit, Inject, PLATFORM_ID, Input } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  Inject,
+  PLATFORM_ID,
+  Input,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { isPlatformBrowser } from '@angular/common';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { CompanyService } from '../../../services/information.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,7 +23,7 @@ import { MatOptionModule } from '@angular/material/core';
 
 /**
  * FormComponent - Formulario para capturar y gestionar la información de una empresa.
- * 
+ *
  * Permite capturar datos como nombre de empresa, descripción, sector, archivos adjuntos, y enlaces adicionales.
  * Integra editores de texto enriquecido CKEditor y manejo de archivos.
  */
@@ -22,7 +33,15 @@ import { MatOptionModule } from '@angular/material/core';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
   standalone: true,
-  imports: [CKEditorModule, CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatOptionModule]
+  imports: [
+    CKEditorModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatOptionModule,
+  ],
 })
 export class FormComponent implements AfterViewInit {
   /** Editor de CKEditor para el campo de descripción */
@@ -51,9 +70,11 @@ export class FormComponent implements AfterViewInit {
    * @param fb FormBuilder para crear y manipular formularios reactivos
    * @param companyService Servicio para realizar la petición de envío
    */
-  constructor(@Inject(PLATFORM_ID) private platformId: any, private fb: FormBuilder, private companyService: CompanyService) {
-  }
-
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: any,
+    private fb: FormBuilder,
+    private companyService: CompanyService
+  ) {}
 
   ngOnInit(): void {
     // Si no se proporciona un formulario desde el padre, inicializa el formulario interno
@@ -63,9 +84,9 @@ export class FormComponent implements AfterViewInit {
         additional_information: [''],
         sector: [''],
         additionalButtonTitle: [''], // Campo para título de enlace adicional
-        additionalButtonLink: [''],  // Campo para link adicional
-        links: this.fb.array([]),     // Arreglo de enlaces adicionales
-        files: this.fb.array([]),     // Arreglo de archivos subidos
+        additionalButtonLink: [''], // Campo para link adicional
+        links: this.fb.array([]), // Arreglo de enlaces adicionales
+        files: this.fb.array([]), // Arreglo de archivos subidos
       });
     }
   }
@@ -94,15 +115,15 @@ export class FormComponent implements AfterViewInit {
   }
 
   /**
- * Getter para acceder al FormArray de los archivos subidos.
- * @returns FormArray de archivos subidos en el formulario.
- */
+   * Getter para acceder al FormArray de los archivos subidos.
+   * @returns FormArray de archivos subidos en el formulario.
+   */
   get files(): FormArray {
     return this.activeForm.get('files') as FormArray;
   }
 
-  /** 
-   * Getter para acceder al FormArray de los enlaces adicionales 
+  /**
+   * Getter para acceder al FormArray de los enlaces adicionales
    * @returns FormArray de enlaces adicionales en el formulario
    */
   get links(): FormArray {
@@ -114,7 +135,10 @@ export class FormComponent implements AfterViewInit {
    * @returns boolean - true si los campos de enlace están válidos, de lo contrario false
    */
   canAddLink(): boolean {
-    return (this.activeForm.get('additionalButtonTitle')?.valid ?? false) && (this.activeForm.get('additionalButtonLink')?.valid ?? false);
+    return (
+      (this.activeForm.get('additionalButtonTitle')?.valid ?? false) &&
+      (this.activeForm.get('additionalButtonLink')?.valid ?? false)
+    );
   }
 
   /**
@@ -127,7 +151,10 @@ export class FormComponent implements AfterViewInit {
     if (title && link) {
       const linkGroup = this.fb.group({
         additionalButtonTitle: [title, Validators.required],
-        additionalButtonLink: [link, [Validators.required, Validators.pattern('https?://.+')]]
+        additionalButtonLink: [
+          link,
+          [Validators.required, Validators.pattern('https?://.+')],
+        ],
       });
 
       this.links.push(linkGroup);
@@ -145,16 +172,17 @@ export class FormComponent implements AfterViewInit {
   }
 
   /**
-  * Maneja el cambio de archivos subidos, limitando el tamaño máximo a 5MB.
-  * @param event Evento de cambio del archivo
-  */
+   * Maneja el cambio de archivos subidos, limitando el tamaño máximo a 5MB.
+   * @param event Evento de cambio del archivo
+   */
   onFileChange(event: any): void {
     const files = event.target.files;
     this.fileError = '';
 
     if (files.length > 0) {
       for (let file of files) {
-        if (file.size > 5000000) { // Limitar tamaño a 5MB
+        if (file.size > 5000000) {
+          // Limitar tamaño a 5MB
           this.fileError = 'El tamaño del archivo no puede exceder los 5MB';
           return;
         }
@@ -182,7 +210,8 @@ export class FormComponent implements AfterViewInit {
       const formData = this.activeForm.value;
 
       // Eliminar los campos nulos si no se necesitan
-      if (!formData.additionalButtonTitle) delete formData.additionalButtonTitle;
+      if (!formData.additionalButtonTitle)
+        delete formData.additionalButtonTitle;
       if (!formData.additionalButtonLink) delete formData.additionalButtonLink;
 
       this.isSubmitting = true;
@@ -198,7 +227,7 @@ export class FormComponent implements AfterViewInit {
           this.isSubmitting = false;
 
           console.error('Error al enviar la solicitud:', error);
-        }
+        },
       });
     } else {
       console.error('Formulario inválido');

@@ -1,0 +1,118 @@
+<mat-dialog-content>
+  <form [formGroup]="editUserForm" (ngSubmit)="onSave()">
+    <!-- Campo de nombre -->
+    <mat-form-field class="full-width">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" placeholder="Nombre del usuario" />
+      @if(editUserForm.get('name')?.invalid &&
+      editUserForm.get('name')?.touched){
+      <mat-error>El nombre es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Campo de email -->
+    <mat-form-field class="full-width">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        formControlName="email"
+        placeholder="Correo electrónico"
+        type="email"
+      />
+      @if(editUserForm.get('email')?.invalid &&
+      editUserForm.get('email')?.touched){
+      <mat-error>
+        @if (editUserForm.get('email')?.errors?.['email']){
+        <ng-container>El correo electrónico no es válido.</ng-container>
+        }
+        <ng-container>El correo electrónico es obligatorio.</ng-container>
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Campo de email -->
+    <mat-form-field class="full-width">
+      <mat-label>Teléfono</mat-label>
+      <input
+        matInput
+        formControlName="phone"
+        placeholder="Teléfono"
+        type="phone"
+      />
+      @if(editUserForm.get('phone')?.invalid &&
+      editUserForm.get('phone')?.touched){
+      <mat-error>
+        @if (editUserForm.get('phone')?.errors?.['phone']){
+        <ng-container>El teléfono no es válido.</ng-container>
+        }
+        <ng-container>El teléfono es obligatorio.</ng-container>
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <!-- Campos adicionales para rol "co" -->
+    @if(editUserForm.get('rol')?.value === 'co'){
+    <mat-form-field class="full-width">
+      <mat-label>Nombre de la Empresa</mat-label>
+      <input
+        matInput
+        formControlName="company"
+        placeholder="Nombre de la empresa"
+      />
+      @if(editUserForm.get('company')?.hasError('required')){
+      <mat-error> El nombre de la empresa es obligatorio.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>CIF</mat-label>
+      <input matInput formControlName="cif" placeholder="A12345678" />
+      @if(editUserForm.get('cif')?.hasError('required')){
+      <mat-error> El CIF es obligatorio.</mat-error>
+      }
+    </mat-form-field>
+    }
+
+    <!-- Campos adicionales para rol "visitante" -->
+    @if(editUserForm.get('rol')?.value === 'visitor'){
+    <mat-form-field class="full-width">
+      <mat-label>DNI</mat-label>
+      <input matInput formControlName="dni" placeholder="12345667A" />
+      @if(editUserForm.get('dni')?.hasError('required')){
+      <mat-error> El DNI es obligatorio.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Estudios</mat-label>
+      <input
+        matInput
+        formControlName="studies"
+        placeholder="Estudios del visitante"
+      />
+      @if(editUserForm.get('studies')?.hasError('studies')){
+      <mat-error> Los estudios son obligatorios.</mat-error>
+      }
+    </mat-form-field>
+    }
+
+    <!-- Acciones del diálogo -->
+    <mat-dialog-actions>
+      <button
+        class="button button--primary submit-button"
+        type="submit"
+        [disabled]="editUserForm.invalid"
+        mat-flat-button
+      >
+        Guardar
+      </button>
+      <button
+        class="button button--secondary"
+        mat-flat-button
+        (click)="onCancel()"
+      >
+        Cancelar
+      </button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

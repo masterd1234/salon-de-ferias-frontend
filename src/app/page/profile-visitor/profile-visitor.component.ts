@@ -17,9 +17,7 @@ import { signal, WritableSignal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Usuario } from '../../../models/users.model';
 import { UserService } from '../../services/users.service';
-import { EditUsersComponent } from '../admin-dashboard/edit-users/edit-users.component';
-
-
+import { EditUsersComponent } from './edit-users/edit-users.component';
 
 @Component({
   selector: 'app-profile-visitor',
@@ -31,13 +29,12 @@ import { EditUsersComponent } from '../admin-dashboard/edit-users/edit-users.com
     MatCardModule,
     MatGridListModule,
     ReactiveFormsModule,
-    MatIconModule
-
+    MatIconModule,
   ],
   templateUrl: './profile-visitor.component.html',
   styleUrl: './profile-visitor.component.scss',
 })
-export class ProfileVisitorComponent implements OnInit  {
+export class ProfileVisitorComponent implements OnInit {
   loading = signal<boolean>(true); // Para controlar si se está cargando
   loadingError = signal<boolean>(false); // Para manejar errores de carga
 
@@ -49,7 +46,7 @@ export class ProfileVisitorComponent implements OnInit  {
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private fb = inject(FormBuilder);
-// scrollToSection: any; // Removed duplicate identifier
+  // scrollToSection: any; // Removed duplicate identifier
 
   constructor() {}
 
@@ -86,8 +83,6 @@ export class ProfileVisitorComponent implements OnInit  {
     );
   }
 
-
-
   openEditDialog(): void {
     const userData = this.userVisitor();
     if (!userData) {
@@ -102,11 +97,11 @@ export class ProfileVisitorComponent implements OnInit  {
       phone: [userData.phone || ''],
     });
 
-  const dialogRef = this.dialog.open(EditUsersComponent, {
-    width: '500px',
-    height: '90vh',
-    data: { form: formGroup },
-  });
+    const dialogRef = this.dialog.open(EditUsersComponent, {
+      width: '500px',
+      height: '90vh',
+      data: { form: formGroup },
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
@@ -127,6 +122,4 @@ export class ProfileVisitorComponent implements OnInit  {
   private saveUserData(data: any): void {
     // Implementa la lógica para guardar los datos del usuario
   }
-   
-
 }
