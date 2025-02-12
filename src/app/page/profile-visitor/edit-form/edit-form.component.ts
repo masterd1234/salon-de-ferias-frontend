@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormComponent } from '../form/form.component';
+import { FormComponent } from '../form/form.component'; 
 
 @Component({
   selector: 'app-edit-form',
