@@ -69,8 +69,8 @@ export class ProfileVisitorComponent implements OnInit {
   }
 
   getUserVisitor(): Observable<Usuario | null> {
-    const id: string = 'some-id'; // Replace 'some-id' with the actual id value
-    return this.userService.getUserById(id).pipe(
+    // const id: string = 'some-id'; // Replace 'some-id' with the actual id value
+    return this.userService.getUserById().pipe(
       retry(3), // Reintenta la solicitud hasta 3 veces
       tap((response) => {
         const user = response as Usuario;
@@ -95,17 +95,18 @@ export class ProfileVisitorComponent implements OnInit {
       dni: [userData.dni || ''],
       email: [userData.email || ''],
       phone: [userData.phone || ''],
+      subname: [userData.name || ''],
     });
 
     const dialogRef = this.dialog.open(EditUsersComponent, {
       width: '500px',
       height: '90vh',
-      data: { form: formGroup },
+      data: { form: formGroup, userId: userData.id },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.saveUserData(result); // Guardar datos actualizados
+        // this.saveUserData(result); // Guardar datos actualizados
       }
     });
   }
@@ -119,7 +120,7 @@ export class ProfileVisitorComponent implements OnInit {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   }
-  private saveUserData(data: any): void {
-    // Implementa la lógica para guardar los datos del usuario
-  }
+  // private saveUserData(data: any): void {
+  //   // Implementa la lógica para guardar los datos del usuario
+  // }
 }

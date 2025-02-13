@@ -64,7 +64,8 @@ export class EditUsersComponent {
    * basadas en el rol seleccionado.
    */
   constructor() {
-    this.userId = this.dialogData.userId; // ID del usuario pasado al modal
+    // this.userId = this.dialogData.userId; // ID del usuario pasado al modal
+    this.userId = this.dialogData?.userId ?? ''; // Evita que sea undefined
     this.editUserForm = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -75,6 +76,7 @@ export class EditUsersComponent {
       cif: [''],
       dni: [''], // Campo adicional para rol "visitante"
       studies: [''],
+      subname: [''],
     });
 
     // Escucha cambios en el campo "rol" para actualizar validaciones
@@ -152,6 +154,11 @@ export class EditUsersComponent {
    * Si el formulario es válido, envía los datos al servicio y cierra el diálogo.
    */
   onSave(): void {
+    if (!this.userId) {
+      console.error('No se encontró el ID del usuario');
+      return;
+    }
+
     if (this.editUserForm.valid) {
       this.userService
         .updateUser(this.userId, this.editUserForm.value)
