@@ -84,7 +84,6 @@ export class StandCompanyComponent implements OnInit {
   ngOnInit(): void {
     window.scrollTo(0, 0);
     const companyId = this.route.snapshot.paramMap.get('id'); // Obtiene el ID de la URL
-    console.log('id comapny', companyId);
     if (companyId) {
       this.companyDataService.getAllCompanies().subscribe({
         next: (response) => {

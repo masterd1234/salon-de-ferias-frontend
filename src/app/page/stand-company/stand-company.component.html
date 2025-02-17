@@ -53,7 +53,7 @@
         <div class="mt-2">
           <i class="fa-regular fa-newspaper"></i>
           <strong class="ps-2">Descripción: </strong>
-          <div>{{ companyInfo.description }}</div>
+          <div>{{ companyInfo?.description }}</div>
           <div
             class="editor-content"
             [innerHTML]="showFullText ? fullDescription : truncatedDescription"
@@ -72,7 +72,7 @@
         <div class="mt-2">
           <i class="fa-solid fa-circle-info"></i>
           <strong class="ps-2">Información Adicional:</strong>
-          <div>{{ companyInfo.additional_information }}</div>
+          <div>{{ companyInfo?.additional_information }}</div>
           <div
             class="editor-content"
             [innerHTML]="
@@ -96,13 +96,14 @@
           <div class="mt-2">
             <i class="fa-solid fa-briefcase"></i>
             <strong class="ps-2">Sector:</strong>
+            {{ getSectorName(companyInfo?.sector) }}
           </div>
           <div class="mt-2">
             <i class="fa-solid fa-link"></i>
             <strong class="ps-2">Enlaces:</strong>
-            <!-- @if(!(company()?.links?.length === 0)) {
+            @if(!(companyInfo?.links?.length === 0)) {
             <ul>
-              <li *ngFor="let link of company()?.links">
+              <li *ngFor="let link of companyInfo?.links">
                 <a [href]="link.additionalButtonLink" target="_blank">{{
                   link.additionalButtonTitle
                 }}</a>
@@ -110,7 +111,7 @@
             </ul>
             } @else {
             <p>No hay enlaces disponibles.</p>
-            } -->
+            }
           </div>
         </div>
 
@@ -211,7 +212,7 @@
           </p>
           <p>
             <strong>Acerca del Empleo:</strong> <br />
-            {{ offer.description }}
+            <!-- {{ offer.description }} -->
           </p>
           <a [href]="offer.link" target="_blank">
             <button mat-flat-button color="accent" class="custom-button">
