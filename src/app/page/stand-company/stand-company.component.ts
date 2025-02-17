@@ -84,6 +84,7 @@ export class StandCompanyComponent implements OnInit {
   ngOnInit(): void {
     window.scrollTo(0, 0);
     const companyId = this.route.snapshot.paramMap.get('id'); // Obtiene el ID de la URL
+    console.log('id comapny', companyId);
     if (companyId) {
       this.companyDataService.getAllCompanies().subscribe({
         next: (response) => {
@@ -97,7 +98,7 @@ export class StandCompanyComponent implements OnInit {
         next: (response) => {
           this.designData = response.data ?? null;
           if (this.designData) {
-            console.log('Design data cargado: ', this.designData.data);
+            console.log('Design data cargado: ', this.designData);
             this.drawCanvas();
           }
         },
@@ -241,9 +242,9 @@ export class StandCompanyComponent implements OnInit {
       return;
     }
 
-    if (this.designData.data.stand.url) {
+    if (this.designData.stand.url) {
       const standImage = new Image();
-      standImage.src = this.designData.data.stand.url;
+      standImage.src = this.designData.stand.url;
       standImage.onload = () => {
         // Dibuja el stand como fondo
         this.drawImageContainStand(
@@ -254,15 +255,15 @@ export class StandCompanyComponent implements OnInit {
         );
 
         // Dibuja el logo, banner y póster, en este orden
-        if (this.designData.data.design.logo.url) {
+        if (this.designData.design.logo.url) {
           this.drawLogo(ctx);
         }
-        if (this.designData.data.files.banner) {
+        if (this.designData.files.banner) {
           this.drawBanner(ctx)
             .then(() => this.drawReceptionist(ctx)) // Dibuja recepcionista solo después del banner
             .catch((error) => console.error('Error al dibujar:', error));
         }
-        if (this.designData.data.files.poster) {
+        if (this.designData.files.poster) {
           this.drawPoster(ctx);
         }
       };
@@ -282,16 +283,16 @@ export class StandCompanyComponent implements OnInit {
    */
   drawBanner(ctx: CanvasRenderingContext2D): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (this.designData.data.files.banner) {
+      if (this.designData.files.banner) {
         const bannerImage = new Image();
-        bannerImage.src = this.designData.data.files.banner;
+        bannerImage.src = this.designData.files.banner;
 
         bannerImage.onload = () => {
           const canvas = ctx.canvas;
 
           // Escalar stand y obtener dimensiones reales en el canvas
           const standImage = new Image();
-          standImage.src = this.designData.data.stand.url;
+          standImage.src = this.designData.stand.url;
 
           standImage.onload = () => {
             const scale = Math.min(
@@ -306,8 +307,8 @@ export class StandCompanyComponent implements OnInit {
             const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
 
             // Coordenadas relativas del banner
-            const { x, y, width, height } = this.designData.data.stand
-              .standConfig.bannerPosition || {
+            const { x, y, width, height } = this.designData.stand.standConfig
+              .bannerPosition || {
               x: 0.1,
               y: 0.1,
               width: 0.8,
@@ -349,16 +350,16 @@ export class StandCompanyComponent implements OnInit {
    * @param ctx Contexto del canvas para renderizado.
    */
   drawLogo(ctx: CanvasRenderingContext2D) {
-    if (this.designData.data.design.logo.url) {
+    if (this.designData.design.logo.url) {
       const logoImage = new Image();
-      logoImage.src = this.designData.data.design.logo.url;
+      logoImage.src = this.designData.design.logo.url;
 
       logoImage.onload = () => {
         const canvas = ctx.canvas;
 
         // Escalar stand y obtener dimensiones reales en el canvas
         const standImage = new Image();
-        standImage.src = this.designData.data.stand.url;
+        standImage.src = this.designData.stand.url;
 
         standImage.onload = () => {
           const scale = Math.min(
@@ -373,7 +374,7 @@ export class StandCompanyComponent implements OnInit {
           const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
 
           // Coordenadas relativas del logo
-          const { x, y, width, height } = this.designData.data.stand.standConfig
+          const { x, y, width, height } = this.designData.stand.standConfig
             .logoPosition || {
             x: 0.1,
             y: 0.1,
@@ -459,23 +460,20 @@ export class StandCompanyComponent implements OnInit {
    */
   drawReceptionist(ctx: CanvasRenderingContext2D): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (
-        !this.designData.data.model.url ||
-        !this.designData.data.stand.standConfig
-      ) {
+      if (!this.designData.model.url || !this.designData.stand.standConfig) {
         resolve();
         return;
       }
 
       const receptionistImage = new Image();
-      receptionistImage.src = this.designData.data.model.url;
+      receptionistImage.src = this.designData.model.url;
 
       receptionistImage.onload = () => {
         const canvas = ctx.canvas;
 
         // Escalar stand y obtener dimensiones reales en el canvas
         const standImage = new Image();
-        standImage.src = this.designData.data.stand.url;
+        standImage.src = this.designData.stand.url;
 
         standImage.onload = () => {
           const scale = Math.min(
@@ -490,7 +488,7 @@ export class StandCompanyComponent implements OnInit {
           const standY = (canvas.clientHeight - standHeight) / 2; // Centrado vertical
 
           // Coordenadas relativas del recepcionista
-          const { x, y, width, height } = this.designData.data.stand.standConfig
+          const { x, y, width, height } = this.designData.stand.standConfig
             .recepcionistPosition || {
             x: 0.1,
             y: 0.1,

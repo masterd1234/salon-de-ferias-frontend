@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
-import { MapComponent } from './page/map/map.component';
 
 /**
  * @constant {Routes} routes
@@ -74,11 +73,6 @@ export const routes: Routes = [
       import('./page/home-visitor/home-visitor.component').then(
         (m) => m.HomeVisitorComponent
       ),
-  },
-  {
-    path: 'map',
-    loadComponent: () =>
-      import('./page/map/map.component').then((m) => m.MapComponent),
   },
 
   /**

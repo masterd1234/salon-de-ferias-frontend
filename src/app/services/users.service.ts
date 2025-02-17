@@ -77,7 +77,7 @@ export class UserService {
       .pipe(
         map((response) => response.user || null), // Extrae solo el campo 'user'
         catchError((error) => {
-          console.error('Error al obtener usuario', error);
+          console.error('Error al obtener usuario');
           return of(null);
         })
       );
