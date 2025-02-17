@@ -18,6 +18,7 @@ import { Offer } from '../../../models/offers/offers.model';
 import { MatIconModule } from '@angular/material/icon';
 import { VideosComponent } from '../profile/videos/videos.component';
 import { VideoService } from '../../services/videos.service';
+import { OffersService } from '../../services/offers.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
@@ -71,6 +72,7 @@ export class StandCompanyComponent implements OnInit {
   canvasRef!: ElementRef<HTMLCanvasElement>;
 
   private router = inject(Router);
+  private sanitazer = inject(DomSanitizer);
   // private imagenService = inject(ImageService);
 
   constructor(
@@ -78,6 +80,8 @@ export class StandCompanyComponent implements OnInit {
     private companyDataService: CompanyDataService,
     private companyService: CompanyService,
     private imagenService: ImageService,
+    private videoService: VideoService,
+    private offerService: OffersService,
     private location: Location
   ) {}
 
@@ -97,7 +101,6 @@ export class StandCompanyComponent implements OnInit {
         next: (response) => {
           this.designData = response.data ?? null;
           if (this.designData) {
-            console.log('Design data cargado: ', this.designData);
             this.drawCanvas();
           }
         },
@@ -108,6 +111,40 @@ export class StandCompanyComponent implements OnInit {
       this.companyService.getInformation(companyId).subscribe({
         next: (response) => {
           this.companyInfo = response.data;
+        },
+        error: (err) => {
+          console.error('Error al obtener los datos del usuario:', err);
+        },
+      });
+      this.videoService.getVideosByCompanyId(companyId).subscribe({
+        next: (response) => {
+          if (response.success && response.videos) {
+            this.videos = response.videos
+              .flatMap((video) =>
+                video.urls
+                  ? video.urls.map((url) =>
+                      this.sanitazer.bypassSecurityTrustResourceUrl(
+                        `https://www.youtube.com/embed/${url}`
+                      )
+                    )
+                  : []
+              )
+              .filter((video): video is SafeResourceUrl => video !== null);
+          } else {
+            console.error('Error al obtener los videos:', response.message);
+          }
+        },
+        error: (err) => {
+          console.error('Error al obtener los videos de la empresa:', err);
+        },
+      });
+      this.offerService.getOffersById(companyId).subscribe({
+        next: (response) => {
+          if (response.success && response.offers) {
+            this.offers = response.offers; // Asigna la lista de ofertas a la propiedad
+          } else {
+            console.error('Error al obtener ofertas:', response.message);
+          }
         },
         error: (err) => {
           console.error('Error al obtener los datos del usuario:', err);
