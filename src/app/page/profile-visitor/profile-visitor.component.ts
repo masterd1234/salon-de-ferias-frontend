@@ -123,4 +123,7 @@ export class ProfileVisitorComponent implements OnInit {
   // private saveUserData(data: any): void {
   //   // Implementa la lógica para guardar los datos del usuario
   // }
+  updateLogo() {
+    alert('Actializar logo');
+  }
 }
