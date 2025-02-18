@@ -5,10 +5,10 @@
 <div class="personal-info d-flex align-items-center">
   <div class="row w-100">
     <div class="profile-picture cd-md-6">
-      <!-- Mostrar la imagen si existe, de lo contrario, mostrar el ícono -->
+      <!-- Mostrar la imagen si existe, de lo contrario, mostrar el ícono  [src]="userVisitor()?.logo"-->
       <img
         *ngIf="userVisitor()?.logo; else showIcon"
-        [src]="userVisitor()?.logo"
+        [src]="logoUrl"
         alt="Profile Picture"
         class="rounded-circle"
       />
@@ -18,9 +18,19 @@
         <i class="fa-regular fa-circle-user user-icon"></i>
       </ng-template>
 
-      <button class="plus-icon button button--primary">
+      <button
+        class="plus-icon button button--primary"
+        (click)="logoInput.click()"
+      >
         <i class="fa-solid fa-plus fa-flip-horizontal"></i>
       </button>
+      <input
+        type="file"
+        #logoInput
+        (change)="onFileChange($event, 'profileImage')"
+        class="file-input"
+        accept="image/*"
+      />
     </div>
 
     <h2 class="profile-name">{{ userVisitor()?.name }}</h2>
@@ -47,9 +57,6 @@
       </mat-card-title>
       <div class="action-header">
         <div class="action-button">
-          <button class="button button--primary mx-2" mat-flat-button>
-            <i class="fas fa-download"></i>
-          </button>
           <button
             class="button button--primary mx-2"
             (click)="openEditDialog()"

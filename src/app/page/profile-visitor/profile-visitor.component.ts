@@ -41,6 +41,18 @@ export class ProfileVisitorComponent implements OnInit {
   userVisitor: WritableSignal<Usuario | null> = signal<Usuario | null>(null);
   //user = signal<Company | null>(null);
 
+  logoFileName: string = '';
+  logoFile: File | null = null; // Archivo cargado para el logo
+  // logoUrl: string | null = null;
+
+  get logoUrl(): string {
+    return this.userVisitor()?.logo || 'assets/logo_FM.png';
+  }
+
+  profileImageFile: File | null = null; // Archivo cargado para el banner
+  profileImageFileName: string = '';
+  profileImageUrl: string | null = null;
+
   // private userDataService = inject(UserDataService);
   private userService = inject(UserService);
   private router = inject(Router);
@@ -123,7 +135,75 @@ export class ProfileVisitorComponent implements OnInit {
   // private saveUserData(data: any): void {
   //   // Implementa la lógica para guardar los datos del usuario
   // }
-  updateLogo() {
-    alert('Actializar logo');
+
+  onFileChange(event: Event, type: string) {
+    const userId = this.userVisitor()?.id;
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      // Validar tipo de archivo
+      if (!['image/png'].includes(file.type)) {
+        alert('Por favor, sube solo archivos en formato PNG.');
+        return;
+      }
+
+      // Validar tamaño de archivo (5 MB como máximo)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('El archivo no debe superar los 5 MB.');
+        return;
+      }
+
+      // Leer el archivo como Data URL para previsualización
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+
+        // Actualizar la URL y el archivo correspondiente
+        switch (type) {
+          // case 'logo':
+          //   this.logoFileName = file.name;
+          //   this.logoUrl = result;
+          //   this.logoFile = file;
+          //   break;
+          case 'profileImage':
+            this.profileImageFileName = file.name;
+            this.profileImageFile = file;
+            this.profileImageUrl = result;
+            break;
+
+          default:
+            console.warn(`Tipo desconocido: ${type}`);
+        }
+      };
+      reader.readAsDataURL(file);
+
+      // Verifica si tienes el ID del usuario
+      if (!userId) {
+        console.error('No se encontró el ID del usuario');
+        return;
+      }
+
+      // Crea el objeto FormData y agrega el archivo
+      const formData = new FormData();
+      formData.append('logo', file); // El nombre del campo debe coincidir con el del backend
+
+      // Llama al servicio para actualizar el logo
+      this.userService.updateLogo(formData, userId).subscribe({
+        next: (response) => {
+          if (response && response.newLogoUrl) {
+            console.log('Logo actualizado con éxito:', response.newLogoUrl);
+            this.userVisitor.set({
+              ...this.userVisitor()!,
+              logo: response.newLogoUrl,
+            });
+          }
+        },
+        error: (err) => {
+          console.error('Error al actualizar el logo:', err);
+        },
+      });
+    }
   }
 }

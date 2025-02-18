@@ -321,6 +321,10 @@ mat-card-footer {
   }
 }
 
+.file-input {
+  display: none;
+}
+
 @media (max-width: 480px) {
   .profile-picture {
     width: 100px;
