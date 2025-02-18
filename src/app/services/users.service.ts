@@ -85,9 +85,9 @@ export class UserService {
 
   updateLogo(logo: File, userId?: string): Observable<any> {
     const url = userId
-      ? `${this.apiUrl}/users/${userId}/logo`
+      ? `${this.apiUrl}/users/logo/${userId}`
       : `${this.apiUrl}/users/logo`;
-    return this.http.put<any>(url, { withCredentials: true }).pipe(
+    return this.http.put<any>(url, logo, { withCredentials: true }).pipe(
       catchError((error) => {
         console.error('Error al actualizar el logo:', error);
         return of(null); // Retorna null en caso de error

@@ -7,8 +7,8 @@
     <div class="profile-picture cd-md-6">
       <!-- Mostrar la imagen si existe, de lo contrario, mostrar el ícono -->
       <img
-        *ngIf="userVisitor()?.image; else showIcon"
-        [src]="userVisitor()?.image"
+        *ngIf="userVisitor()?.logo; else showIcon"
+        [src]="userVisitor()?.logo"
         alt="Profile Picture"
         class="rounded-circle"
       />
@@ -19,10 +19,7 @@
       </ng-template>
 
       <button class="plus-icon button button--primary">
-        <i
-          class="fa-solid fa-plus fa-flip-horizontal"
-          (click)="updateLogo()"
-        ></i>
+        <i class="fa-solid fa-plus fa-flip-horizontal"></i>
       </button>
     </div>
 
