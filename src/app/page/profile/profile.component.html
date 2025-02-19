@@ -18,9 +18,19 @@
         <i class="fa-regular fa-circle-user user-icon"></i>
       </ng-template>
 
-      <button class="plus-icon button button--primary">
+      <button
+        class="plus-icon button button--primary"
+        (click)="logoInput.click()"
+      >
         <i class="fa-solid fa-plus fa-flip-horizontal"></i>
       </button>
+      <input
+        type="file"
+        #logoInput
+        (change)="onFileChange($event, 'logo')"
+        class="file-input"
+        accept="image/*"
+      />
     </div>
 
     <h2 class="profile-name">{{ userCompany?.name }}</h2>
@@ -270,7 +280,7 @@
         <mat-card-header>
           <img
             matCardAvatar
-            [src]="offer.logo?.url"
+            [src]="userCompany?.logo"
             alt="Logo"
             class="custom-avatar"
             style="object-fit: contain"
