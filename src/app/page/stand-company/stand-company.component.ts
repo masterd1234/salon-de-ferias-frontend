@@ -30,6 +30,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-stand-company',
@@ -82,7 +83,8 @@ export class StandCompanyComponent implements OnInit {
     private imagenService: ImageService,
     private videoService: VideoService,
     private offerService: OffersService,
-    private location: Location
+    private location: Location,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -556,6 +558,28 @@ export class StandCompanyComponent implements OnInit {
 
       receptionistImage.onerror = () =>
         reject('Error al cargar la imagen del recepcionista');
+    });
+  }
+
+  applyToOffer(offer: any): void {
+    this.offerService.applyToOffer(offer.id).subscribe({
+      next: () => {
+        this.snackBar.open('Inscripción exitosa', 'Cerrar', { duration: 3000 });
+
+        if (offer.link) {
+          // Redirige solo si la oferta tiene un enlace
+          setTimeout(() => {
+            window.open(offer.link, '_blank');
+          }, 1000); // Pequeño retraso para que el usuario vea la confirmación
+        }
+      },
+      error: (err) => {
+        this.snackBar.open(
+          err.error?.error || 'Error al inscribirse',
+          'Cerrar',
+          { duration: 3000 }
+        );
+      },
     });
   }
 }

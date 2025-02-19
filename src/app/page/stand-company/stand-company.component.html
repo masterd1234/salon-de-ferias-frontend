@@ -193,15 +193,6 @@
               offer.workplace_type
             }})</mat-card-subtitle
           >
-          <div class="action-button ml-auto d-flex">
-            <button
-              class="button button--secondary delete-button"
-              color="warn"
-              mat-flat-button
-            >
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
         </mat-card-header>
 
         <mat-card-content *ngIf="expandedOfferId === offer.id">
@@ -214,11 +205,15 @@
             <strong>Acerca del Empleo:</strong> <br />
             {{ offer.description }}
           </p>
-          <a [href]="offer.link" target="_blank">
-            <button mat-flat-button color="accent" class="custom-button">
-              Inscribirse
-            </button>
-          </a>
+
+          <button
+            mat-flat-button
+            color="accent"
+            class="custom-button"
+            (click)="applyToOffer(offer)"
+          >
+            Inscribirse
+          </button>
         </mat-card-content>
       </mat-card>
     </mat-card-content>

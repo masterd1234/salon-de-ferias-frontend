@@ -15,6 +15,7 @@ import { getSectorName, sectorsMap } from '../../../models/offers/sector.model';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../../services/users.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-offers-list',
@@ -28,7 +29,7 @@ import { UserService } from '../../services/users.service';
     MatSelectModule,
     MatButtonModule,
     MatDialogModule,
-    MatDividerModule
+    MatDividerModule,
   ],
   templateUrl: './all-offers.component.html',
   styleUrls: ['./all-offers.component.scss'],
@@ -39,11 +40,11 @@ export class AllOffersComponent implements OnInit {
   expandedOfferId: string | null = null;
 
   JobTypeMap = JobTypeMap;
-  jobTypeKeys = Object.keys(JobTypeMap)
+  jobTypeKeys = Object.keys(JobTypeMap);
   getJobType = getJobType;
 
   sectorName = sectorsMap;
-  sectorKeys = Object.keys(sectorsMap)
+  sectorKeys = Object.keys(sectorsMap);
   getSectorsName = getSectorName;
   // Opciones de filtros
   provinces = provinciasEspana;
@@ -58,7 +59,8 @@ export class AllOffersComponent implements OnInit {
     private fb: FormBuilder,
     private offersService: OffersService,
     public dialog: MatDialog,
-    private userService: UserService
+    private userService: UserService,
+    private snackBar: MatSnackBar
   ) {
     this.filtersForm = this.fb.group({
       keyword: [''],
@@ -103,12 +105,12 @@ export class AllOffersComponent implements OnInit {
     });
   }
 
-
   /**
    * Aplica los filtros seleccionados en el formulario reactivo.
    */
   applyFilters(): void {
-    const { province, offerType, sector, company, mode, keyword } = this.filtersForm.value;
+    const { province, offerType, sector, company, mode, keyword } =
+      this.filtersForm.value;
 
     const params = {
       location: province,
@@ -116,7 +118,7 @@ export class AllOffersComponent implements OnInit {
       sector,
       company,
       workplace_type: mode,
-      keyword
+      keyword,
     };
 
     this.offersService.searchOffers(params).subscribe({
@@ -133,8 +135,9 @@ export class AllOffersComponent implements OnInit {
     });
   }
 
-
-  checkAspectRatio(logoUrl: string | undefined): Promise<'square' | 'rectangular'> {
+  checkAspectRatio(
+    logoUrl: string | undefined
+  ): Promise<'square' | 'rectangular'> {
     return new Promise((resolve) => {
       if (!logoUrl) {
         resolve('rectangular'); // Considera rectangular si no hay URL
@@ -159,8 +162,6 @@ export class AllOffersComponent implements OnInit {
     });
   }
 
-
-
   async processOffers(offers: Offer[]): Promise<ExtendedOffer[]> {
     return Promise.all(
       offers.map(async (offer) => {
@@ -173,7 +174,6 @@ export class AllOffersComponent implements OnInit {
     );
   }
 
-
   /**
    * Resetea los filtros y muestra todas las ofertas.
    */
@@ -181,8 +181,6 @@ export class AllOffersComponent implements OnInit {
     this.filtersForm.reset();
     this.filteredOffers = [...this.offers];
   }
-
-
 
   /**
    * Alterna la visualización de los detalles de una oferta.
@@ -199,5 +197,27 @@ export class AllOffersComponent implements OnInit {
   closeOfferDetails(event: Event): void {
     event.stopPropagation();
     this.expandedOfferId = null;
+  }
+
+  applyToOffer(offer: any): void {
+    this.offersService.applyToOffer(offer.id).subscribe({
+      next: () => {
+        this.snackBar.open('Inscripción exitosa', 'Cerrar', { duration: 3000 });
+
+        if (offer.link) {
+          // Redirige solo si la oferta tiene un enlace
+          setTimeout(() => {
+            window.open(offer.link, '_blank');
+          }, 1000); // Pequeño retraso para que el usuario vea la confirmación
+        }
+      },
+      error: (err) => {
+        this.snackBar.open(
+          err.error?.error || 'Error al inscribirse',
+          'Cerrar',
+          { duration: 3000 }
+        );
+      },
+    });
   }
 }

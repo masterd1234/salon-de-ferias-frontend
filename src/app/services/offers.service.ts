@@ -195,4 +195,12 @@ export class OffersService {
         )
       );
   }
+
+  applyToOffer(offerId: string): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/apply/${offerId}`,
+      {},
+      { withCredentials: true }
+    );
+  }
 }
