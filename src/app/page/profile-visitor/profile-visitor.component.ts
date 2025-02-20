@@ -16,8 +16,12 @@ import { retry, tap, catchError } from 'rxjs/operators';
 import { signal, WritableSignal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Usuario } from '../../../models/users.model';
+import { Offer } from '../../../models/offers/offers.model';
 import { UserService } from '../../services/users.service';
+import { OffersService } from '../../services/offers.service';
 import { EditUsersComponent } from './edit-users/edit-users.component';
+import { getJobType, JobTypeMap } from '../../../models/offers/jobType.model';
+import { getSectorName, sectorsMap } from '../../../models/offers/sector.model';
 
 @Component({
   selector: 'app-profile-visitor',
@@ -35,8 +39,18 @@ import { EditUsersComponent } from './edit-users/edit-users.component';
   styleUrl: './profile-visitor.component.scss',
 })
 export class ProfileVisitorComponent implements OnInit {
+  JobTypeMap = JobTypeMap;
+  getJobType = getJobType;
+
+  sectorsMap = sectorsMap;
+  getSectorName = getSectorName;
+
   loading = signal<boolean>(true); // Para controlar si se está cargando
   loadingError = signal<boolean>(false); // Para manejar errores de carga
+
+  /** Lista de ofertas obtenidas del servicio de ofertas */
+  offers: Offer[] = [];
+  expandedOfferId: string | null = null;
 
   userVisitor: WritableSignal<Usuario | null> = signal<Usuario | null>(null);
   //user = signal<Company | null>(null);
@@ -55,6 +69,7 @@ export class ProfileVisitorComponent implements OnInit {
 
   // private userDataService = inject(UserDataService);
   private userService = inject(UserService);
+  private offerService = inject(OffersService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private fb = inject(FormBuilder);
@@ -71,7 +86,10 @@ export class ProfileVisitorComponent implements OnInit {
     this.loadingError.set(false);
 
     try {
-      await Promise.all([lastValueFrom(this.getUserVisitor())]);
+      await Promise.all([
+        lastValueFrom(this.getUserVisitor()),
+        lastValueFrom(this.loadOffers()),
+      ]);
     } catch (error) {
       console.error('Error al cargar los datos del perfil:', error);
       this.loadingError.set(true);
@@ -91,6 +109,26 @@ export class ProfileVisitorComponent implements OnInit {
       catchError((err) => {
         console.error('Error después de 3 reintentos:', err);
         return of(null); // Devuelve un Observable con `null` en caso de error
+      })
+    );
+  }
+
+  /**
+   * Carga las ofertas desde el backend.
+   */
+  loadOffers(): Observable<any> {
+    // const userId = this.userVisitor()?.id;
+    return this.offerService.getOffersUserById().pipe(
+      tap((response) => {
+        if (response.success && response.offers) {
+          this.offers = response.offers; // Asigna la lista de ofertas a la propiedad
+        } else {
+          console.error('Error al obtener ofertas:', response.message);
+        }
+      }),
+      catchError((error) => {
+        console.error('Error inesperado al obtener ofertas:', error);
+        return of(null); // Devuelve un observable nulo en caso de error
       })
     );
   }
@@ -205,5 +243,13 @@ export class ProfileVisitorComponent implements OnInit {
         },
       });
     }
+  }
+
+  /**
+   * Alterna la visualización de los detalles de una oferta.
+   * @param offerId ID de la oferta.
+   */
+  toggleOfferDetails(offerId: string) {
+    this.expandedOfferId = this.expandedOfferId === offerId ? null : offerId;
   }
 }

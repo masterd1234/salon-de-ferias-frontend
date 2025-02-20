@@ -203,4 +203,19 @@ export class OffersService {
       { withCredentials: true }
     );
   }
+
+  getOffersUserById(
+    id?: string
+  ): Observable<{ success: boolean; message: string; offers?: Offer[] }> {
+    const url = id ? `${this.apiUrl}/visitor/${id}` : `${this.apiUrl}/visitor`;
+
+    return this.http
+      .get<{ message: string; offers: Offer[] }>(url, { withCredentials: true })
+      .pipe(
+        map((response) => ({ success: true, ...response })),
+        catchError((error) =>
+          this.handleError(error, 'Error desconocido al obtener las ofertas')
+        )
+      );
+  }
 }

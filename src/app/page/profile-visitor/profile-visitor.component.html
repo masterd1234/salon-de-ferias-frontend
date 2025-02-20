@@ -100,10 +100,51 @@
   <mat-card class="card">
     <mat-card-header>
       <mat-card-title>
-        <h3 id="offer">Ofertas</h3>
+        <h3 id="offer">Ofertas aplicadas</h3>
       </mat-card-title>
     </mat-card-header>
 
     <mat-divider class="mt-2 w-100"></mat-divider>
+
+    <mat-card-content>
+      <mat-card
+        *ngFor="let offer of offers"
+        class="offer-card mt-3"
+        (click)="toggleOfferDetails(offer.id!)"
+      >
+        <mat-card-header>
+          <img
+            matCardAvatar
+            [src]="offer?.logo?.url"
+            alt="Logo"
+            class="custom-avatar"
+            style="object-fit: contain"
+          />
+          <mat-card-title>{{ offer.position }}</mat-card-title>
+          <mat-card-subtitle
+            >{{ offer.companyName }} | {{ offer.location }} ({{
+              offer.workplace_type
+            }})</mat-card-subtitle
+          >
+        </mat-card-header>
+
+        <mat-card-content *ngIf="expandedOfferId === offer.id">
+          <p>
+            <strong><i class="fa-solid fa-briefcase"></i></strong>
+            {{ offer.workplace_type }} | {{ getJobType(offer.job_type) }} |
+            {{ getSectorName(offer.sector) }}
+          </p>
+          <p>
+            <strong>Acerca del Empleo:</strong> <br />
+            {{ offer.description }}
+          </p>
+          <!-- <a [href]="offer.link" target="_blank">
+            <button mat-flat-button color="accent" class="custom-button">
+              Inscribirse
+            </button>
+          </a> -->
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
   </mat-card>
 </div>
