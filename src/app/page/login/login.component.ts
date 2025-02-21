@@ -119,7 +119,7 @@ export class LoginComponent {
                 this.router.navigate(['/admin-dashboard']);
                 break;
               case 'co':
-                this.router.navigate(['/home-company']);
+                this.router.navigate(['/profile']);
                 break;
               case 'visitor':
                 this.router.navigate(['/home-visitor']);

@@ -154,7 +154,7 @@ export class RegisterComponent {
                     this.router.navigate(['/admin-dashboard']);
                     break;
                   case 'co':
-                    this.router.navigate(['/home-company']);
+                    this.router.navigate(['/company-dashboard']);
                     break;
                   case 'visitor':
                     this.router.navigate(['/home-visitor']);

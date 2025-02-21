@@ -51,19 +51,6 @@ export const routes: Routes = [
 
   /**
    * Ruta para la página de inicio de sesión.
-   * @path /home-company
-   * @component HomeCompanyComponent (cargado de forma diferida)
-   */
-  {
-    path: 'home-company',
-    loadComponent: () =>
-      import('./page/home-company/home-company.component').then(
-        (m) => m.HomeCompanyComponent
-      ),
-  },
-
-  /**
-   * Ruta para la página de inicio de sesión.
    * @path /home-visitor
    * @component HomeVisitorComponent (cargado de forma diferida)
    */
