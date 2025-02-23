@@ -323,4 +323,40 @@
     </mat-card-content>
     }
   </mat-card>
+
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>
+        <h3 id="offer">Descargas</h3>
+      </mat-card-title>
+      @if (isRol()==='co') {
+      <div class="action-button ml-auto d-flex">
+        <button
+          class="button button--primary custom-button"
+          (click)="downloadInput.click()"
+        >
+          Añadir Descargas
+        </button>
+        <input
+          type="file"
+          #downloadInput
+          (change)="onFileChange($event, 'logo')"
+          class="file-input"
+        />
+      </div>
+      }
+    </mat-card-header>
+
+    <mat-divider class="mt-2 w-100"></mat-divider>
+
+    @if(isRol()=== 'co'){
+    <mat-card-content>
+      <mat-card *ngFor="let file of files" class="offer-card mt-3">
+        <mat-card-header>
+          <mat-card-title>{{ file }}</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </mat-card-content>
+    }
+  </mat-card>
 </div>

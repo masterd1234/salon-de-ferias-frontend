@@ -26,6 +26,7 @@ import { VideoService } from '../../services/videos.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Offer } from '../../../models/offers/offers.model';
 import { OffersService } from '../../services/offers.service';
+import { FilesService } from '../../services/files.service';
 import { OffersComponent } from './offers/offers.component';
 import { MatIconModule } from '@angular/material/icon';
 import { EditFormComponent } from './edit-form/edit-form.component';
@@ -90,6 +91,7 @@ export class ProfileComponent {
   /** Signal para almacenar los datos de la empresa */
   company = signal<Company | null>(null);
 
+  files = [];
   /** URL de la imagen de perfil */
   profileImageUrl: string | null = null;
   /** Número de columnas para la cuadrícula, adaptable a tamaños de pantalla */
@@ -121,6 +123,7 @@ export class ProfileComponent {
   private sanitazer = inject(DomSanitizer);
   private videoService = inject(VideoService);
   private offerService = inject(OffersService);
+  private fileService = inject(FilesService);
   private imagenService = inject(ImageService);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -164,6 +167,7 @@ export class ProfileComponent {
       await Promise.all([
         lastValueFrom(this.loadOffers()),
         lastValueFrom(this.loadVideos()),
+        lastValueFrom(this.loadFiles()),
         lastValueFrom(this.getUserCompany()),
         lastValueFrom(this.getCompanyData()),
         lastValueFrom(this.getDesignData()),
@@ -783,6 +787,26 @@ export class ProfileComponent {
       console.warn('El objeto `window` no está disponible.');
       this.cols = 3; // Establece un valor predeterminado si window no está disponible
     }
+  }
+  /**
+   * Carga las archivos de la compañía desde el backend.
+   */
+  loadFiles(): Observable<any> {
+    return this.fileService.getFilesById().pipe(
+      tap((response) => {
+        if (response.success) {
+          console.log(response);
+          this.files = response[0].urls; // Asigna la lista de ofertas a la propiedad
+          console.log(this.files);
+        } else {
+          console.error('Error al obtener archivos:', response);
+        }
+      }),
+      catchError((error) => {
+        console.error('Error inesperado al obtener archivos:', error);
+        return of(null); // Devuelve un observable nulo en caso de error
+      })
+    );
   }
   /**
    * Carga las ofertas desde el backend.
