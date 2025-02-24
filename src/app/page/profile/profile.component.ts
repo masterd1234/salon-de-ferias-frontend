@@ -91,7 +91,7 @@ export class ProfileComponent {
   /** Signal para almacenar los datos de la empresa */
   company = signal<Company | null>(null);
 
-  files = [];
+  files: { name: string; url: string }[] = [];
   /** URL de la imagen de perfil */
   profileImageUrl: string | null = null;
   /** Número de columnas para la cuadrícula, adaptable a tamaños de pantalla */
@@ -794,10 +794,9 @@ export class ProfileComponent {
   loadFiles(): Observable<any> {
     return this.fileService.getFilesById().pipe(
       tap((response) => {
-        if (response.success) {
-          console.log(response);
-          this.files = response[0].urls; // Asigna la lista de ofertas a la propiedad
-          console.log(this.files);
+        if (response.success && response.docs) {
+          this.files = response.docs; // Asigna la lista de ofertas a la propiedad
+          console.log('files:', this.files);
         } else {
           console.error('Error al obtener archivos:', response);
         }
@@ -952,5 +951,9 @@ export class ProfileComponent {
         },
       });
     }
+  }
+
+  downloadFile(url: string): void {
+    window.open(url, '_blank');
   }
 }

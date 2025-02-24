@@ -45,6 +45,9 @@
         </button>
         <button mat-button (click)="scrollToSection('video')">Videos</button>
         <button mat-button (click)="scrollToSection('offer')">Ofertas</button>
+        <button mat-button (click)="scrollToSection('downloads')">
+          Descargas
+        </button>
         }@else {
         <button mat-button (click)="scrollToSection('personal-info-card')">
           Perfil de visitante
@@ -327,7 +330,7 @@
   <mat-card class="card">
     <mat-card-header>
       <mat-card-title>
-        <h3 id="offer">Descargas</h3>
+        <h3 id="downloads">Descargas</h3>
       </mat-card-title>
       @if (isRol()==='co') {
       <div class="action-button ml-auto d-flex">
@@ -351,11 +354,12 @@
 
     @if(isRol()=== 'co'){
     <mat-card-content>
-      <mat-card *ngFor="let file of files" class="offer-card mt-3">
-        <mat-card-header>
-          <mat-card-title>{{ file }}</mat-card-title>
-        </mat-card-header>
-      </mat-card>
+      <div class="file-container">
+        <div class="file-card" *ngFor="let file of files">
+          <h3>{{ file.name }}</h3>
+          <button (click)="downloadFile(file.url)">Descargar</button>
+        </div>
+      </div>
     </mat-card-content>
     }
   </mat-card>
