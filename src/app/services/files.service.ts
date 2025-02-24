@@ -30,4 +30,15 @@ export class FilesService {
       )
     );
   }
+
+  addFilesById(formData: FormData, id?: string): Observable<any> {
+    const url = id ? `${this.apiUrl}/company/${id}` : `${this.apiUrl}/company`;
+
+    return this.http.post<any>(url, formData, { withCredentials: true }).pipe(
+      map((response) => ({ success: true, ...response })),
+      catchError((error) =>
+        this.handleError(error, 'Error al cargar el archivo')
+      )
+    );
+  }
 }

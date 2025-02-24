@@ -37,6 +37,7 @@ import { Usuario } from '../../../models/users.model';
 import { catchError, lastValueFrom, Observable, of, retry, tap } from 'rxjs';
 import { ImageService } from '../../services/design.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 /**
  * @class ProfileComponent
@@ -135,7 +136,11 @@ export class ProfileComponent {
    * También configura una URL de imagen de perfil inicial.
    * @param dialog Servicio de diálogo de Angular Material para abrir diálogos.
    */
-  constructor(public dialog: MatDialog, private fb: FormBuilder) {
+  constructor(
+    public dialog: MatDialog,
+    private fb: FormBuilder,
+    private snackBar: MatSnackBar
+  ) {
     this.videoForm = this.fb.group({
       newVideo: [
         '',
@@ -796,7 +801,6 @@ export class ProfileComponent {
       tap((response) => {
         if (response.success && response.docs) {
           this.files = response.docs; // Asigna la lista de ofertas a la propiedad
-          console.log('files:', this.files);
         } else {
           console.error('Error al obtener archivos:', response);
         }
@@ -948,6 +952,80 @@ export class ProfileComponent {
         },
         error: (err) => {
           console.error('Error al actualizar el logo:', err);
+        },
+      });
+    }
+  }
+
+  addFile(event: Event, type: string) {
+    const userId = this.userCompany?.id;
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      // Validar tipo de archivo
+      if (!['application/pdf'].includes(file.type)) {
+        alert('Por favor, sube solo archivos en formato PDF.');
+        return;
+      }
+
+      // Validar tamaño de archivo (5 MB como máximo)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('El archivo no debe superar los 5 MB.');
+        return;
+      }
+
+      // Leer el archivo como Data URL para previsualización
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+
+        // // Actualizar la URL y el archivo correspondiente
+        // switch (type) {
+        //   case 'file':
+        //     this.fileName = file.name;
+        //     this.fileUrl = result;
+
+        //     break;
+        //   // case 'profileImage':
+        //   //   this.profileImageFileName = file.name;
+        //   //   this.profileImageFile = file;
+        //   //   this.profileImageUrl = result;
+        //   //   break;
+
+        //   default:
+        //     console.warn(`Tipo desconocido: ${type}`);
+        // }
+      };
+      reader.readAsDataURL(file);
+
+      // Verifica si tienes el ID del usuario
+      if (!userId) {
+        console.error('No se encontró el ID del usuario');
+        return;
+      }
+
+      // Crea el objeto FormData y agrega el archivo
+      const formData = new FormData();
+      formData.append('file', file); // El nombre del campo debe coincidir con el del backend
+
+      // Llama al servicio para actualizar el logo
+      this.fileService.addFilesById(formData, userId).subscribe({
+        next: (response) => {
+          if (response && response.docs[0]) {
+            console.log('Archivo cargado con éxito:', response);
+            this.snackBar.open('Archivo cargado con éxito', 'Cerrar', {
+              duration: 3000,
+            });
+          }
+        },
+        error: (err) => {
+          this.snackBar.open(
+            err.error?.error || 'Error al cargar archivo',
+            'Cerrar',
+            { duration: 3000 }
+          );
         },
       });
     }

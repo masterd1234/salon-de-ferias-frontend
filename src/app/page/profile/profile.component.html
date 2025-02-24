@@ -343,7 +343,7 @@
         <input
           type="file"
           #downloadInput
-          (change)="onFileChange($event, 'logo')"
+          (change)="addFile($event, 'file')"
           class="file-input"
         />
       </div>
@@ -356,8 +356,11 @@
     <mat-card-content>
       <div class="file-container">
         <div class="file-card" *ngFor="let file of files">
-          <h3>{{ file.name }}</h3>
-          <button (click)="downloadFile(file.url)">Descargar</button>
+          <div class="file-info">
+            <h3>{{ file.name }}</h3>
+            <img src="assets/pdf-icon.png" alt="PDF" class="file-icon" />
+            <button (click)="downloadFile(file.url)">Descargar</button>
+          </div>
         </div>
       </div>
     </mat-card-content>
