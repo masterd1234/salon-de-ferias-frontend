@@ -1,0 +1,38 @@
+<div class="form-container">
+  <h2 class="form-title">Añadir Nuevo Evento</h2>
+  <form [formGroup]="eventForm" (ngSubmit)="submitForm()">
+    <div class="form-group">
+      <label for="name_date">Nombre del Evento</label>
+      <input
+        id="name_date"
+        formControlName="name_date"
+        type="text"
+        placeholder="Ej: Reunión Uno a Uno"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Descripción</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        placeholder="Escribe una breve descripción..."
+        required
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="link_event">Enlace del Evento</label>
+      <input
+        id="link_event"
+        formControlName="link_event"
+        type="url"
+        placeholder="Ej: https://meet.google.com/abc-defg-hij"
+        required
+      />
+    </div>
+
+    <button class="submit-btn" type="submit">Guardar Evento</button>
+  </form>
+</div>

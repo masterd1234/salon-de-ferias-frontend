@@ -150,7 +150,7 @@ export class ProfileVisitorComponent implements OnInit {
 
     const dialogRef = this.dialog.open(EditUsersComponent, {
       width: '500px',
-      height: '90vh',
+      height: '52vh',
       data: { form: formGroup, userId: userData.id },
     });
 

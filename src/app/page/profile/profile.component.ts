@@ -27,6 +27,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Offer } from '../../../models/offers/offers.model';
 import { OffersService } from '../../services/offers.service';
 import { FilesService } from '../../services/files.service';
+import { CalendarEventsService } from '../../services/calendar-events.service';
 import { OffersComponent } from './offers/offers.component';
 import { MatIconModule } from '@angular/material/icon';
 import { EditFormComponent } from './edit-form/edit-form.component';
@@ -38,6 +39,7 @@ import { catchError, lastValueFrom, Observable, of, retry, tap } from 'rxjs';
 import { ImageService } from '../../services/design.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EventFormComponent } from './event-form/event-form.component';
 
 /**
  * @class ProfileComponent
@@ -93,6 +95,8 @@ export class ProfileComponent {
   company = signal<Company | null>(null);
 
   files: { name: string; url: string }[] = [];
+
+  events: { name_date: string; link_event: string; description: string }[] = [];
   /** URL de la imagen de perfil */
   profileImageUrl: string | null = null;
   /** Número de columnas para la cuadrícula, adaptable a tamaños de pantalla */
@@ -125,6 +129,7 @@ export class ProfileComponent {
   private videoService = inject(VideoService);
   private offerService = inject(OffersService);
   private fileService = inject(FilesService);
+  private calendarEventsService = inject(CalendarEventsService);
   private imagenService = inject(ImageService);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -173,6 +178,7 @@ export class ProfileComponent {
         lastValueFrom(this.loadOffers()),
         lastValueFrom(this.loadVideos()),
         lastValueFrom(this.loadFiles()),
+        lastValueFrom(this.loadEventsCalendar()),
         lastValueFrom(this.getUserCompany()),
         lastValueFrom(this.getCompanyData()),
         lastValueFrom(this.getDesignData()),
@@ -811,6 +817,26 @@ export class ProfileComponent {
       })
     );
   }
+
+  /**
+   * Carga los eventos de la compañía desde el backend.
+   */
+  loadEventsCalendar(): Observable<any> {
+    return this.calendarEventsService.getCalendarEventsById().pipe(
+      tap((response) => {
+        if (response.success && response.events) {
+          this.events = response.events; // Asigna la lista de eventos a la propiedad
+        } else {
+          console.error('Error al obtener archivos:', response);
+        }
+      }),
+      catchError((error) => {
+        console.error('Error inesperado al obtener archivos:', error);
+        return of(null); // Devuelve un observable nulo en caso de error
+      })
+    );
+  }
+
   /**
    * Carga las ofertas desde el backend.
    */
@@ -1033,5 +1059,21 @@ export class ProfileComponent {
 
   downloadFile(url: string): void {
     window.open(url, '_blank');
+  }
+
+  openEventForm() {
+    const id = this.company()?.companyID;
+    const dialogRef = this.dialog.open(EventFormComponent, {
+      width: '400px',
+      height: '50vh',
+      data: { companyID: id },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Evento agregado con éxito');
+        // Aquí puedes actualizar la lista de eventos
+      }
+    });
   }
 }

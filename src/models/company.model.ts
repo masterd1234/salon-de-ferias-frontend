@@ -3,6 +3,7 @@
  * @description Interfaz que representa la información de una empresa, incluyendo descripción, sector, información de contacto y documentos opcionales.
  */
 export interface Company {
+  companyID: string;
 
   /**
    * @property {string} description - Descripción general de la empresa.
@@ -28,8 +29,8 @@ export interface Company {
    * @property {Array<{additionalButtonTitle: string, additionalButtonLink: string}>} [link] - Array de objetos que contiene título y enlace URL adicionales relacionados con la empresa (opcional).
    */
   links?: Array<{
-    additionalButtonTitle: string,
-    additionalButtonLink: string
+    additionalButtonTitle: string;
+    additionalButtonLink: string;
   }>;
 }
 
