@@ -50,29 +50,6 @@
       }
     </mat-form-field>
 
-    <!-- Campos adicionales para rol "co" -->
-    @if(editUserForm.get('rol')?.value === 'co'){
-    <mat-form-field class="full-width">
-      <mat-label>Nombre de la Empresa</mat-label>
-      <input
-        matInput
-        formControlName="company"
-        placeholder="Nombre de la empresa"
-      />
-      @if(editUserForm.get('company')?.hasError('required')){
-      <mat-error> El nombre de la empresa es obligatorio.</mat-error>
-      }
-    </mat-form-field>
-
-    <mat-form-field class="full-width">
-      <mat-label>CIF</mat-label>
-      <input matInput formControlName="cif" placeholder="A12345678" />
-      @if(editUserForm.get('cif')?.hasError('required')){
-      <mat-error> El CIF es obligatorio.</mat-error>
-      }
-    </mat-form-field>
-    }
-
     <!-- Campos adicionales para rol "visitante" -->
     @if(editUserForm.get('rol')?.value === 'visitor'){
     <mat-form-field class="full-width">
@@ -90,7 +67,7 @@
         formControlName="studies"
         placeholder="Estudios del visitante"
       />
-      @if(editUserForm.get('studies')?.hasError('studies')){
+      @if(editUserForm.get('studies')?.hasError('required')){
       <mat-error> Los estudios son obligatorios.</mat-error>
       }
     </mat-form-field>
