@@ -133,6 +133,28 @@
   <mat-card class="card">
     <mat-card-header>
       <mat-card-title>
+        <h3 id="links-meetings">Calendario de eventos</h3>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-divider class="mt-2 w-100"></mat-divider>
+
+    <mat-card-content>
+      <div class="file-container">
+        <div class="file-card" *ngFor="let event of events">
+          <div class="file-info">
+            <h3>{{ event.name_date }}</h3>
+            <p>{{ event.description }}</p>
+            <button (click)="downloadFile(event.link_event)">Ver evento</button>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>
         <h3 id="video">Videos</h3>
       </mat-card-title>
     </mat-card-header>

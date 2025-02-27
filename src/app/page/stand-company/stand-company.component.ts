@@ -19,6 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { VideosComponent } from '../profile/videos/videos.component';
 import { VideoService } from '../../services/videos.service';
 import { OffersService } from '../../services/offers.service';
+import { CalendarEventsService } from '../../services/calendar-events.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
@@ -53,6 +54,7 @@ export class StandCompanyComponent implements OnInit {
   // companyInfo = signal<Company | null>(null);
 
   offers: Offer[] = [];
+  events: { name_date: string; link_event: string; description: string }[] = [];
   expandedOfferId: string | null = null;
   /** Lista de videos en formato seguro */
   videos: SafeResourceUrl[] = [];
@@ -83,6 +85,7 @@ export class StandCompanyComponent implements OnInit {
     private imagenService: ImageService,
     private videoService: VideoService,
     private offerService: OffersService,
+    private calendarEventsService: CalendarEventsService,
     private location: Location,
     private snackBar: MatSnackBar
   ) {}
@@ -150,6 +153,19 @@ export class StandCompanyComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al obtener los datos del usuario:', err);
+        },
+      });
+      this.calendarEventsService.getCalendarEventsById(companyId).subscribe({
+        next: (response) => {
+          if (response.success) {
+            console.log(response.events);
+            this.events = response.events; // Asigna la lista de eventos a la propiedad
+          } else {
+            console.error('Error al obtener eventos:', response.message);
+          }
+        },
+        error: (err) => {
+          console.error('Error al obtener los eventos de la compañía:', err);
         },
       });
     }
@@ -581,5 +597,9 @@ export class StandCompanyComponent implements OnInit {
         );
       },
     });
+  }
+
+  downloadFile(url: string): void {
+    window.open(url, '_blank');
   }
 }
