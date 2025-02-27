@@ -240,6 +240,28 @@
       </mat-card>
     </mat-card-content>
   </mat-card>
+
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>
+        <h3 id="downloads">Descargas</h3>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-divider class="mt-2 w-100"></mat-divider>
+
+    <mat-card-content>
+      <div class="file-container">
+        <div class="file-card" *ngFor="let file of files">
+          <div class="file-info">
+            <h3>{{ file.name }}</h3>
+            <img src="assets/pdf-icon.png" alt="PDF" class="file-icon" />
+            <button (click)="downloadFile(file.url)">Descargar</button>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>
 
 <!-- <ng-template #loading>

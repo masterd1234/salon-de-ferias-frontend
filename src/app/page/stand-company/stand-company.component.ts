@@ -19,6 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { VideosComponent } from '../profile/videos/videos.component';
 import { VideoService } from '../../services/videos.service';
 import { OffersService } from '../../services/offers.service';
+import { FilesService } from '../../services/files.service';
 import { CalendarEventsService } from '../../services/calendar-events.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
@@ -55,6 +56,7 @@ export class StandCompanyComponent implements OnInit {
 
   offers: Offer[] = [];
   events: { name_date: string; link_event: string; description: string }[] = [];
+  files: { name: string; url: string }[] = [];
   expandedOfferId: string | null = null;
   /** Lista de videos en formato seguro */
   videos: SafeResourceUrl[] = [];
@@ -86,6 +88,7 @@ export class StandCompanyComponent implements OnInit {
     private videoService: VideoService,
     private offerService: OffersService,
     private calendarEventsService: CalendarEventsService,
+    private fileService: FilesService,
     private location: Location,
     private snackBar: MatSnackBar
   ) {}
@@ -166,6 +169,18 @@ export class StandCompanyComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al obtener los eventos de la compañía:', err);
+        },
+      });
+      this.fileService.getFilesById(companyId).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.files = response.docs; // Asigna la lista de archivos a la propiedad
+          } else {
+            console.error('Error al obtener archivos:', response.message);
+          }
+        },
+        error: (err) => {
+          console.error('Error al obtener los archivos de la compañía:', err);
         },
       });
     }
