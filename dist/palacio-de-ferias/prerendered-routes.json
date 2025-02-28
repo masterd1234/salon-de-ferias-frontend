@@ -2,11 +2,13 @@
   "routes": [
     "/admin-dashboard",
     "/company-dashboard",
-    "/home",
+    "/employability-fair-hall",
+    "/home-visitor",
+    "/landing-page",
     "/login",
-    "/map",
     "/offers",
     "/profile",
+    "/profile-visitor",
     "/register"
   ]
 }
