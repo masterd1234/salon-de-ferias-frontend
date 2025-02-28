@@ -96,6 +96,7 @@ export class EditUsersComponent {
     const cifControl = this.editUserForm.get('cif');
     const dniControl = this.editUserForm.get('dni');
     const studiesControl = this.editUserForm.get('studies');
+    
 
     // Resetea las validaciones
     companyControl?.clearValidators();

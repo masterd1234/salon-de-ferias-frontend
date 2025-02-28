@@ -3,15 +3,19 @@
 @import '../../../../scss/buttons';
 
 /* Contenedor principal */
-:host {
-  display: block;
-  background-color: $secondary-background-color;
-  padding: 20px;
-}
+//:host {
+ // display: block;
+  //background-color: $secondary-background-color;
+  //padding: 20px;
+  //min-height: 1000px; // Ajusta según la cantidad de contenido
+  //overflow: hidden;
+  
+//}
 
 /* Ancho completo para los campos del formulario */
 .full-width {
   width: 100%;
+  
 }
 
 /* Estilo para los campos de formulario */
@@ -38,3 +42,4 @@ mat-dialog-actions {
     background-color: $highlight-color !important;
     color: white !important;
 }
+
