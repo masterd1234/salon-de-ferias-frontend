@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  url: 'https://backend-node-wpf9.onrender.com',
+  url: 'https://salon-de-ferias-backend.onrender.com',
 };
